@@ -7,5 +7,10 @@ Add a dated entry every work session. Include failures.
 **Done**
 - Created repo and project skeleton
 - Environment setup
+- Added .venv and initial requirements
 - SAR context added (docs/SAR_context.md)
-- Literature review
+- Draft proposal updated
+- Initial literature review (docs/related_work.md)
+
+**Next-Steps**
+- 
