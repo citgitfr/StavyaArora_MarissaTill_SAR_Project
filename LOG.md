@@ -7,10 +7,6 @@ Add a dated entry every work session. Include failures.
 **Done**
 - Created repo and project skeleton
 - Python installers were blocked on our WorkSpace, so we installed uv (per its docs) and used it to get Python 3.12 in a project venv.
-
-**Remaining**
-- Environment setup, data setup
-**Bottlenecks / questions**
-
-**To-do**
-Literature Review
+- Environment setup
+- SAR context added (docs/SAR_context.md)
+- Literature review
