@@ -11,12 +11,15 @@ Add a dated entry every work session. Include failures.
 - Added .venv and initial requirements
 - SAR context added (docs/SAR_context.md)
 - Draft proposal updated
-- Created initial literature review agent (**PATH**)
-- - Initial literature review (docs/related_work.md)
+- Created initial literature review agent (.claude/commands)
+- - Set up initial rules, and got claude running in project terminal
+- Initial literature review (docs/related_work.md)
 - Installed OpenDrift 1.14.12 and ran its own `example_leeway.py` (not our code); figure saved to docs/figures/leeway_smoke_test_example.png
 
 **Next-Steps**
 - Set up OpenDrift on Marissa’s VM
+- Get the literature review agent online
+- - The initial agent was not able to read PDFs over 20 MB (appropriate libraries weren't downloaded)
 - Solidify the project goal and feasibility
 - - Further literature review in this field
 - - Explore existing data and limitations
