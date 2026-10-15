@@ -12,6 +12,7 @@ Add a dated entry every work session. Include failures.
 - SAR context added (docs/SAR_context.md)
 - Draft proposal updated
 - Initial literature review (docs/related_work.md)
+- - Installed OpenDrift 1.14.12 and ran its own `example_leeway.py` (not our code); figure saved to docs/figures/leeway_smoke_test_example.png.
 
 **Next-Steps**
 - 
