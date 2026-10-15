@@ -6,10 +6,6 @@ Add a dated entry every work session. Include failures.
 ## 2026-10-14
 **Done**
 - Created repo and project skeleton
-
-**Remaining**
-- Environment setup, data setup
-**Bottlenecks / questions**
-
-**To-do**
-Literature Review
+- Environment setup
+- SAR context added (docs/SAR_context.md)
+- Literature review
