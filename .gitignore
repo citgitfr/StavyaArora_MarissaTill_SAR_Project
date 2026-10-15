@@ -218,3 +218,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+.env
+*.key
+data/
+outputs/
+*.nc
+papers/
