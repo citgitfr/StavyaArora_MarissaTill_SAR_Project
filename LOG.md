@@ -6,6 +6,7 @@ Add a dated entry every work session. Include failures.
 ## 2026-10-14
 **Done**
 - Created repo and project skeleton
+- Python installers were blocked on our WorkSpace, so we installed uv (per its docs) and used it to get Python 3.12 in a project venv.
 
 **Remaining**
 - Environment setup, data setup
