@@ -1,0 +1,26 @@
+# Frozen before any agent run. Set from physics and the clean-data measurements in
+# docs/dev_notes.md and LOG.md only. Never tune against faulty cases.
+date: 2026-10-29
+
+speed:
+  max_m_s: 3.0                    # clean maxima are 1.0 (radar) and 0.63 (model); catches x10/x100, not x2
+
+time:
+  max_gap_s: 7200                 # clean data has no gap above its own step (3600 s)
+
+qc:
+  fill_values: [9999, -9999, 999, -999]
+
+coverage:
+  min_hour_fraction: 0.2        # set below the clean minimum from scripts/cov_check.py
+  min_good_hours_fraction: 0.8
+
+speed_ratio:
+  min: 0.5                        # clean ratio is 1.107
+  max: 2.0
+
+correlation:
+  min: 0.1                        # clean corr_u 0.498, corr_v 0.387; a sign flip gives about the negative
+
+lag:
+  max_abs_hours: 1                # clean best lag is -1; shifts of 1 h or less are undetectable here

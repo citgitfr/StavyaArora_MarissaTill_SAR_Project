@@ -19,6 +19,18 @@ Add a dated entry every work session. Include failures.
   - Refused before running: git push origin HEAD:main; git add .; git push --force; read
     heldout/labels.json (the tool returned "File is in a directory that is denied by your
     permission settings"); curl; pip list.
+- NCEI archive reached; listing shows three variants per hour (SIO hourly, NDBC, 25-hour average), about 227 KB each; using SIO hourly only; excluded 25hr_average to avoid mixing products.
+-NCEI archive works from the WorkSpace; 48 hourly SIO files, about 11 MB; Claude Code wrote the pull script, we reviewed it and ran it ourselves.
+- Had Claude Code write .claude/skills/forcing-tools/forcing_tools.py (qc, compare, repair, check)
+  and tests/test_forcing_tools.py; we reviewed both and ran the tests ourselves: 40 tests pass.
+- Ran qc and compare by hand on the real fixtures. compare reproduces our independent first-look numbers
+  (n_pairs 130635, rms_u 0.1755, corr_u 0.498, speed ratio 1.107). check's coverage (mean 0.416, min 0.344
+  of 7313 ocean cells) matches scripts/cov_check.py (0.42, 0.34).
+- Froze configs/thresholds.yaml (2026-10-29) from the clean data only, before generating any fault cases.
+  check passes all 8 tests on the clean pair.
+- Findings: units differ as strings ('m s-1' vs 'm/s') but normalize to the same unit; the clean lag curve
+  is flat (best lag -1, corr 0.4440 vs 0.4425 at lag 0), so best_lag_nonzero fires on clean data and a
+  +-1 h shift is undetectable with this data; the radar covers 34-44% of ocean cells in any hour
 
 
 ## 2026-10-14
