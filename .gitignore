@@ -220,7 +220,8 @@ __marimo__/
 .streamlit/secrets.toml
 .env
 *.key
-data/
+/data/
 outputs/
 *.nc
 heldout/
+!fixtures/*.nc
