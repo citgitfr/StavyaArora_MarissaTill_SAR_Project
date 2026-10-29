@@ -31,7 +31,18 @@ Add a dated entry every work session. Include failures.
 - Findings: units differ as strings ('m s-1' vs 'm/s') but normalize to the same unit; the clean lag curve
   is flat (best lag -1, corr 0.4440 vs 0.4425 at lag 0), so best_lag_nonzero fires on clean data and a
   +-1 h shift is undetectable with this data; the radar covers 34-44% of ocean cells in any hour
+  - Wrote .claude/skills/forcing-tools/SKILL.md; ran the agent (claude -p, dontAsk) on case01 and case03.
+  case01 (clean): check passed, decision fused, no repair. case03: check failed (speed_max 1099 m/s, corr ~0,
+  lag 3 h); agent masked values >= 10 m/s (7,479 cells), re-check passed, decision repair. Cost about $0.20 and
+  8 turns for case03. Transcripts in eval/transcripts/.
+- Observed: the Skill tool was denied by our permissions (agent read SKILL.md as a file instead); decisions are still grounded in tool output.
 
+**Remaining**
+- Run case15 (tool error case), then all 15 cases x 2 repeats; minimal score.py (floor, oracle, repair success);
+  baseline rule; fresh-clone smoke test; allow rule for the Skill tool.
+
+**Next Steps**
+Next: implement the fixed blend recipe (radar where valid, model elsewhere, with a source mask), run OpenDrift Leeway ensembles from the chosen forcing, and score both forcing options against held-out drifter tracks, which is what turns the model-only versus fused choice into a measurable one.
 
 ## 2026-10-14
 **Done**

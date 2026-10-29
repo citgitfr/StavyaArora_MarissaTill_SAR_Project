@@ -1,0 +1,26 @@
+{
+  "case_id": "case03",
+  "choice": "repair",
+  "repair": {"action": "mask_fill", "param": 10},
+  "evidence": [
+    "check.result = fail",
+    "check.speed_bound.speed_max = 1099.0",
+    "check.correlation_sign.corr_u = -0.003511",
+    "check.correlation_sign.corr_v = 0.0008845",
+    "check.lag.best_lag_hours = 3",
+    "qc.speed_median = 0.2002",
+    "qc.speed_p95 = 1.0",
+    "qc.fill_value_hits = 0",
+    "compare.rms_u = 173.6",
+    "compare.speed_ratio_median = 1.141",
+    "repair.n_masked = 7479",
+    "check(repaired).result = pass",
+    "check(repaired).speed_bound.speed_max = 1.0",
+    "check(repaired).correlation_sign.corr_u = 0.4971",
+    "check(repaired).correlation_sign.corr_v = 0.3865",
+    "check(repaired).correlation_sign.corr_swapped = -0.1999",
+    "check(repaired).lag.best_lag_hours = -1",
+    "check(repaired).speed_ratio.speed_ratio_median = 1.107"
+  ],
+  "reason": "Radar contained non-physical spikes (speed_max 1099.0 vs p95 1.0, not in the fill-value list) that destroyed correlation and lag tests while the median speed ratio stayed normal. Masking values with |value| >= 10 m/s removed them and all checks pass with clean-like statistics, so the repaired radar is used for fused forcing."
+}
