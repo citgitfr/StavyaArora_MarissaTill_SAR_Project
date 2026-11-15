@@ -5,7 +5,7 @@ permissions all live here, in git. Every session — on your laptop or in a clou
 routine — starts from a fresh clone of this repository, so anything not committed
 here is forgotten.
 
-See @README.md for the full research project. This agent is responsible for data handling and selection.
+See @README.md for the full research project. This agent diagnoses and repairs faulty current forcing (HF radar vs. ocean model) and decides which forcing a drift forecast should use.
 
 ## Who you work for
 @memory/USER.md
@@ -18,7 +18,7 @@ See @README.md for the full research project. This agent is responsible for data
 - Never write API keys or credentials into any file. Use .env, which is gitignored.
 - Never read heldout/, edit fixtures/, or use the network except when pushing a claude/ branch.
 - Commit only from a branch whose name starts with claude/. Run `git branch --show-current`
-  first and stop if it does not. Stage only files under runs/. Start commit messages with "agent:".
+  first and stop if it does not. Stage only files under runs/ and memory/MEMORY.md (rules at the top of that file). Start commit messages with "agent:".
 - Push only that claude/ branch. Never push main, never force-push, never merge.
 - Raw data goes in data/ and PDFs in papers/ (both gitignored).
 - Use only what a source says. If something is not stated, write "not stated". Never invent citations.

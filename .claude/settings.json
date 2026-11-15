@@ -8,14 +8,18 @@
       "Bash(git log *)",
       "Bash(git branch --show-current)",
       "Bash(git add runs/*)",
+      "Bash(git add memory/MEMORY.md)",
       "Bash(git commit *)",
       "Bash(git push origin claude/*)",
-      "Edit(runs/**)"
+      "Edit(runs/**)",
+      "Edit(memory/MEMORY.md)",
+      "Skill(forcing-tools)"
     ],
     "ask": [
       "Edit(CLAUDE.md)",
       "Edit(PERMISSIONS.md)",
-      "Edit(.claude/**)"
+      "Edit(.claude/**)",
+      "Edit(memory/USER.md)"
     ],
     "deny": [
       "Bash(git push *main*)",
