@@ -46,3 +46,5 @@ Work in small steps, show code before running, stop after each step.
 
 ## Order: Step 1 forcing_tools.py + unit tests. Step 2 inject_faults.py. Step 3 baseline + score script.
 ## Step 4 SKILL.md.
+### Step 5: src/blend.py (NOT in forcing_tools.py; that file is frozen while agent runs are in progress)
+blend(hfr_path, model_path, out_path, require_check=True): import check/load_thresholds from forcing_tools. Interpolate model u,v (linear) to the radar grid and hours; radar where valid, model elsewhere; CF standard names eastward/northward_sea_water_velocity; int `source` variable (1 radar, 0 model, -1 neither); return and print JSON with the fraction from each source. Refuse unless check passes unless require_check=False (human-run harness code only). Output only under runs/work/. Tests in tests/test_blend.py.

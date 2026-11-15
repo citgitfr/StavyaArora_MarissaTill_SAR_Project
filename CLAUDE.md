@@ -16,7 +16,7 @@ See @README.md for the full research project. This agent is responsible for data
 ## How to operate
 - Read `PERMISSIONS.md` before any action that leaves this repository.
 - Never write API keys or credentials into any file. Use .env, which is gitignored.
-- Never read heldout/, edit fixtures/, or use the network.
+- Never read heldout/, edit fixtures/, or use the network except when pushing a claude/ branch.
 - Commit only from a branch whose name starts with claude/. Run `git branch --show-current`
   first and stop if it does not. Stage only files under runs/. Start commit messages with "agent:".
 - Push only that claude/ branch. Never push main, never force-push, never merge.

@@ -3,6 +3,16 @@ Team: Stavya Arora, Marissa Till | REPO: https://github.com/citgitfr/StavyaArora
 
 Add a dated entry every work session. Include failures.
 
+## 2026-11-15 
+
+**Done**
+- Corrected the case count: the injector produces 14 cases (4 clean, 8 detectable faults, 2 below the
+  detection limit), not 15. Its own summary line miscounted; there is no case15 (the blank result in an
+  earlier loop was the tool reporting that runs/cases/case15/ does not exist).
+- Fixed instruction inconsistencies found by a repo inventory
+- Froze forcing_tools.py for the evaluation runs: SHA-256 7AFE6B2FB8F9862D3D15085FC950A047BD3CEEF17186EF47244D648EFBDB2B13,
+  last changed in commit dcd0f02. Thresholds frozen 2026-10-29.
+
 ## 2026-10-28
 
 **Done**
@@ -38,7 +48,7 @@ Add a dated entry every work session. Include failures.
 - Observed: the Skill tool was denied by our permissions (agent read SKILL.md as a file instead); decisions are still grounded in tool output.
 
 **Remaining**
-- Run case15 (tool error case), then all 15 cases x 2 repeats; minimal score.py (floor, oracle, repair success);
+- Run all 14 cases x 2 repeats; minimal score.py (floor, oracle, repair success);
   baseline rule; fresh-clone smoke test; allow rule for the Skill tool.
 
 **Next Steps**

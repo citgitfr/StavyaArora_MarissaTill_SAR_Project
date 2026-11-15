@@ -69,5 +69,4 @@ forcing_tools.py and a few git commands, and that `heldout/` is not in git histo
 - Every change we accept: the merge commit on `main`.
 - Model: pinned in `.claude/settings.json`. Claude Code version: `claude --version`,
   recorded in the report.
-- Memory: none. Each run starts from the repository. Thresholds are frozen in
-  `configs/thresholds.yaml` with a date (file not created yet).
+- Memory: none. Each run starts from the repository. Decisions go to runs/results/<system>/<case_id>.json, and configs/thresholds.yaml exists (frozen 2026-10-29)
