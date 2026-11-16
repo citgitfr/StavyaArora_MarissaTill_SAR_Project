@@ -29,6 +29,20 @@
 - Accessed: 2026-10-28.
 - Notes: file metadata says "Approved for public release. Distribution unlimited."
 
+### Global Drifter Program hourly drifter tracks (ground truth)
+- Source: NOAA AOML GDP, hourly QC dataset `drifter_hourly_qc` on https://erddap.aoml.noaa.gov/gdp/erddap
+  (found by scripts/find_drifters.py; the server's search for "drifter hourly" listed only the 6-hour dataset, but the
+  hourly dataset's info page and data responded).
+- Used: drifter 300534061399950, 2021-10-18 00:00 to 2021-10-28 23:00 UTC, 264 hourly GPS positions, drogue lost
+  (drogue_lost_date not set before this period). Scans: none in the original box on 2021-08-10..12; 4 drifters in
+  that box in 2018-2024; 38 in 32-38.5 N, 124.5-117 W.
+- Accessed: 2026-11-15. Raw CSV in data/drifters/ (not committed).
+
+### Matching radar and model for the drifter window (2021-10-18..29)
+- HF radar: same NCEI product as above, 264 hourly SIO files, box 33.8-35.8 N, 122-119.8 W -> data/hfr_20211018.nc.
+- HYCOM: same GLBy0.08 expt_93.0 2021 dataset, surface, 3-hourly, box 33-36.5 N, 123-119 W (larger than the radar
+  box) -> data/hycom_20211018.nc. Both accessed 2026-11-15, not committed (rebuild with the commands in docs/pipeline.md).
+
 ### Access problems found
 - hfrnet-tds.ucsd.edu timed out from the WorkSpace (port 443), and NOAA's ERDDAP mirror returned
   403 (IP blacklisted); the NCEI archive worked. See LOG.md.

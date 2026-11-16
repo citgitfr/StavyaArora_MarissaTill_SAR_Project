@@ -1,17 +1,22 @@
-"""Pull the HYCOM half of the SAR forcing demo (HF radar comes from NCEI via pull_hfr_ncei.py).
-Run this yourself in a terminal (the agent never touches the network)."""
+"""Pull a HYCOM surface-current slice (u, v) over OPeNDAP into one netCDF file. HF radar comes from
+src/data/pull_hfr_ncei.py. Run this yourself (the agent never touches the network). Defaults reproduce the original
+fixture.
+
+  python src/data/pull_fixtures.py                                  # original: 2021-08-10..12, SoCal box
+  python src/data/pull_fixtures.py --box 31.5 35.5 -123.5 -117 --out data/hycom_wide_20210810.nc
+
+HYCOM is 3-hourly, so let --end run one step past the radar's last hour. The model box should be LARGER than the
+radar box: particles that leave every reader stop in OpenDrift. The default URL is GLBy0.08 expt_93.0 for the
+start year; a window spanning two years is refused. Never overwrites --out.
+"""
+import argparse
 import os
 import sys
+
+import pandas as pd
 import xarray as xr
 
-# ---- EDIT THESE ------------------------------------------------------
-T0, T1 = "2021-08-10 00:00", "2021-08-12 00:00"   # HYCOM is 3-hourly; the extra step covers the radar's last hours
-LAT0, LAT1 = 32.8, 34.2
-LON0, LON1 = -120.0, -117.5              # degrees east, -180..180
-HYCOM_URL = "https://tds.hycom.org/thredds/dodsC/GLBy0.08/expt_93.0/uv3z/2021"
-OUT = "fixtures/hycom_uv_slice.nc"
-# ----------------------------------------------------------------------
-os.makedirs("fixtures", exist_ok=True)
+URL = "https://tds.hycom.org/thredds/dodsC/GLBy0.08/expt_93.0/uv3z/{year}"
 
 
 def describe(name, ds):
@@ -32,18 +37,19 @@ def find_var(ds, names, std):
     sys.exit(f"Could not find {std}. Variables: {list(ds.data_vars)}")
 
 
-def pull_hycom():
-    if os.path.exists(OUT):
-        sys.exit(f"{OUT} already exists; not overwriting. Remove it yourself to rebuild.")
-    ds = xr.open_dataset(HYCOM_URL, drop_variables=["tau"])
+def pull_hycom(t0, t1, box, url, out):
+    if os.path.exists(out):
+        sys.exit(f"{out} already exists; not overwriting. Remove it yourself to rebuild.")
+    lat0, lat1, lon0, lon1 = box
+    ds = xr.open_dataset(url, drop_variables=["tau"])
     print("HYCOM raw dims:", dict(ds.sizes), "| variables:", list(ds.data_vars))
     print("HYCOM time range:", ds["time"].values[0], "->", ds["time"].values[-1])
     un = find_var(ds, ("water_u", "u"), "eastward_sea_water_velocity")
     vn = find_var(ds, ("water_v", "v"), "northward_sea_water_velocity")
-    lo0, lo1 = LON0, LON1
+    lo0, lo1 = lon0, lon1
     if float(ds["lon"].max()) > 180:          # global HYCOM grids often use 0..360
-        lo0, lo1 = LON0 % 360, LON1 % 360
-    sub = ds[[un, vn]].sel(time=slice(T0, T1), lat=slice(LAT0, LAT1), lon=slice(lo0, lo1))
+        lo0, lo1 = lon0 % 360, lon1 % 360
+    sub = ds[[un, vn]].sel(time=slice(t0, t1), lat=slice(lat0, lat1), lon=slice(lo0, lo1))
     if "depth" in sub.dims:
         print("HYCOM depth levels (first 3):", ds["depth"].values[:3])
         sub = sub.isel(depth=0)
@@ -52,9 +58,25 @@ def pull_hycom():
     if min(sub.sizes.values()) == 0:
         sys.exit(f"HYCOM subset empty: {dict(sub.sizes)}")
     sub = sub.load()
-    sub.to_netcdf(OUT)
+    os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
+    sub.to_netcdf(out)
     describe("HYCOM (surface level)", sub)
 
 
+def main(argv=None):
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--start", default="2021-08-10 00:00")
+    ap.add_argument("--end", default="2021-08-12 00:00")
+    ap.add_argument("--box", nargs=4, type=float, default=[32.8, 34.2, -120.0, -117.5],
+                    metavar=("LAT0", "LAT1", "LON0", "LON1"), help="degrees, longitudes -180..180")
+    ap.add_argument("--url", help="OPeNDAP URL (default: GLBy0.08 expt_93.0 uv3z for the start year)")
+    ap.add_argument("--out", default="fixtures/hycom_uv_slice.nc")
+    a = ap.parse_args(argv)
+    y0, y1 = pd.Timestamp(a.start).year, pd.Timestamp(a.end).year
+    if a.url is None and y0 != y1:
+        sys.exit("window spans two years; pull each year separately or pass --url")
+    pull_hycom(a.start, a.end, a.box, a.url or URL.format(year=y0), a.out)
+
+
 if __name__ == "__main__":
-    pull_hycom()
+    main()

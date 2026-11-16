@@ -1,0 +1,89 @@
+{
+  "drifter": 300534061399950,
+  "radar": "data/hfr_20211018.nc",
+  "model": "data/hycom_20211018.nc",
+  "window_hours": 24,
+  "windows": 20,
+  "every_hours": 12,
+  "particles": 500,
+  "radius_m": 100.0,
+  "frozen_check_on_real_pair": {
+    "result": "pass",
+    "failed": []
+  },
+  "results": {
+    "model_only|K=0": {
+      "median_sep_km_6h": 5.1631,
+      "median_sep_km_12h": 10.5117,
+      "median_sep_km_24h": 18.9901,
+      "mean_skill": 0.0662,
+      "in50_24h": 0.0,
+      "in90_24h": 0.0,
+      "in50_12h": 0.0,
+      "in90_12h": 0.0,
+      "median_area50_km2_24h": 1.016,
+      "median_area90_km2_24h": 1.016
+    },
+    "model_only|K=10": {
+      "median_sep_km_6h": 5.1506,
+      "median_sep_km_12h": 10.4368,
+      "median_sep_km_24h": 18.9101,
+      "mean_skill": 0.0674,
+      "in50_24h": 0.0,
+      "in90_24h": 0.0,
+      "in50_12h": 0.0,
+      "in90_12h": 0.0,
+      "median_area50_km2_24h": 8.1296,
+      "median_area90_km2_24h": 23.4012
+    },
+    "model_only|K=50": {
+      "median_sep_km_6h": 5.1302,
+      "median_sep_km_12h": 10.3193,
+      "median_sep_km_24h": 18.7904,
+      "mean_skill": 0.0697,
+      "in50_24h": 0.0,
+      "in90_24h": 0.0,
+      "in50_12h": 0.05,
+      "in90_12h": 0.05,
+      "median_area50_km2_24h": 33.4557,
+      "median_area90_km2_24h": 95.9892
+    },
+    "radar+model|K=0": {
+      "median_sep_km_6h": 4.1668,
+      "median_sep_km_12h": 7.8177,
+      "median_sep_km_24h": 16.5914,
+      "mean_skill": 0.2126,
+      "in50_24h": 0.0,
+      "in90_24h": 0.0,
+      "in50_12h": 0.0,
+      "in90_12h": 0.0,
+      "median_area50_km2_24h": 1.016,
+      "median_area90_km2_24h": 1.016
+    },
+    "radar+model|K=10": {
+      "median_sep_km_6h": 3.9485,
+      "median_sep_km_12h": 7.3311,
+      "median_sep_km_24h": 16.0233,
+      "mean_skill": 0.2195,
+      "in50_24h": 0.0,
+      "in90_24h": 0.0,
+      "in50_12h": 0.05,
+      "in90_12h": 0.1,
+      "median_area50_km2_24h": 7.1375,
+      "median_area90_km2_24h": 21.3827
+    },
+    "radar+model|K=50": {
+      "median_sep_km_6h": 3.9977,
+      "median_sep_km_12h": 7.2863,
+      "median_sep_km_24h": 15.9827,
+      "mean_skill": 0.2233,
+      "in50_24h": 0.05,
+      "in90_24h": 0.05,
+      "in50_12h": 0.1,
+      "in90_12h": 0.15,
+      "median_area50_km2_24h": 26.4032,
+      "median_area90_km2_24h": 79.873
+    }
+  },
+  "radar_better_share_24h": 0.7167
+}

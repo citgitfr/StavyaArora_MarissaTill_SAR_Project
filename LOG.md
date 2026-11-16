@@ -76,6 +76,26 @@ Add a dated entry every work session. Include failures.
   0.3-0.4 km (masked cells fall back to the model); the remaining 1 h offset costs 0.74 km (same as the undetectable
   +1 h case); using the 60%-blanked radar is 11.3 km from the reference versus 13.9 km for model_only.
   Figure: docs/figures/drift_case10.png.
+- Ground truth search (scripts/find_drifters.py, run by Marissa): no GDP drifters in the radar box on 2021-08-10..12;
+  4 in 2018-2024 in that box, 38 in a wider California box. Five drifters were offshore on our exact dates, but the
+  radar did not reach them (0% coverage; pulled a wider Aug 2021 radar cut to check, then deleted it). Measured the
+  radar's reach (about 120 W at 33.75 N, 121.5 W at 34.75 N) and ranked drifter visits inside it. Chose undrogued
+  drifter 300534061399950, 2021-10-18..28 (radar data in its cell 64% of hours, within 5 km 91%).
+- Added command-line options to scripts/list_ncei.py, src/data/pull_hfr_ncei.py and src/data/pull_fixtures.py
+  (defaults reproduce the original fixtures; dropped the course User-Agent header). New offline
+  scripts/drifter_coverage.py. Added deny rules so Claude cannot run the download scripts (people pull data).
+- Wrote src/drifter_eval.py and tests/test_drifter_eval.py (8 tests). The tests caught a bug in the 50%/90% area
+  code (cells mapped back to the grid in the wrong order). Reusing OpenDrift readers made runs ~10x faster.
+- Result vs the real drifter (20 windows, 24 h): radar+model beats model_only (median 24 h separation 16.0 vs
+  18.9 km at K=10; skill 0.22 vs 0.07; closer in 72% of window/K pairs). But both are far off, and the POC maps are
+  badly overconfident: the drifter is inside the 90% area in 0% of windows (5% at K=50, area ~80 km2). In the example
+  window both forecasts go west while the drifter goes east. Likely missing physics: wind (the drogue was lost) and
+  model error. The frozen check passes on this real pair, so baseline and agent would choose fused, which reality
+  rewards over model_only, but the forecast itself is not good enough to plan a search on.
+- Wrote src/drifter_viz.py: summary figure of all 20 windows and animated GIFs of single windows. Pattern: radar
+  helps most where it covers the drifter's path (e.g. windows 10-23..10-25, 90-100% coverage: 6-11 km vs 15-17 km
+  for model_only), but in some well-covered windows (10-19 12:00, 10-20 00:00) radar+model is worse (30-37 km).
+  Checked determinism: the same window gives the same result in a fresh process and after other runs.
 
 
 ## 2026-10-28

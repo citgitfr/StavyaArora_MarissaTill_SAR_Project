@@ -42,6 +42,9 @@ Anything that would ask is denied when nobody is there to answer.
   never committed (`.gitignore`).  [deny: `Read(./heldout/**)`, `Edit(heldout/**)`]
 - Edit `fixtures/` (source data) or `configs/thresholds.yaml` (frozen thresholds).
   [deny: `Edit(fixtures/**)`, `Edit(configs/thresholds.yaml)`]
+- Run the data-download scripts. People run every download.
+  [deny: `Bash(python src/data/*)`, `Bash(python scripts/list_ncei.py*)`,
+  `Bash(python scripts/find_drifters.py*)`; deny wins even if someone approves by mistake]
 - Use the network, other than `git push origin claude/*`.
   [deny: curl, wget, ssh, scp, pip install, uv pip install, WebFetch, WebSearch]
 - Read `.env` files or `~/.ssh`.  [deny: `Read(./.env)`, `Read(./.env.*)`, `Read(~/.ssh/**)`]
