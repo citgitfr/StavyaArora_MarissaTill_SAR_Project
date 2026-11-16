@@ -43,6 +43,14 @@ Add a dated entry every work session. Include failures.
   forcing-tools skill and script) plus runs/cases/. No .git, no heldout. It refuses uncommitted allowlisted files and
   refuses to run if labels.json is in the repo, and writes a manifest (commit, SHA-256 per file) to
   eval/workspaces/<run_id>.json. Self-test: 37 files, check runs inside it.
+- Trial run (case06) in a workspace failed first: every allowed tool was denied, because a new folder is untrusted
+  and Claude Code ignores its own .claude/settings.json. The agent wrote nothing and reported the block ($0.21).
+  Fix: pass --settings .claude/settings.json. Rerun: Skill and tools worked; decision repair flip_sign v, the same
+  as the baseline; 9 turns, $0.13. One harmless denial: `mkdir ... && python ...` (compounds need every part allowed);
+  the agent retried without mkdir. Practice run only, not scored (eval/transcripts/trial/, runs/results/agent/trial/).
+- Wrote scripts/run_agent_batch.py: one call per repeat; builds the workspace, pre-creates output folders, runs
+  claude -p per case (dontAsk, --settings, memory locked), copies decisions, repaired files and transcripts back,
+  stops on a denial of a needed tool, logs turns/cost/denials to eval/batches/<run_id>.json. Dry run tested.
 
 
 ## 2026-10-28

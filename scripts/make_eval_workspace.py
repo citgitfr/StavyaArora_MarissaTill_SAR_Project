@@ -90,6 +90,7 @@ def main(argv=None):
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print(f"workspace: {ws}\n{len(copied)} files ({len(cases)} cases); manifest: {out.relative_to(REPO)}")
+    return ws
 
 
 if __name__ == "__main__":

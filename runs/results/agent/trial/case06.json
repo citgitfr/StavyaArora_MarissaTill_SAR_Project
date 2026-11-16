@@ -1,0 +1,21 @@
+{"case_id": "case06",
+ "choice": "repair",
+ "repair": {"action": "flip_sign", "param": "v"},
+ "evidence": [
+  "check(original).result = fail",
+  "check(original).correlation_sign.pass = false",
+  "compare.corr_u = 0.4977",
+  "compare.corr_v = -0.3873",
+  "compare.corr_swapped = -0.03482",
+  "compare.speed_ratio_median = 1.107",
+  "compare.best_lag_hours = 0",
+  "compare.flags = [\"negative_corr_v\"]",
+  "qc(radar).speed_max = 1.0",
+  "qc(radar).fill_value_hits = 0",
+  "repair.repairs_used = 1",
+  "check(repaired).result = pass",
+  "check(repaired).correlation_sign.corr_v = 0.3873",
+  "check(repaired).correlation_sign.corr_swapped = -0.2007",
+  "check(repaired).lag.best_lag_hours = -1"
+ ],
+ "reason": "Only the correlation_sign test failed, with corr_v negative while corr_u, speed ratio, lag, units and fill values were normal, which matches a flipped v sign. After flip_sign v the repaired radar passes every check test, so it is used as the radar (runs/work/agent/case06/radar_repaired.nc)."}

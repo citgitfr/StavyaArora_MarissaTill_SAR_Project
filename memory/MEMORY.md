@@ -20,5 +20,6 @@ Format: `- YYYY-MM-DD [decision|fact] text (source: ...)`. Under 40 lines. Fix o
 - 2026-10-28 [fact] Radar coverage is measured against HYCOM ocean cells, not the whole box. (source: docs/dev_notes.md)
 - 2026-10-28 [fact] compare flags best_lag_nonzero even on clean data; only check's lag test decides. A radar time offset of 1 h or less cannot be detected. (source: LOG.md, SKILL.md)
 - 2026-10-28 [fact] repair never overwrites a file and counts repairs per output folder (max 2), so a repeat run needs a fresh folder. (source: forcing_tools.py)
-- 2026-10-28 [fact] In dontAsk mode the Skill tool was denied; Skill(forcing-tools) was allowed on 2026-11-15. If it is still denied, read .claude/skills/forcing-tools/SKILL.md as a file. (source: eval/transcripts/agent_case03.jsonl)
+- 2026-11-15 [fact] If the Skill or forcing_tools.py is denied, the folder's settings were not loaded (an untrusted folder ignores its own .claude/settings.json); evaluation runs pass --settings .claude/settings.json. Read .claude/skills/forcing-tools/SKILL.md as a file, and report the denial instead of guessing. (source: eval/transcripts/trial/case06.jsonl)
+- 2026-11-15 [fact] Shell compounds are allowed only if every part is allowed, so `mkdir ... && python ...` is denied; run the tool command alone (repair creates its own output folder). (source: eval/transcripts/trial/case06.jsonl)
 - 2026-11-15 [fact] The blend step belongs in src/blend.py: radar where valid, model elsewhere, a `source` variable, refuse unless check passes. (source: docs/dev_notes.md, Step 5)

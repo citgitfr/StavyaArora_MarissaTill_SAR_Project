@@ -1,0 +1,8 @@
+[
+  {
+    "action": "flip_sign",
+    "param": "v",
+    "file": "runs/cases/case06/radar.nc",
+    "out": "/Users/marissatill/sar_eval/trial/runs/work/agent/case06/radar_repaired.nc"
+  }
+]
