@@ -1,0 +1,14 @@
+[
+  {
+    "action": "mask_fill",
+    "param": 5.0,
+    "file": "runs/cases/case06/radar.nc",
+    "out": "/Users/marissatill/sar_eval/cmp_rep2/runs/work/agent/case06/radar_repaired.nc"
+  },
+  {
+    "action": "flip_sign",
+    "param": "v",
+    "file": "runs/work/agent/case06/radar_repaired.nc",
+    "out": "/Users/marissatill/sar_eval/cmp_rep2/runs/work/agent/case06/radar_repaired2.nc"
+  }
+]

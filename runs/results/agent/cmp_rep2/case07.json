@@ -1,0 +1,19 @@
+{"case_id": "case07",
+ "choice": "escalate",
+ "repair": null,
+ "evidence": [
+  "check.result = fail",
+  "check.tests.speed_ratio.speed_ratio_median = 0.01857 (min 0.5, max 2.0)",
+  "check.tests.speed_bound.speed_max = 1.004 (max_m_s 3.0, radar)",
+  "check.tests.correlation_sign.corr_u = 0.2433",
+  "check.tests.correlation_sign.corr_v = 0.272",
+  "check.tests.lag.best_lag_hours = 0",
+  "qc(radar).speed_median = 0.2195",
+  "qc(radar).speed_max = 1.004",
+  "qc(model).units_normalized = m s-1",
+  "qc(model).speed_median = 14.34",
+  "qc(model).speed_p95 = 33.42",
+  "qc(model).speed_max = 66.97",
+  "compare.corr_swapped = 0.03849"
+ ],
+ "reason": "Check fails only on speed_ratio, but the radar speeds are within the speed bound while the model file reports speeds far above it (qc max 66.97 m s-1), so the fault appears to be in the model, which no radar repair on the menu can fix and which makes model_only unsafe. A person should inspect the model forcing before any drift forecast uses it."}

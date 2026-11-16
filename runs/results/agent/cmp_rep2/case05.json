@@ -1,0 +1,22 @@
+{
+  "case_id": "case05",
+  "choice": "model_only",
+  "repair": {"action": "shift_time", "param": -6},
+  "evidence": [
+    "check.result = fail",
+    "check.tests.lag.best_lag_hours = 6",
+    "check.tests.correlation_sign.corr_u = 6.277e-05",
+    "check.tests.correlation_sign.corr_v = 0.07705",
+    "check.tests.correlation_sign.corr_swapped = -0.01432",
+    "compare.corr_by_lag.6 = 0.142",
+    "compare.speed_ratio_median = 1.857",
+    "qc.speed_max = 1.004",
+    "qc.fill_value_hits = 0",
+    "repaired check.result = fail",
+    "repaired check.tests.lag.best_lag_hours = 0",
+    "repaired check.tests.correlation_sign.corr_u = 0.08801",
+    "repaired check.tests.correlation_sign.corr_v = 0.1961",
+    "repaired check.tests.time_axis.inside_model_times = false"
+  ],
+  "reason": "The radar failed the lag and correlation tests; shift_time -6 fixed the lag but corr_u stayed below 0.1 and the shifted times fell outside the model window, and no other menu repair matches the evidence. The radar could not be made to pass check, so the forecast should use the model alone."
+}

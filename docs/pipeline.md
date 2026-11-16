@@ -19,14 +19,22 @@ Activate the venv in every new terminal: the agent's `python` is whatever is fir
 
 ## The one command
 ```bash
-python src/run_demo.py --replay              # October 2021 (real-drifter window), ~13 min
+python src/run_demo.py --replay              # all 22 October cases as one test, ~20 min
 python src/run_demo.py --replay --august     # plus an appendix with the August 2021 benchmark
 ```
-Runs steps 1-8 below on the October data, replaying the saved agent decisions (no Claude calls, no network, no API
-key), and writes `demo_results/lab3_demo.md` (all tables and figures), `demo_results/lab3_figures/` and
-`demo_results/lab3_run_log.txt`. At the top of the report is a PASS/FAIL table of reproducibility checks:
-regenerated cases and key match the stored ones; the rerun baseline matches its saved decisions; the agent's repaired
-files rebuild identically with the frozen tool (missing ones are rebuilt, as on a fresh clone).
+No Claude calls, no network, no API key. Three stages:
+- **A. Each set separately** (single-fault: 14 cases, seed 1018; harder: 8 cases, seed 2026): regenerate the cases and
+  check them against the repo and the key; rerun the baseline and check it against its committed decisions; replay
+  every saved agent run (repaired files rebuilt with the frozen tool and checked).
+- **B. Merge into one 22-case set:** `runs/cases_all/` (case01-14 single-fault, case15-22 harder; `mapping.json`), one
+  key (`~/sar_heldout/labels_all.json`), merged baseline decisions, and merged agent runs `all_rep1` = oct_rep1 +
+  cmp_rep1 and `all_rep2` = oct_rep1 + cmp_rep2. Regenerated every run; not in git.
+- **C. Score and draw all 22 at once:** `score.py`, `decision_reality.py`, `drift.py`, `decision_viz.py` on the merged
+  set (results in `runs/results/*_all/`, figures `*_all*`), plus the clean-data reality check.
+
+Writes `demo_results/lab3_demo.md` (every table and figure, on all 22 cases, plus one by-subset table),
+`demo_results/lab3_figures/` and `demo_results/lab3_run_log.txt`, with a PASS/FAIL table of reproducibility checks at
+the top. The per-set commands below remain for running a set on its own.
 
 ## Data
 Everything the demo needs is committed in `fixtures/`. The scripts below only show where it came from; **people run

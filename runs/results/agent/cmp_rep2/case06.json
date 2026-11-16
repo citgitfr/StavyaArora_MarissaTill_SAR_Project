@@ -1,0 +1,27 @@
+{
+  "case_id": "case06",
+  "choice": "repair",
+  "repair": [
+    {"action": "mask_fill", "param": 5.0},
+    {"action": "flip_sign", "param": "v"}
+  ],
+  "evidence": [
+    "check(original).result = fail",
+    "check(original).speed_bound.speed_max = 1099.0",
+    "check(original).fill_values.hfr_hits = 0",
+    "check(original).correlation_sign.corr_u = -0.0006774",
+    "check(original).correlation_sign.corr_v = -0.0003022",
+    "check(original).lag.best_lag_hours = 6",
+    "qc(radar).speed_p95 = 1.004",
+    "compare.rms_u = 173.6",
+    "repair(mask_fill 5.0).n_masked = 37917",
+    "check(after mask_fill).speed_bound.speed_max = 1.004",
+    "check(after mask_fill).lag.best_lag_hours = 0",
+    "check(after mask_fill).correlation_sign.corr_u = 0.2432",
+    "check(after mask_fill).correlation_sign.corr_v = -0.2716",
+    "check(after flip_sign v).result = pass",
+    "check(after flip_sign v).correlation_sign.corr_v = 0.2716",
+    "check(after flip_sign v).speed_ratio.speed_ratio_median = 1.857"
+  ],
+  "reason": "The radar held non-standard spike values (speed_max 1099.0, no listed fill-value hits) that swamped correlation and lag; masking |value| >= 5.0 removed them and revealed a negative corr_v, which flip_sign v corrected. Check passes on runs/work/agent/case06/radar_repaired2.nc, which should be used as the radar forcing."
+}

@@ -1,0 +1,8 @@
+[
+  {
+    "action": "shift_time",
+    "param": -6.0,
+    "file": "runs/cases/case05/radar.nc",
+    "out": "/Users/marissatill/sar_eval/cmp_rep2/runs/work/agent/case05/radar_shift.nc"
+  }
+]

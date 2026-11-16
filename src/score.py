@@ -279,8 +279,8 @@ def main(argv=None):
               f"{s['radar_recovered']:>5}/{s['radar_recoverable']:<5}{faithful:>10}{s['escalations']:>7}{cost:>8}{turns:>7}")
     for k, v in summary["agreement"].items():
         print(f"agreement {k}: {v['same_choice_and_action']}/{v['cases']}")
-    print(f"\nwrote {(out / 'summary.json').relative_to(REPO)} and {(out / 'cases.csv').relative_to(REPO)} "
-          "(cases.csv reveals the key)")
+    show = (lambda p: p.relative_to(REPO)) if REPO in out.parents else (lambda p: p)
+    print(f"\nwrote {show(out / 'summary.json')} and {show(out / 'cases.csv')} (cases.csv reveals the key)")
 
 
 if __name__ == "__main__":

@@ -31,6 +31,14 @@ agent_cmp_rep1,case05,radar_rotated_90,True,model_only,"{""action"": ""shift_tim
 agent_cmp_rep1,case06,spikes_plus_v_flip,True,repair,"[{""action"": ""mask_fill"", ""param"": 10.0}, {""action"": ""flip_sign"", ""param"": ""v""}]",True,False,True,True,0.0,0.9500001318666248,True
 agent_cmp_rep1,case07,model_x100,True,escalate,null,True,False,False,False,,,
 agent_cmp_rep1,case08,radar_rotated_180,True,repair,"[{""action"": ""flip_sign"", ""param"": ""u""}, {""action"": ""flip_sign"", ""param"": ""v""}]",True,False,True,True,0.0,1.0,True
+agent_cmp_rep2,case01,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+agent_cmp_rep2,case02,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+agent_cmp_rep2,case03,x100_plus_shift_+3h,True,repair,"[{""action"": ""rescale"", ""param"": 0.01}, {""action"": ""shift_time"", ""param"": -3}]",True,False,True,True,7.543778046681382e-09,1.0,True
+agent_cmp_rep2,case04,swap_plus_x0.01,True,repair,"[{""action"": ""swap_components"", ""param"": null}, {""action"": ""rescale"", ""param"": 100.0}]",True,False,True,True,7.946951541271119e-09,1.0,True
+agent_cmp_rep2,case05,radar_rotated_90,True,model_only,"{""action"": ""shift_time"", ""param"": -6}",True,False,True,False,,,
+agent_cmp_rep2,case06,spikes_plus_v_flip,True,repair,"[{""action"": ""mask_fill"", ""param"": 5.0}, {""action"": ""flip_sign"", ""param"": ""v""}]",True,False,True,True,0.0,0.9500001318666248,True
+agent_cmp_rep2,case07,model_x100,True,escalate,null,True,False,False,False,,,
+agent_cmp_rep2,case08,radar_rotated_180,True,repair,"[{""action"": ""flip_sign"", ""param"": ""u""}, {""action"": ""flip_sign"", ""param"": ""v""}]",True,False,True,True,0.0,1.0,True
 oracle,case01,clean,True,fused,null,True,False,True,True,,,
 oracle,case02,clean,True,fused,null,True,False,True,True,,,
 oracle,case03,x100_plus_shift_+3h,True,repair,"[{""action"": ""rescale"", ""param"": 0.01}, {""action"": ""shift_time"", ""param"": -3.0}]",True,False,True,True,,,

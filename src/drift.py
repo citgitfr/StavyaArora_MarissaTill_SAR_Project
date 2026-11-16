@@ -204,28 +204,41 @@ def figure(case, panels, ref, path, start=None):
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     ps = _load_style()
-    runs = {k: v[0] for k, v in panels.items()}
+    runs = {k: v[0] for k, v in panels.items() if v[0] is not None}
     edges = poc_edges(ref, *runs.values())
-    n = len(runs) + 1
+    n = len(panels) + 1
     fig, axs = plt.subplots(1, n, figsize=(4.2 * n, 5.4), sharex=True, sharey=True)
     fig.subplots_adjust(top=0.80, bottom=0.25, wspace=0.08, left=0.05, right=0.99)
+    # the map stays on the clean-radar reference; particles that leave it are reported in the panel, not chased
+    x0, x1 = np.nanmin(ref[0]) - 0.1, np.nanmax(ref[0]) + 0.1
+    y0, y1 = np.nanmin(ref[1]) - 0.1, np.nanmax(ref[1]) + 0.1
     items = [("clean_radar", ref, None), *[(k, v[0], v[1]) for k, v in panels.items()]]
     for ax, (k, r, dec) in zip(axs, items):
-        ax.pcolormesh(edges[0], edges[1], poc_map(r[0][:, -1], r[1][:, -1], edges).T, cmap="Blues", shading="flat")
-        ax.plot(r[0][::25].T, r[1][::25].T, lw=0.5, color=ps.color(k), alpha=0.8)
-        ax.plot([], [], lw=1, color=ps.color(k), label="Sample particle tracks (24 h)")
-        ax.plot([], [], "s", color="#6baed6", label="Probability map at 24 h (shaded)")
-        ax.plot(ref[0][:, -1], ref[1][:, -1], ".", ms=1, color="k")
-        ax.plot([], [], ".", color="k", label="Reference end points (clean radar)")
         sub = "reference for this figure" if dec is None else ps.decision_text(dec)
         ax.set_title(f"{ps.name(k)}\n{sub}", fontsize=ps.SUBTITLE_SIZE - 1, color=ps.color(k))
         ax.set_xlabel("Longitude", fontsize=8)
         ax.tick_params(labelsize=7)
+        ax.plot(ref[0][:, -1], ref[1][:, -1], ".", ms=1, color="k")
+        ax.plot([], [], ".", color="k", label="Reference end points (clean radar)")
+        if r is None:
+            ax.text(0.5, 0.55, "Escalated to a person:\nno automatic forecast", transform=ax.transAxes,
+                    ha="center", va="center", fontsize=10, color=ps.color(k),
+                    bbox=dict(facecolor="white", edgecolor=ps.color(k)))
+        else:
+            ax.pcolormesh(edges[0], edges[1], poc_map(r[0][:, -1], r[1][:, -1], edges).T, cmap="Blues", shading="flat")
+            ax.plot(r[0][::25].T, r[1][::25].T, lw=0.5, color=ps.color(k), alpha=0.8)
+            ax.plot([], [], lw=1, color=ps.color(k), label="Sample particle tracks (24 h)")
+            ax.plot([], [], "s", color="#6baed6", label="Probability map at 24 h (shaded)")
+            end_lon, end_lat = r[0][:, -1], r[1][:, -1]
+            off = ~((end_lon >= x0) & (end_lon <= x1) & (end_lat >= y0) & (end_lat <= y1))
+            if off.mean() > 0.01:
+                d = float(np.nanmedian(haversine_km(end_lon[off], end_lat[off], ref[0][off, -1], ref[1][off, -1])))
+                ax.text(0.5, 0.04, f"{off.mean():.0%} of particles end off this map\n(median {d:.0f} km from the reference)",
+                        transform=ax.transAxes, ha="center", va="bottom", fontsize=8, color=ps.color(k),
+                        bbox=dict(facecolor="white", edgecolor=ps.color(k), alpha=0.9))
         ax.legend(fontsize=7, loc="upper center", bbox_to_anchor=(0.5, -0.13), frameon=False)
-    lons = np.concatenate([r[0].ravel() for r in (ref, *runs.values())])
-    lats = np.concatenate([r[1].ravel() for r in (ref, *runs.values())])
-    axs[0].set_xlim(np.nanpercentile(lons, 0.5) - 0.05, np.nanpercentile(lons, 99.5) + 0.05)
-    axs[0].set_ylim(np.nanpercentile(lats, 0.5) - 0.05, np.nanpercentile(lats, 99.5) + 0.05)
+    axs[0].set_xlim(x0, x1)
+    axs[0].set_ylim(y0, y1)
     axs[0].set_ylabel("Latitude", fontsize=8)
     when = f" from {start:%Y-%m-%d %H:%M} UTC" if start is not None else ""
     fig.suptitle(f"{ps.case_label(case)}: what each decision does to a 24 h forecast{when}\n"
@@ -257,7 +270,10 @@ def evaluate(a):
             dec = decs.get(c)
             choice = dec.get("choice") if dec else None
             row = {"policy": name, "case": c, "choice": choice, "radar": None, "run": None}
-            if choice in ("model_only", "escalate") or (choice in score.RADAR_CHOICES):
+            if choice == "escalate":                 # handed to a person: no automatic forecast
+                rows.append({**row, "radar": "escalated"})
+                continue
+            if choice == "model_only" or (choice in score.RADAR_CHOICES):
                 radar = score.radar_used(dec, c, work, cases_dir) if choice in score.RADAR_CHOICES else None
                 if choice in score.RADAR_CHOICES and radar is None:
                     rows.append({**row, "radar": "MISSING"})
@@ -303,6 +319,9 @@ def evaluate(a):
         for name in ("always_fused", "baseline", *agents, "always_model_only"):
             decs, work = pols[name]
             dec = decs[c]
+            if dec["choice"] == "escalate":
+                panels[name] = (None, dec)
+                continue
             radar = score.radar_used(dec, c, work, cases_dir) if dec["choice"] in score.RADAR_CHOICES else None
             panels[name] = (cached_run(radar, cases_dir / c / "model.nc", points, start)[:2], dec)
         fig_path = REPO / "docs" / "figures" / f"{a.fig_prefix}{c}.png"

@@ -231,3 +231,11 @@ runs/work/_replay_*/
 
 # drift run cache (regenerated)
 runs/work/drift/
+
+# run_demo merged 22-case set (regenerated every run)
+runs/cases_all/
+runs/results/_merged_baseline/
+runs/work/_merged_baseline/
+runs/results/agent/all_rep*/
+runs/work/agent/all_rep*/
+eval/batches/all_rep*.json

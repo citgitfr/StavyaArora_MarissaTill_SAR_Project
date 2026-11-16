@@ -1,12 +1,12 @@
 """Baseline vs agent pictures for the faulty October cases, against the real drifter. Offline; does not read the key.
 
-1. decision_summary_oct.png - the drifter-summary layout, comparing No QC (radar as delivered), the scripted baseline,
+1. decision_summary_<tag>.png - the drifter-summary layout, comparing No QC (radar as delivered), the scripted baseline,
    the Claude agent and the perfect repair, over every case and every 24 h window:
    (a) one case: the real drifter's path in each window and each policy's forecast-centre path
    (b) distance from forecast centre to the real drifter by hour, over all cases and windows (median, middle 50%)
    (c) every case: mean 24 h miss over the windows, per policy
-2. baseline_vs_agent_oct.png - decisions side by side, per-case miss baseline vs agent, metrics side by side
-3. decision_oct_<case>.gif - one 24 h forecast per policy, animated, with the perfect repair and the real drifter
+2. baseline_vs_agent_<tag>.png - decisions side by side, per-case miss baseline vs agent, metrics side by side
+3. decision_<tag>_<case>.gif - one 24 h forecast per policy, animated, with the perfect repair and the real drifter
 
   python src/decision_viz.py --agent-run oct_rep1
   python src/decision_viz.py --agent-run oct_rep1 --cases case14 case06 --window "2021-10-24 12:00"
@@ -75,7 +75,7 @@ def summary_runs(pols, ids, track, starts, clean, model, cases_dir, k):
     return out
 
 
-def decision_summary(res, ids, track, starts, map_case, decs_by_policy, path):
+def decision_summary(res, ids, track, starts, map_case, decs_by_policy, path, subsets=None):
     plt = _plt()
     order = ["always_fused", "baseline", "agent", "clean_radar"]
     style = {"always_fused": dict(lw=1.2), "baseline": dict(lw=2.2), "agent": dict(lw=1.4, ls="--"),
@@ -107,7 +107,7 @@ def decision_summary(res, ids, track, starts, map_case, decs_by_policy, path):
     b = fig.add_subplot(gs[1])
     hours = np.arange(25)
     for p in order:
-        d = np.array([r[2] for c in ids for r in res[p][c]])
+        d = np.array([r[2] for c in ids for r in res[p][c]])           # escalated cases have no forecast
         b.plot(hours, np.median(d, 0), color=ps.color(p), label=f"{ps.name(p)} (median)", **style[p])
         if p != "clean_radar":
             b.fill_between(hours, np.percentile(d, 25, 0), np.percentile(d, 75, 0), color=ps.color(p), alpha=0.12)
@@ -123,12 +123,28 @@ def decision_summary(res, ids, track, starts, map_case, decs_by_policy, path):
     x = np.arange(len(ids))
     bars = ["always_fused", "baseline", "agent"]
     w = 0.27
+    allv = {p: [np.mean([r[2][-1] for r in res[p][cid]]) if res[p][cid] else np.nan for cid in ids] for p in bars}
+    finite = np.array([v for p in bars for v in allv[p] if np.isfinite(v)])
+    cap = min(float(finite.max()), 2.5 * float(np.median(finite))) * 1.08       # very large misses are clipped, labelled
+    if subsets:
+        hard = [i for i, cid in enumerate(ids) if subsets.get(cid) == "harder"]
+        if hard:
+            c.axvspan(min(hard) - 0.5, max(hard) + 0.5, color="0.93", zorder=0)
+            c.text((min(hard) + max(hard)) / 2, cap * 0.97, "harder cases", ha="center", va="top", fontsize=8, color="0.4")
     for j, p in enumerate(bars):
-        vals = [np.mean([r[2][-1] for r in res[p][cid]]) for cid in ids]
-        c.bar(x + (j - 1) * w, vals, w, color=ps.color(p), label=ps.name(p),
-              hatch="//" if p == "agent" else None, edgecolor="white" if p == "agent" else None)
+        xs = x + (j - 1) * w
+        c.bar(xs, np.minimum(np.nan_to_num(allv[p], nan=0), cap), w, color=ps.color(p), label=ps.name(p),
+              hatch="//" if p == "agent" else None, edgecolor="white" if p == "agent" else None, zorder=2)
+        for xi, v in zip(xs, allv[p]):
+            if not np.isfinite(v):
+                c.text(xi, 0.5, "E", ha="center", va="bottom", fontsize=8, fontweight="bold", color=ps.color(p))
+            elif v > cap:
+                c.text(xi, cap * 0.985, f"{v:.0f}", ha="center", va="top", fontsize=7, rotation=90, color="white",
+                       fontweight="bold", zorder=3)
     clean_vals = [np.mean([r[2][-1] for r in res["clean_radar"][cid]]) for cid in ids]
-    c.plot(x, clean_vals, "_", color=ps.color("clean_radar"), ms=22, mew=2.5, label=ps.name("clean_radar"))
+    c.plot(x, clean_vals, "_", color=ps.color("clean_radar"), ms=14, mew=2.5, label=ps.name("clean_radar"), zorder=3)
+    c.plot([], [], " ", label="E = escalated to a person (no forecast)")
+    c.set_ylim(0, cap)
     c.set_xticks(x)
     c.set_xticklabels([str(int(cid.replace("case", ""))) for cid in ids], fontsize=ps.LABEL_SIZE)
     c.set_xlabel("Case", fontsize=ps.LABEL_SIZE)
@@ -136,17 +152,17 @@ def decision_summary(res, ids, track, starts, map_case, decs_by_policy, path):
     c.set_title("(c) Every faulty case: 24 h miss, averaged over the windows", fontsize=ps.SUBTITLE_SIZE - 1)
     c.legend(fontsize=ps.LEGEND_SIZE, loc="upper left")
     c.grid(axis="y", alpha=0.3)
-    fig.suptitle(f"No QC vs scripted baseline vs Claude agent on the faulty October 2021 cases, judged against real "
-                 f"drifter {de.DEF_ID}", fontsize=ps.TITLE_SIZE)
+    fig.suptitle(f"No QC vs scripted baseline vs Claude agent on all {len(ids)} faulty October 2021 cases, judged "
+                 f"against real drifter {de.DEF_ID}", fontsize=ps.TITLE_SIZE)
     fig.tight_layout()
     fig.savefig(path, dpi=150, bbox_inches="tight")
     plt.close(fig)
 
 
 # ---- 2. baseline vs agent --------------------------------------------------------------------
-def baseline_vs_agent(ids, base, agent, agent_run, reality, scores, batch, path):
+def baseline_vs_agent(ids, base, agent, agent_run, reality, scores, batch, path, subsets=None):
     plt = _plt()
-    fig = plt.figure(figsize=(17, 6))
+    fig = plt.figure(figsize=(17, max(6, 0.3 * len(ids) + 1.8)))
     gs = fig.add_gridspec(1, 3, width_ratios=[1.3, 1, 1.1])
 
     a = fig.add_subplot(gs[0])
@@ -165,6 +181,11 @@ def baseline_vs_agent(ids, base, agent, agent_run, reality, scores, batch, path)
     a.set_xticklabels([ps.name("baseline"), f"{ps.name('agent')} ({agent_run})"], fontsize=ps.LABEL_SIZE)
     a.set_yticks(np.arange(len(ids)) + 0.5)
     a.set_yticklabels([ps.case_label(c) for c in ids], fontsize=8)
+    if subsets:
+        hard = [i for i, c in enumerate(ids) if subsets.get(c) == "harder"]
+        if hard and min(hard) > 0:
+            a.axhline(min(hard), color="0.3", lw=1.2)
+            a.text(2.08, min(hard) - 0.15, "harder cases below", fontsize=7, color="0.3", va="bottom")
     a.set_title("(a) The decision each made on every faulty case", fontsize=ps.SUBTITLE_SIZE)
     for s in a.spines.values():
         s.set_visible(False)
@@ -179,15 +200,25 @@ def baseline_vs_agent(ids, base, agent, agent_run, reality, scores, batch, path)
     r = reality.pivot_table(index="case", columns="policy", values="median_sep_km_24h")
     ag = f"agent_{agent_run}"
     cols = [k for k in ("baseline", ag, "clean_radar") if k in r]
-    lim = [float(r[cols].min().min()) - 1, float(r[cols].max().max()) + 1]
+    vals = r[cols].to_numpy(dtype=float)
+    cap = 3 * float(np.nanmedian(vals))                                   # keep the scale readable
+    shown = r[ag].notna() & (r["baseline"] <= cap) & (r[ag] <= cap)
+    lim = [float(np.nanmin(vals)) - 1, float(np.nanmax(np.where(vals <= cap, vals, np.nan))) + 1]
     b.plot(lim, lim, color="0.7", lw=1, label="Same outcome (diagonal)")
-    b.scatter(r["baseline"], r[ag], color=ps.color("agent"), zorder=3, label="One faulty case")
+    b.scatter(r.loc[shown, "baseline"], r.loc[shown, ag], color=ps.color("agent"), zorder=3, label="One faulty case")
     if "clean_radar" in r:
         b.axhline(r["clean_radar"].mean(), color=ps.color("clean_radar"), ls=":", lw=1.2,
                   label=f"{ps.name('clean_radar')}, mean")
-    for c in r.index:
+    for c in r.index[shown]:
         b.annotate(str(int(c.replace("case", ""))), (r.loc[c, "baseline"], r.loc[c, ag]), fontsize=7,
                    xytext=(4, 2), textcoords="offset points")
+    hidden = []
+    for c in r.index[~shown]:
+        ag_txt = "agent escalated" if pd.isna(r.loc[c, ag]) else f"agent {r.loc[c, ag]:.0f} km"
+        hidden.append(f"{ps.case_label(c)}: baseline {r.loc[c, 'baseline']:.0f} km, {ag_txt}")
+    if hidden:
+        b.text(0.98, 0.02, "Not shown:\n" + "\n".join(hidden), transform=b.transAxes, ha="right", va="bottom",
+               fontsize=7, bbox=dict(facecolor="white", edgecolor="0.6"))
     b.set_xlim(lim)
     b.set_ylim(lim)
     b.set_xlabel(f"{ps.name('baseline')}: median 24 h miss (km)", fontsize=ps.LABEL_SIZE)
@@ -231,20 +262,35 @@ def baseline_vs_agent(ids, base, agent, agent_run, reality, scores, batch, path)
 def animate_case(case, clouds, decs, clean_cloud, obs, path):
     plt = _plt()
     from matplotlib.animation import FuncAnimation, PillowWriter
-    allx = np.concatenate([obs["lon"].values, clean_cloud[0].ravel()] + [c[0].ravel() for c in clouds.values()])
-    ally = np.concatenate([obs["lat"].values, clean_cloud[1].ravel()] + [c[1].ravel() for c in clouds.values()])
-    lo, hi = np.nanpercentile(allx, [0.5, 99.5])
-    la, ha = np.nanpercentile(ally, [0.5, 99.5])
+    # the map follows the drifter and the perfect-repair cloud; another cloud widens it only if it stays nearby,
+    # otherwise its panel reports how far off the map it is
+    lo, hi = np.nanmin([obs["lon"].min(), np.nanpercentile(clean_cloud[0], 0.5)]), \
+        np.nanmax([obs["lon"].max(), np.nanpercentile(clean_cloud[0], 99.5)])
+    la, ha = np.nanmin([obs["lat"].min(), np.nanpercentile(clean_cloud[1], 0.5)]), \
+        np.nanmax([obs["lat"].max(), np.nanpercentile(clean_cloud[1], 99.5)])
+    for c in clouds.values():
+        if c is None:
+            continue
+        cx0, cx1 = np.nanpercentile(c[0], [0.5, 99.5])
+        cy0, cy1 = np.nanpercentile(c[1], [0.5, 99.5])
+        if cx0 > lo - 0.25 and cx1 < hi + 0.25 and cy0 > la - 0.25 and cy1 < ha + 0.25:
+            lo, hi, la, ha = min(lo, cx0), max(hi, cx1), min(la, cy0), max(ha, cy1)
     pad = 0.03
+    box = (lo - pad, hi + pad, la - pad, ha + pad)
     n = len(clouds)
     fig, axs = plt.subplots(1, n, figsize=(4.6 * n, 5.6), sharex=True, sharey=True)
     fig.subplots_adjust(top=0.78, bottom=0.27, wspace=0.08, left=0.05, right=0.99)
     art = []
-    for ax, (p, (plon, plat)) in zip(axs, clouds.items()):
-        ax.set_xlim(lo - pad, hi + pad)
-        ax.set_ylim(la - pad, ha + pad)
+    for ax, (p, cloud) in zip(axs, clouds.items()):
+        plon, plat = cloud if cloud is not None else (None, None)
+        ax.set_xlim(box[0], box[1])
+        ax.set_ylim(box[2], box[3])
         ax.set_title(f"{ps.name(p)}\n{ps.decision_text(decs[p])}", fontsize=ps.SUBTITLE_SIZE - 1,
                      color=ps.color(p))
+        if cloud is None:
+            ax.text(0.5, 0.55, "Escalated to a person:\nno automatic forecast", transform=ax.transAxes, ha="center",
+                    va="center", fontsize=10, color=ps.color(p), bbox=dict(facecolor="white", edgecolor=ps.color(p)))
+        note = ax.text(0.5, 0.03, "", transform=ax.transAxes, ha="center", va="bottom", fontsize=8, color=ps.color(p))
         g, = ax.plot([], [], ".", ms=2, color=ps.color("clean_radar"), alpha=0.3, label=ps.name("clean_radar"))
         dots, = ax.plot([], [], ".", ms=2.5, color=ps.color(p), alpha=0.8, label=f"Forecast particles ({ps.name(p).split(' (')[0]})")
         line, = ax.plot([], [], color="k", lw=1.8, label="Real drifter, path so far")
@@ -257,20 +303,26 @@ def animate_case(case, clouds, decs, clean_cloud, obs, path):
             if hasattr(hnd, "set_markersize"):
                 hnd.set_markersize(6)
                 hnd.set_alpha(1)
-        art.append((p, g, dots, line, head, plon, plat))
+        art.append((p, g, dots, line, head, plon, plat, note))
     axs[0].set_ylabel("Latitude", fontsize=8)
     stamp = fig.suptitle("", fontsize=ps.SUBTITLE_SIZE)
     t0 = obs.index[0]
 
     def frame(h):
         misses = []
-        for p, g, dots, line, head, plon, plat in art:
+        for p, g, dots, line, head, plon, plat, note in art:
             g.set_data(clean_cloud[0][:, h], clean_cloud[1][:, h])
-            dots.set_data(plon[:, h], plat[:, h])
             line.set_data(obs["lon"].values[:h + 1], obs["lat"].values[:h + 1])
             head.set_data([obs["lon"].values[h]], [obs["lat"].values[h]])
+            short = ps.name(p).split(' (')[0]
+            if plon is None:
+                misses.append(f"{short} escalated")
+                continue
+            dots.set_data(plon[:, h], plat[:, h])
             d = de.haversine_km(np.nanmean(plon[:, h]), np.nanmean(plat[:, h]), obs["lon"].values[h], obs["lat"].values[h])
-            misses.append(f"{ps.name(p).split(' (')[0]} {d:.1f} km")
+            off = ~((plon[:, h] >= box[0]) & (plon[:, h] <= box[1]) & (plat[:, h] >= box[2]) & (plat[:, h] <= box[3]))
+            note.set_text(f"{off.mean():.0%} of particles off this map" if off.mean() > 0.01 else "")
+            misses.append(f"{short} {d:.1f} km")
         stamp.set_text(f"{ps.case_label(case)}: where does each policy's forecast put the object?  24 h forecast released "
                        f"at the real drifter, {t0:%Y-%m-%d %H:%M} UTC\nHour +{h:02d}   distance from forecast centre to "
                        f"real drifter: " + "  |  ".join(misses))
@@ -296,7 +348,9 @@ def main(argv=None):
     ap.add_argument("--every", type=int, default=12)
     ap.add_argument("--reality", default="runs/results/reality_oct/cases.csv")
     ap.add_argument("--scores", default="runs/results/scores_oct/summary.json")
-    ap.add_argument("--skip-summary", action="store_true", help="skip decision_summary_oct.png (saves ~3 min)")
+    ap.add_argument("--skip-summary", action="store_true", help="skip the decision summary figure (saves ~3 min)")
+    ap.add_argument("--tag", default="oct", help="file-name tag: baseline_vs_agent_<tag>.png, decision_<tag>_<case>.gif")
+    ap.add_argument("--subset-of", help="optional JSON mapping case -> subset name, shown in the figures")
     a = ap.parse_args(argv)
 
     cases_dir, clean, model = REPO / a.cases_dir, Path(a.clean), Path(a.model)
@@ -308,6 +362,7 @@ def main(argv=None):
             "agent": (agent, REPO / "runs" / "work" / "agent" / a.agent_run),
             "always_model_only": ({c: {"choice": "model_only"} for c in ids}, None)}
     decs_by_policy = {p: v[0] for p, v in pols.items()}
+    subsets = json.loads((REPO / a.subset_of).read_text(encoding="utf-8")) if a.subset_of else None
     fig_dir = REPO / "docs" / "figures"
 
     reality_p, scores_p = REPO / a.reality, REPO / a.scores
@@ -320,8 +375,8 @@ def main(argv=None):
     if bpath.exists():
         bl = json.loads(bpath.read_text(encoding="utf-8"))
         batch = {"total_cost_usd": round(sum(c["cost_usd"] or 0 for c in bl["cases"].values()), 2)}
-    baseline_vs_agent(ids, base, agent, a.agent_run, reality, scores, batch, fig_dir / "baseline_vs_agent_oct.png")
-    print("wrote docs/figures/baseline_vs_agent_oct.png")
+    baseline_vs_agent(ids, base, agent, a.agent_run, reality, scores, batch, fig_dir / f"baseline_vs_agent_{a.tag}.png", subsets)
+    print(f"wrote docs/figures/baseline_vs_agent_{a.tag}.png")
 
     with __import__("xarray").open_dataset(clean) as rr, __import__("xarray").open_dataset(model) as mm:
         t1 = min(pd.Timestamp(rr.time.values[-1]), pd.Timestamp(mm.time.values[-1]))
@@ -332,8 +387,8 @@ def main(argv=None):
         sum_pols = {p: pols[p] for p in ("always_fused", "baseline", "agent")}
         sum_pols["clean_radar"] = (None, None)
         res = summary_runs(sum_pols, ids, track, starts, clean, model, cases_dir, a.k)
-        decision_summary(res, ids, track, starts, a.cases[0], decs_by_policy, fig_dir / "decision_summary_oct.png")
-        print("wrote docs/figures/decision_summary_oct.png")
+        decision_summary(res, ids, track, starts, a.cases[0], decs_by_policy, fig_dir / f"decision_summary_{a.tag}.png", subsets)
+        print(f"wrote docs/figures/decision_summary_{a.tag}.png")
 
     s = pd.Timestamp(a.window)
     obs = track.loc[s:s + pd.Timedelta(hours=24)]
@@ -345,13 +400,13 @@ def main(argv=None):
         clouds, decs = {}, {}
         for p, (dd, work) in pols.items():
             readers, note = dre.forcing_for(dd.get(c), c, work, cases_dir, model)
-            if readers is None:
+            if readers is None and note != "escalated":
                 sys.exit(f"{p} {c}: repaired file missing")
-            clouds[p] = de.run(readers, lon0, lat0, s, 24, a.k)
+            clouds[p] = None if readers is None else de.run(readers, lon0, lat0, s, 24, a.k)
             decs[p] = dd.get(c)
-        gif = fig_dir / f"decision_oct_{c}.gif"
+        gif = fig_dir / f"decision_{a.tag}_{c}.gif"
         animate_case(c, clouds, decs, clean_cloud, obs, gif)
-        print(f"wrote docs/figures/decision_oct_{c}.gif")
+        print(f"wrote docs/figures/decision_{a.tag}_{c}.gif")
 
 
 if __name__ == "__main__":

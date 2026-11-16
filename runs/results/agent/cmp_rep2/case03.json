@@ -1,0 +1,27 @@
+{
+  "case_id": "case03",
+  "choice": "repair",
+  "repair": [
+    {"action": "rescale", "param": 0.01},
+    {"action": "shift_time", "param": -3}
+  ],
+  "evidence": [
+    "check.result = fail (original radar)",
+    "check.speed_bound.speed_max = 100.4",
+    "qc.speed_median = 21.95",
+    "check.speed_ratio.speed_ratio_median = 184.3",
+    "check.lag.best_lag_hours = 3",
+    "check.time_axis.inside_model_times = false",
+    "check.time_axis.hfr_times = [2021-10-18T03:00, 2021-10-29T02:00]",
+    "check.time_axis.model_times = [2021-10-18T00:00, 2021-10-29T00:00]",
+    "compare.speed_ratio_median = 1.843 (after rescale 0.01)",
+    "compare.best_lag_hours = 3 (after rescale 0.01)",
+    "check.result = pass (after rescale 0.01 and shift_time -3)",
+    "check.speed_bound.speed_max = 1.004 (repaired)",
+    "check.speed_ratio.speed_ratio_median = 1.857 (repaired)",
+    "check.correlation_sign.corr_u = 0.2433 (repaired)",
+    "check.correlation_sign.corr_v = 0.272 (repaired)",
+    "check.lag.best_lag_hours = 0 (repaired)"
+  ],
+  "reason": "The radar was about 100 times too large (speed_max 100.4) and 3 h late (best_lag_hours 3, radar times start at 03:00), so it was rescaled by 0.01 and shifted by -3 h. The repaired file runs/work/agent/case03/radar_repaired.nc passes every check test."
+}

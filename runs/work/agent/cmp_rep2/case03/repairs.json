@@ -1,0 +1,14 @@
+[
+  {
+    "action": "rescale",
+    "param": 0.01,
+    "file": "runs/cases/case03/radar.nc",
+    "out": "/Users/marissatill/sar_eval/cmp_rep2/runs/work/agent/case03/radar_rescaled.nc"
+  },
+  {
+    "action": "shift_time",
+    "param": -3.0,
+    "file": "runs/work/agent/case03/radar_rescaled.nc",
+    "out": "/Users/marissatill/sar_eval/cmp_rep2/runs/work/agent/case03/radar_repaired.nc"
+  }
+]

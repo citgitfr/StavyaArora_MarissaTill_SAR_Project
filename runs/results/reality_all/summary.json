@@ -1,0 +1,76 @@
+{
+  "drifter": 300534061399950,
+  "windows": 20,
+  "k": 10.0,
+  "cases_dir": "runs/cases_all",
+  "clean_radar": "fixtures/hfr_20211018.nc",
+  "model": "fixtures/hycom_20211018.nc",
+  "distinct_forcings": 24,
+  "policies": {
+    "always_model_only": {
+      "cases": 22,
+      "mean_miss_km_24h": 26.22,
+      "mean_skill": 0.064,
+      "mean_in90_24h": 0.0,
+      "mean_excess_over_clean_km": 10.196,
+      "worst_excess_over_clean_km": 163.693,
+      "share_cases_better_than_model_only": 0.0,
+      "escalated": 0
+    },
+    "always_fused": {
+      "cases": 22,
+      "mean_miss_km_24h": 21.238,
+      "mean_skill": 0.166,
+      "mean_in90_24h": 0.007,
+      "mean_excess_over_clean_km": 5.215,
+      "worst_excess_over_clean_km": 52.148,
+      "share_cases_better_than_model_only": 0.773,
+      "escalated": 0
+    },
+    "baseline": {
+      "cases": 22,
+      "mean_miss_km_24h": 23.928,
+      "mean_skill": 0.183,
+      "mean_in90_24h": 0.009,
+      "mean_excess_over_clean_km": 7.905,
+      "worst_excess_over_clean_km": 163.693,
+      "share_cases_better_than_model_only": 0.773,
+      "escalated": 0
+    },
+    "agent_all_rep1": {
+      "cases": 21,
+      "mean_miss_km_24h": 16.372,
+      "mean_skill": 0.199,
+      "mean_in90_24h": 0.01,
+      "mean_excess_over_clean_km": 0.349,
+      "worst_excess_over_clean_km": 2.887,
+      "share_cases_better_than_model_only": 0.857,
+      "escalated": 1
+    },
+    "agent_all_rep2": {
+      "cases": 21,
+      "mean_miss_km_24h": 16.372,
+      "mean_skill": 0.199,
+      "mean_in90_24h": 0.01,
+      "mean_excess_over_clean_km": 0.349,
+      "worst_excess_over_clean_km": 2.887,
+      "share_cases_better_than_model_only": 0.857,
+      "escalated": 1
+    },
+    "clean_radar": {
+      "cases": 22,
+      "mean_miss_km_24h": 16.023,
+      "mean_skill": 0.219,
+      "mean_in90_24h": 0.0,
+      "mean_excess_over_clean_km": 0.0,
+      "worst_excess_over_clean_km": 0.0,
+      "share_cases_better_than_model_only": 1.0,
+      "escalated": 0
+    }
+  },
+  "no_motion_reference": {
+    "median_miss_km_24h": 15.021,
+    "mean_miss_km_24h": 14.765,
+    "skill": 0.0
+  }
+}

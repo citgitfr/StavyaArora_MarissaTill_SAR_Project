@@ -1,0 +1,78 @@
+{
+  "start": "2021-10-22 23:00:00",
+  "hours": 24,
+  "release_points": [
+    [
+      -120.76114654541016,
+      34.63711929321289
+    ],
+    [
+      -121.51073455810547,
+      35.374298095703125
+    ],
+    [
+      -120.07402801513672,
+      34.06175994873047
+    ],
+    [
+      -120.88607788085938,
+      34.07973861694336
+    ],
+    [
+      -120.84443664550781,
+      35.19449996948242
+    ]
+  ],
+  "particles": 1000,
+  "radius_m": 1000.0,
+  "model": "OceanDrift, currents only, reader priority [radar, model]",
+  "reference": "hfr_20211018.nc + hycom_20211018.nc",
+  "distinct_runs": 24,
+  "policies": {
+    "always_model_only": {
+      "cases_run": 22,
+      "median_sep_km_6h": 3.286,
+      "median_sep_km_12h": 6.232,
+      "median_sep_km_24h": 16.221,
+      "mean_of_mean_sep_km_24h": 19.681,
+      "max_sep_km_24h": 113.01,
+      "mean_poc_overlap": 0.065
+    },
+    "always_fused": {
+      "cases_run": 22,
+      "median_sep_km_6h": 1.581,
+      "median_sep_km_12h": 2.127,
+      "median_sep_km_24h": 3.298,
+      "mean_of_mean_sep_km_24h": 11.321,
+      "max_sep_km_24h": 46.828,
+      "mean_poc_overlap": 0.487
+    },
+    "baseline": {
+      "cases_run": 22,
+      "median_sep_km_6h": 0.0,
+      "median_sep_km_12h": 0.0,
+      "median_sep_km_24h": 0.0,
+      "mean_of_mean_sep_km_24h": 8.436,
+      "max_sep_km_24h": 113.01,
+      "mean_poc_overlap": 0.75
+    },
+    "agent_all_rep1": {
+      "cases_run": 21,
+      "median_sep_km_6h": 0.0,
+      "median_sep_km_12h": 0.0,
+      "median_sep_km_24h": 0.0,
+      "mean_of_mean_sep_km_24h": 2.24,
+      "max_sep_km_24h": 16.221,
+      "mean_poc_overlap": 0.83
+    },
+    "agent_all_rep2": {
+      "cases_run": 21,
+      "median_sep_km_6h": 0.0,
+      "median_sep_km_12h": 0.0,
+      "median_sep_km_24h": 0.0,
+      "mean_of_mean_sep_km_24h": 2.24,
+      "max_sep_km_24h": 16.221,
+      "mean_poc_overlap": 0.83
+    }
+  }
+}

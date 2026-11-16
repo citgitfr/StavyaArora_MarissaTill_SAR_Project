@@ -1,0 +1,30 @@
+{
+  "case_id": "case08",
+  "choice": "repair",
+  "repair": [
+    {"action": "flip_sign", "param": "u"},
+    {"action": "flip_sign", "param": "v"}
+  ],
+  "repaired_file": "runs/work/agent/case08/radar_repaired.nc",
+  "evidence": [
+    "check(original).result = fail",
+    "check(original).correlation_sign.corr_u = -0.2433",
+    "check(original).correlation_sign.corr_v = -0.272",
+    "check(original).correlation_sign.corr_swapped = -0.03849",
+    "check(original).lag.best_lag_hours = -6",
+    "compare.corr_by_lag.0 = -0.2576",
+    "compare.corr_by_lag.-6 = -0.1233",
+    "compare.flags = negative_corr_u, negative_corr_v, swapped_corr_exceeds_direct, best_lag_nonzero",
+    "qc(radar).fill_value_hits = 0",
+    "qc(radar).speed_max = 1.004",
+    "check(after flip_sign u).correlation_sign.corr_u = 0.2433",
+    "check(after flip_sign u).correlation_sign.corr_v = -0.272",
+    "check(after flip_sign u).lag.best_lag_hours = 0",
+    "check(repaired).result = pass",
+    "check(repaired).correlation_sign.corr_u = 0.2433",
+    "check(repaired).correlation_sign.corr_v = 0.272",
+    "check(repaired).lag.best_lag_hours = 0",
+    "check(repaired).speed_ratio.speed_ratio_median = 1.857"
+  ],
+  "reason": "Radar u and v were both anti-correlated with the model at every lag, so the lag failure (-6 h) was a side effect of the sign error, not a time offset. Flipping the sign of u and then v made check pass with best_lag_hours = 0, so the repaired radar is used."
+}

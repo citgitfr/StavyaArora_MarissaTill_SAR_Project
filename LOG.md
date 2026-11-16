@@ -165,6 +165,29 @@ Add a dated entry every work session. Include failures.
   run would have read the answers. make_eval_workspace.py now writes a neutral stand-in README into the workspace
   instead of the real one (PERMISSIONS.md updated); a test workspace contains no results text. cmp_rep1 is clean: the
   README it saw (commit fb9620a) only said compound faults were the next benchmark.
+- Agent cmp_rep2 (neutral-README workspace, commit 3217faf): 8/8 decisions, 0 denials, $1.90. Same action as cmp_rep1
+  on all 8 cases (only the mask_fill threshold differs, 10 vs 5): escalated the faulty model again ("the model file
+  reports speeds far above it (qc max 66.97 m s-1) ... makes model_only unsafe"), recovered the 180-deg rotation again
+  (flip u then v), missed the 90-deg rotation again the same way. Against the real drifter both runs are identical
+  (mean 24 h miss 16.43 km on 7 forecast cases, +0.40 km vs perfect repair). The compound result is reproducible.
+  Against the key (Marissa ran score.py): cmp_rep1 and cmp_rep2 both 8/8 acceptable, 0 silent errors, radar recovered
+  6/7, faithful 6/6, 1 escalation; rep1 vs rep2 agree 8/8; baseline 7/8, 5/7; baseline vs agent agree 4/8.
+- One combined test: run_demo already runs both October sets; its report now opens with "all 22 October cases in one
+  test" (key scores summed, drifter misses averaged over the cases each policy forecast). Agent (oct_rep1 + either
+  harder run): 22/22 acceptable, 0 silent errors, radar recovered 18/20, 1 correct escalation, mean 24 h miss 16.4 km
+  over 21 forecast cases, worst case +2.9 km vs perfect repair, ~$4.60. Baseline: 21/22, 0 silent, 17/20, 23.9 km,
+  worst +164 km (the faulty-model case). No QC: 8/22 with 14 silent errors. Model only: 21/22, 0/20 radar, 26.2 km.
+  Same table at the top of the README results. A single shuffled 22-case benchmark (--plan full) is left for Lab 4.
+- Whole report on all 22 cases. run_demo now checks each set separately (cases, keys, baseline, agent replays), then
+  merges them into runs/cases_all/ (case01-14 single-fault, case15-22 harder; mapping.json), one key outside the repo,
+  merged baseline decisions and merged agent runs all_rep1 (oct_rep1 + cmp_rep1) and all_rep2 (oct_rep1 + cmp_rep2),
+  and runs score, decision_reality, drift and decision_viz once on all 22. Every table and figure covers all 22, with one
+  by-subset table. Figures handle the new situations: an escalated decision is drawn as "escalated to a person, no
+  automatic forecast" (drift.py and decision_viz.py no longer forecast it with the model), maps stay on the drifter and
+  say how many particles end off the map and how far, the per-case bar chart caps very large misses and labels them,
+  marks escalations with E and shades the harder cases. Plumbing tested with made-up keys; real-drifter numbers on all
+  22 cases (no key needed): agent 16.37 km (21 forecast + 1 escalated), baseline 23.93 km, No QC 21.24, model only
+  26.22, perfect repair 16.02, no-motion 15.02.
 
 
 ## 2026-10-28

@@ -63,6 +63,23 @@
         "minutes": 4.9
       }
     },
+    "agent_cmp_rep2": {
+      "cases": 8,
+      "decided": 8,
+      "acceptable": 8,
+      "silent_errors": 0,
+      "radar_recoverable": 7,
+      "radar_recovered": 6,
+      "radar_decisions": 6,
+      "faithful_radar": 6,
+      "fidelity_checked": 6,
+      "escalations": 1,
+      "batch": {
+        "cost_usd": 1.8996,
+        "mean_turns": 8.88,
+        "minutes": 5.2
+      }
+    },
     "oracle": {
       "cases": 8,
       "decided": 8,
@@ -77,6 +94,10 @@
     }
   },
   "agreement": {
+    "cmp_rep1_vs_cmp_rep2": {
+      "cases": 8,
+      "same_choice_and_action": 8
+    },
     "baseline_vs_cmp_rep1": {
       "cases": 8,
       "same_choice_and_action": 4
