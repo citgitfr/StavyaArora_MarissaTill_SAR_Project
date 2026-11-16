@@ -1,0 +1,29 @@
+{
+  "case_id": "case03",
+  "choice": "repair",
+  "repair": {"action": "mask_fill", "param": 10.0},
+  "evidence": [
+    "check.result = fail",
+    "check.tests.speed_bound.speed_max = 1099.0",
+    "check.tests.fill_values.hfr_hits = 0",
+    "check.tests.correlation_sign.corr_u = -0.003511",
+    "check.tests.correlation_sign.corr_v = 0.0008845",
+    "check.tests.lag.best_lag_hours = 3",
+    "qc.speed_median = 0.2002",
+    "qc.speed_p95 = 1.0",
+    "qc.speed_max = 1099.0",
+    "compare.speed_ratio_median = 1.141",
+    "compare.bias_u = -38.75",
+    "compare.bias_v = -38.78",
+    "repair.n_masked = 7479",
+    "check(repaired).result = pass",
+    "check(repaired).tests.speed_bound.speed_max = 1.0",
+    "check(repaired).tests.speed_ratio.speed_ratio_median = 1.107",
+    "check(repaired).tests.correlation_sign.corr_u = 0.4971",
+    "check(repaired).tests.correlation_sign.corr_v = 0.3865",
+    "check(repaired).tests.correlation_sign.corr_swapped = -0.1999",
+    "check(repaired).tests.lag.best_lag_hours = -1",
+    "check(repaired).tests.coverage.hour_fraction_min = 0.326"
+  ],
+  "reason": "The radar holds isolated non-standard spike values (speed_max 1099.0 while the median and p95 are normal), which broke the speed-bound, correlation and lag tests. Masking values with |u| or |v| >= 10 removed 7479 spikes, and the repaired radar passes every check, so it is used as the radar in the fused forcing."
+}

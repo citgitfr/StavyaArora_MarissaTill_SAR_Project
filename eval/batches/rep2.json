@@ -1,0 +1,162 @@
+{
+  "run_id": "rep2",
+  "workspace": "/Users/marissatill/sar_eval/rep2",
+  "started_utc": "2026-11-16T01:00:27.175778+00:00",
+  "prompt_template": "Evaluation run. Use the forcing-tools skill to decide runs/cases/{case}. Write any repaired file under runs/work/agent/{case}/ and the decision to runs/results/agent/{case}.json. The output folders already exist. Do not edit memory. Do not commit.",
+  "flags": [
+    "--permission-mode",
+    "dontAsk",
+    "--settings",
+    ".claude/settings.json",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--disallowedTools",
+    "Edit(memory/**)"
+  ],
+  "cases": {
+    "case01": {
+      "seconds": 18.1,
+      "exit_code": 0,
+      "turns": 5,
+      "cost_usd": 0.1523884,
+      "decision_written": true,
+      "denials": [],
+      "critical_denials": 0,
+      "stderr_tail": "Ignoring 12 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects[\"/Users/marissatill/sar_eval/rep2\"].hasTrustDialogAccepted: true in /Users/marissatill/.claude.json.\nWarning: claude.ai MCP servers blocked by enterprise policy: claude.ai Claude Docs, claude.ai BioRender, claude.ai Goodnotes"
+    },
+    "case02": {
+      "seconds": 18.5,
+      "exit_code": 0,
+      "turns": 6,
+      "cost_usd": 0.1535158,
+      "decision_written": true,
+      "denials": [],
+      "critical_denials": 0,
+      "stderr_tail": "Ignoring 12 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects[\"/Users/marissatill/sar_eval/rep2\"].hasTrustDialogAccepted: true in /Users/marissatill/.claude.json.\nWarning: claude.ai MCP servers blocked by enterprise policy: claude.ai Claude Docs, claude.ai BioRender, claude.ai Goodnotes"
+    },
+    "case03": {
+      "seconds": 34.9,
+      "exit_code": 0,
+      "turns": 8,
+      "cost_usd": 0.2090182,
+      "decision_written": true,
+      "denials": [],
+      "critical_denials": 0,
+      "stderr_tail": "Ignoring 12 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects[\"/Users/marissatill/sar_eval/rep2\"].hasTrustDialogAccepted: true in /Users/marissatill/.claude.json.\nWarning: claude.ai MCP servers blocked by enterprise policy: claude.ai Claude Docs, claude.ai BioRender, claude.ai Goodnotes"
+    },
+    "case04": {
+      "seconds": 28.8,
+      "exit_code": 0,
+      "turns": 8,
+      "cost_usd": 0.19224999999999998,
+      "decision_written": true,
+      "denials": [],
+      "critical_denials": 0,
+      "stderr_tail": "Ignoring 12 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects[\"/Users/marissatill/sar_eval/rep2\"].hasTrustDialogAccepted: true in /Users/marissatill/.claude.json.\nWarning: claude.ai MCP servers blocked by enterprise policy: claude.ai Claude Docs, claude.ai BioRender, claude.ai Goodnotes"
+    },
+    "case05": {
+      "seconds": 18.0,
+      "exit_code": 0,
+      "turns": 5,
+      "cost_usd": 0.144393,
+      "decision_written": true,
+      "denials": [],
+      "critical_denials": 0,
+      "stderr_tail": "Ignoring 12 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects[\"/Users/marissatill/sar_eval/rep2\"].hasTrustDialogAccepted: true in /Users/marissatill/.claude.json.\nWarning: claude.ai MCP servers blocked by enterprise policy: claude.ai Claude Docs, claude.ai BioRender, claude.ai Goodnotes"
+    },
+    "case06": {
+      "seconds": 24.2,
+      "exit_code": 0,
+      "turns": 9,
+      "cost_usd": 0.1883552,
+      "decision_written": true,
+      "denials": [],
+      "critical_denials": 0,
+      "stderr_tail": "Ignoring 12 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects[\"/Users/marissatill/sar_eval/rep2\"].hasTrustDialogAccepted: true in /Users/marissatill/.claude.json.\nWarning: claude.ai MCP servers blocked by enterprise policy: claude.ai Claude Docs, claude.ai BioRender, claude.ai Goodnotes"
+    },
+    "case07": {
+      "seconds": 18.1,
+      "exit_code": 0,
+      "turns": 6,
+      "cost_usd": 0.1514762,
+      "decision_written": true,
+      "denials": [],
+      "critical_denials": 0,
+      "stderr_tail": "Ignoring 12 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects[\"/Users/marissatill/sar_eval/rep2\"].hasTrustDialogAccepted: true in /Users/marissatill/.claude.json.\nWarning: claude.ai MCP servers blocked by enterprise policy: claude.ai Claude Docs, claude.ai BioRender, claude.ai Goodnotes"
+    },
+    "case08": {
+      "seconds": 30.0,
+      "exit_code": 0,
+      "turns": 9,
+      "cost_usd": 0.2096268,
+      "decision_written": true,
+      "denials": [],
+      "critical_denials": 0,
+      "stderr_tail": "Ignoring 12 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects[\"/Users/marissatill/sar_eval/rep2\"].hasTrustDialogAccepted: true in /Users/marissatill/.claude.json.\nWarning: claude.ai MCP servers blocked by enterprise policy: claude.ai Claude Docs, claude.ai BioRender, claude.ai Goodnotes"
+    },
+    "case09": {
+      "seconds": 24.9,
+      "exit_code": 0,
+      "turns": 8,
+      "cost_usd": 0.183864,
+      "decision_written": true,
+      "denials": [],
+      "critical_denials": 0,
+      "stderr_tail": "Ignoring 12 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects[\"/Users/marissatill/sar_eval/rep2\"].hasTrustDialogAccepted: true in /Users/marissatill/.claude.json.\nWarning: claude.ai MCP servers blocked by enterprise policy: claude.ai Claude Docs, claude.ai BioRender, claude.ai Goodnotes"
+    },
+    "case10": {
+      "seconds": 29.4,
+      "exit_code": 0,
+      "turns": 8,
+      "cost_usd": 0.1963144,
+      "decision_written": true,
+      "denials": [],
+      "critical_denials": 0,
+      "stderr_tail": "Ignoring 12 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects[\"/Users/marissatill/sar_eval/rep2\"].hasTrustDialogAccepted: true in /Users/marissatill/.claude.json.\nWarning: claude.ai MCP servers blocked by enterprise policy: claude.ai Claude Docs, claude.ai BioRender, claude.ai Goodnotes"
+    },
+    "case11": {
+      "seconds": 19.9,
+      "exit_code": 0,
+      "turns": 7,
+      "cost_usd": 0.16464439999999997,
+      "decision_written": true,
+      "denials": [],
+      "critical_denials": 0,
+      "stderr_tail": "Ignoring 12 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects[\"/Users/marissatill/sar_eval/rep2\"].hasTrustDialogAccepted: true in /Users/marissatill/.claude.json.\nWarning: claude.ai MCP servers blocked by enterprise policy: claude.ai Claude Docs, claude.ai BioRender, claude.ai Goodnotes"
+    },
+    "case12": {
+      "seconds": 17.0,
+      "exit_code": 0,
+      "turns": 6,
+      "cost_usd": 0.1521218,
+      "decision_written": true,
+      "denials": [],
+      "critical_denials": 0,
+      "stderr_tail": "Ignoring 12 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects[\"/Users/marissatill/sar_eval/rep2\"].hasTrustDialogAccepted: true in /Users/marissatill/.claude.json.\nWarning: claude.ai MCP servers blocked by enterprise policy: claude.ai Claude Docs, claude.ai BioRender, claude.ai Goodnotes"
+    },
+    "case13": {
+      "seconds": 14.3,
+      "exit_code": 0,
+      "turns": 5,
+      "cost_usd": 0.1403882,
+      "decision_written": true,
+      "denials": [],
+      "critical_denials": 0,
+      "stderr_tail": "Ignoring 12 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects[\"/Users/marissatill/sar_eval/rep2\"].hasTrustDialogAccepted: true in /Users/marissatill/.claude.json.\nWarning: claude.ai MCP servers blocked by enterprise policy: claude.ai Claude Docs, claude.ai BioRender, claude.ai Goodnotes"
+    },
+    "case14": {
+      "seconds": 24.3,
+      "exit_code": 0,
+      "turns": 9,
+      "cost_usd": 0.1888264,
+      "decision_written": true,
+      "denials": [],
+      "critical_denials": 0,
+      "stderr_tail": "Ignoring 12 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects[\"/Users/marissatill/sar_eval/rep2\"].hasTrustDialogAccepted: true in /Users/marissatill/.claude.json.\nWarning: claude.ai MCP servers blocked by enterprise policy: claude.ai Claude Docs, claude.ai BioRender, claude.ai Goodnotes"
+    }
+  },
+  "stopped_early": null,
+  "finished_utc": "2026-11-16T01:05:47.489889+00:00",
+  "total_cost_usd": 2.4272
+}

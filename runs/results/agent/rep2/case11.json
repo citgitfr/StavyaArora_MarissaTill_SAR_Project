@@ -1,0 +1,22 @@
+{"case_id": "case11",
+ "choice": "model_only",
+ "repair": null,
+ "evidence": [
+  "check.result = fail",
+  "check.tests.coverage.pass = false",
+  "check.tests.coverage.good_hours_fraction = 0.3958",
+  "check.tests.coverage.min_good_hours_fraction = 0.8",
+  "check.tests.coverage.hour_fraction_mean = 0.1649",
+  "check.tests.coverage.hour_fraction_min = 0.0",
+  "qc(radar).valid_fraction = 0.1321",
+  "check.tests.units.pass = true",
+  "check.tests.speed_bound.pass = true",
+  "check.tests.time_axis.pass = true",
+  "check.tests.fill_values.pass = true",
+  "check.tests.speed_ratio.speed_ratio_median = 1.07",
+  "check.tests.correlation_sign.corr_u = 0.4571",
+  "check.tests.correlation_sign.corr_v = 0.4189",
+  "check.tests.lag.best_lag_hours = -1",
+  "qc(model).flags = []"
+ ],
+ "reason": "The radar fails only the coverage test (good_hours_fraction 0.3958 vs minimum 0.8), and no repair on the menu can restore missing radar data. All other tests pass and the model file QC shows no flags, so the forecast should use model currents only."}

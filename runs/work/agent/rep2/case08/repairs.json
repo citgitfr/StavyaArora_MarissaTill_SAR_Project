@@ -1,0 +1,8 @@
+[
+  {
+    "action": "mask_fill",
+    "param": 10.0,
+    "file": "runs/cases/case08/radar.nc",
+    "out": "/Users/marissatill/sar_eval/rep2/runs/work/agent/case08/radar_repaired.nc"
+  }
+]

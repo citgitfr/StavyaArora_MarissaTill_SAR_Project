@@ -1,0 +1,21 @@
+{
+  "case_id": "case14",
+  "choice": "repair",
+  "repair": {"action": "rescale", "param": 0.01},
+  "evidence": [
+    "check(original).result = fail",
+    "check(original).speed_bound.speed_max = 100.0",
+    "check(original).speed_ratio.speed_ratio_median = 110.7",
+    "check(original).correlation_sign.corr_u = 0.4977",
+    "check(original).correlation_sign.corr_v = 0.3873",
+    "check(original).correlation_sign.corr_swapped = -0.2007",
+    "qc(radar).speed_median = 19.24",
+    "qc(radar).units_normalized = m s-1",
+    "compare.best_lag_hours = -1",
+    "repair.out = runs/work/agent/case14/radar_repaired.nc",
+    "check(repaired).result = pass",
+    "check(repaired).speed_bound.speed_max = 1.0",
+    "check(repaired).speed_ratio.speed_ratio_median = 1.107"
+  ],
+  "reason": "Radar speeds were about 100 times the model speeds everywhere, but the correlations were normal, so the values look like cm/s labelled as m/s. Rescaling by 0.01 made every check test pass."
+}

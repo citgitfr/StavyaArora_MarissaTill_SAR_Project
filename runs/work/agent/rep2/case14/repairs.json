@@ -1,0 +1,8 @@
+[
+  {
+    "action": "rescale",
+    "param": 0.01,
+    "file": "runs/cases/case14/radar.nc",
+    "out": "/Users/marissatill/sar_eval/rep2/runs/work/agent/case14/radar_repaired.nc"
+  }
+]

@@ -51,6 +51,31 @@ Add a dated entry every work session. Include failures.
 - Wrote scripts/run_agent_batch.py: one call per repeat; builds the workspace, pre-creates output folders, runs
   claude -p per case (dontAsk, --settings, memory locked), copies decisions, repaired files and transcripts back,
   stops on a denial of a needed tool, logs turns/cost/denials to eval/batches/<run_id>.json. Dry run tested.
+- Agent batch rep1: 14/14 decisions, 0 denials, $2.46, about 6 min. rep2: 14/14, 0 denials, $2.43. rep1 and rep2
+  made the same choice and repair action on all 14 cases (only the mask_fill threshold varied: 5 or 10), and both
+  match the scripted baseline's actions on all 14 (baseline mask_fill threshold 6). The agent explains its choices
+  well, but on these single, clean-cut faults the rule table does as well for free.
+- Wrote src/score.py (LLM-free: acceptable, silent errors, radar recovered, faithful radar vs. the clean fixture,
+  escalations, cost/turns, run agreement; policies always_model_only, always_fused, baseline, agent per run, oracle)
+  and tests/test_score.py (14 tests, made-up key). Plumbing run on a made-up all-clean key: 1.5 s; fidelity flags
+  two radar decisions per policy as not faithful (vector RMS 0.125 m/s, 47 of 48 hours shared), consistent with a
+  1-hour time offset left in the data. Not yet run on the real key.
+- Scored on the real key (python src/score.py): acceptable 13/14 for baseline, agent rep1 and rep2; 1 silent error each;
+  radar recovered 12/13; faithful radar 11/13; always_fused 8 silent errors; always_model_only recovers 0/13.
+  rep1 vs rep2 and baseline vs rep1 agree on 14/14.
+- Checked how OpenDrift 1.14.12 combines readers (models/basemodel/environment.py, get_environment): readers are
+  tried in order per particle and time step, and NaN or out-of-coverage values fall through to the next reader.
+  So stacking [radar, model] is a hard-switch blend; Lab 3 uses this instead of writing src/blend.py. Weighted or
+  tapered blends need a written file (Lab 4).
+- Wrote src/drift.py (OceanDrift, currents only, deterministic; 5 release points x 200 particles; 24 h from
+  2021-08-10 11:00; reference = clean radar + HYCOM; separation at 6/12/24 h and POC-map overlap; runs cached by
+  data hash) and tests/test_drift.py (6 tests). First version picked release points in the box corners, where
+  particles leave both readers (the HYCOM slice is the same box as the radar) and stop; fixed with a 0.25 deg margin.
+- Drift results (24 h, median km from the reference): model_only 13.9 km; always_fused up to 38.8 km on the x0.01
+  case and 6-10 km on swap, sign flip and x100; baseline and agent repairs bring those to 0.0; mask_fill cases
+  0.3-0.4 km (masked cells fall back to the model); the remaining 1 h offset costs 0.74 km (same as the undetectable
+  +1 h case); using the 60%-blanked radar is 11.3 km from the reference versus 13.9 km for model_only.
+  Figure: docs/figures/drift_case10.png.
 
 
 ## 2026-10-28

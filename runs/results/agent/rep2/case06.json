@@ -1,0 +1,22 @@
+{
+  "case_id": "case06",
+  "choice": "repair",
+  "repair": {"action": "flip_sign", "param": "v"},
+  "evidence": [
+    "check.result = fail",
+    "check.tests.correlation_sign.pass = false",
+    "check.tests.correlation_sign.corr_u = 0.4977",
+    "check.tests.correlation_sign.corr_v = -0.3873",
+    "check.tests.correlation_sign.corr_swapped = -0.03482",
+    "check.tests.speed_ratio.speed_ratio_median = 1.107",
+    "check.tests.lag.best_lag_hours = 0",
+    "compare.flags = [\"negative_corr_v\"]",
+    "qc.flags = []",
+    "repair.action = flip_sign, repair.param = v, repair.repairs_used = 1",
+    "check(repaired).result = pass",
+    "check(repaired).tests.correlation_sign.corr_v = 0.3873",
+    "check(repaired).tests.correlation_sign.corr_swapped = -0.2007",
+    "check(repaired).tests.lag.best_lag_hours = -1"
+  ],
+  "reason": "Only the correlation-sign test failed, with corr_v = -0.3873 at clean-like magnitude while corr_u, speed ratio, lag, units, coverage and fill tests were normal, which matches a flipped v sign. After flip_sign v the check passes, so the repaired radar file runs/work/agent/case06/radar_repaired.nc is used."
+}

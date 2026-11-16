@@ -1,0 +1,20 @@
+{"case_id": "case07",
+ "choice": "fused",
+ "repair": null,
+ "evidence": [
+  "check.result = pass",
+  "check.tests.speed_bound.speed_max = 1.0",
+  "check.tests.coverage.hour_fraction_min = 0.3439",
+  "check.tests.coverage.good_hours_fraction = 1.0",
+  "check.tests.fill_values.hfr_hits = 0",
+  "check.tests.lag.best_lag_hours = -1",
+  "compare.speed_ratio_median = 1.107",
+  "compare.corr_u = 0.4977",
+  "compare.corr_v = 0.3873",
+  "compare.corr_swapped = -0.2007",
+  "compare.corr_by_lag.-1 = 0.444",
+  "compare.corr_by_lag.0 = 0.4425",
+  "qc.valid_fraction = 0.3329",
+  "qc.flags = []"
+ ],
+ "reason": "All eight check tests pass, and the speed ratio and correlations match the clean-data profile in SKILL.md. The best_lag_nonzero flag from compare is not a fault by itself, and check's lag test passes (best_lag_hours = -1, limit 1)."}

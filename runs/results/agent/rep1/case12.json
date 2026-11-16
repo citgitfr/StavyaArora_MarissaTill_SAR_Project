@@ -1,0 +1,16 @@
+{"case_id": "case12",
+ "choice": "fused",
+ "repair": null,
+ "evidence": [
+  "check.result = pass",
+  "check.tests.speed_ratio.speed_ratio_median = 1.107",
+  "check.tests.correlation_sign.corr_u = 0.4977",
+  "check.tests.correlation_sign.corr_v = 0.3873",
+  "check.tests.correlation_sign.corr_swapped = -0.2007",
+  "check.tests.lag.best_lag_hours = -1",
+  "check.tests.coverage.good_hours_fraction = 1.0",
+  "check.tests.fill_values.hfr_hits = 0",
+  "qc.speed_max = 1.0",
+  "qc.flags = []"
+ ],
+ "reason": "Check passed every test on the original radar and model files, and the radar statistics match the clean-data pattern. No repair was needed, so the radar can be fused with the model."}

@@ -1,0 +1,26 @@
+{
+  "case_id": "case08",
+  "choice": "repair",
+  "repair": {"action": "mask_fill", "param": 10.0},
+  "evidence": [
+    "check.result = fail",
+    "check.tests.speed_bound.speed_max = 14140.0",
+    "check.tests.speed_bound.max_m_s = 3.0",
+    "check.tests.fill_values.hfr_hits = 7479",
+    "check.tests.correlation_sign.corr_u = -0.003589",
+    "check.tests.lag.best_lag_hours = 6",
+    "qc.speed_p95 = 1.0",
+    "qc.flags = [\"fill_values_present\"]",
+    "compare.bias_u = 499.6",
+    "compare.speed_ratio_median = 1.141",
+    "repair.n_masked = 7479",
+    "check(repaired).result = pass",
+    "check(repaired).tests.speed_bound.speed_max = 1.0",
+    "check(repaired).tests.correlation_sign.corr_u = 0.499",
+    "check(repaired).tests.correlation_sign.corr_v = 0.3875",
+    "check(repaired).tests.correlation_sign.corr_swapped = -0.2016",
+    "check(repaired).tests.lag.best_lag_hours = -1",
+    "check(repaired).tests.speed_ratio.speed_ratio_median = 1.109"
+  ],
+  "reason": "The radar file held 7479 unmasked fill values (speed_max 14140.0 against a 3.0 m/s bound), which also wrecked the correlation and lag tests while the median speed ratio stayed normal. Masking values with |value| >= 10 removed exactly those 7479 hits, and check then passed on every test."
+}

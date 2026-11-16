@@ -1,0 +1,19 @@
+{
+  "case_id": "case09",
+  "choice": "repair",
+  "repair": {"action": "rescale", "param": 100},
+  "evidence": [
+    "check.result = fail (original radar)",
+    "check.tests.speed_ratio.speed_ratio_median = 0.01107 (min 0.5, max 2.0)",
+    "qc.speed_median = 0.001924",
+    "qc.speed_max = 0.01",
+    "compare.corr_u = 0.4977",
+    "compare.corr_v = 0.3873",
+    "compare.corr_swapped = -0.2007",
+    "check.tests.lag.best_lag_hours = -1 (pass)",
+    "repair.out = runs/work/agent/case09/radar_repaired.nc",
+    "check.result = pass (repaired radar)",
+    "check.tests.speed_ratio.speed_ratio_median = 1.107 (repaired radar)"
+  ],
+  "reason": "Only the speed-ratio test failed: radar speeds were about 100 times too small, while correlations, sign, lag, units label, and coverage all looked normal, which points to a scale fault. Rescaling u and v by 100 brought the speed ratio to 1.107, and check passed on the repaired file."
+}

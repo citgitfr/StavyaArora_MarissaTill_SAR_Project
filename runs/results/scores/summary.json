@@ -1,0 +1,104 @@
+{
+  "labels": "/Users/marissatill/sar_heldout/labels.json",
+  "seed": 295,
+  "faithful_rms_m_s": 0.001,
+  "policies": {
+    "always_model_only": {
+      "cases": 14,
+      "decided": 14,
+      "acceptable": 14,
+      "silent_errors": 0,
+      "radar_recoverable": 13,
+      "radar_recovered": 0,
+      "radar_decisions": 0,
+      "faithful_radar": null,
+      "fidelity_checked": 0,
+      "escalations": 0
+    },
+    "always_fused": {
+      "cases": 14,
+      "decided": 14,
+      "acceptable": 6,
+      "silent_errors": 8,
+      "radar_recoverable": 13,
+      "radar_recovered": 6,
+      "radar_decisions": 14,
+      "faithful_radar": 6,
+      "fidelity_checked": 14,
+      "escalations": 0
+    },
+    "baseline": {
+      "cases": 14,
+      "decided": 14,
+      "acceptable": 13,
+      "silent_errors": 1,
+      "radar_recoverable": 13,
+      "radar_recovered": 12,
+      "radar_decisions": 13,
+      "faithful_radar": 11,
+      "fidelity_checked": 13,
+      "escalations": 0,
+      "batch": {
+        "cost_usd": 0.0,
+        "mean_turns": null,
+        "minutes": null
+      }
+    },
+    "agent_rep1": {
+      "cases": 14,
+      "decided": 14,
+      "acceptable": 13,
+      "silent_errors": 1,
+      "radar_recoverable": 13,
+      "radar_recovered": 12,
+      "radar_decisions": 13,
+      "faithful_radar": 11,
+      "fidelity_checked": 13,
+      "escalations": 0,
+      "batch": {
+        "cost_usd": 2.459,
+        "mean_turns": 7.5,
+        "minutes": 5.8
+      }
+    },
+    "agent_rep2": {
+      "cases": 14,
+      "decided": 14,
+      "acceptable": 13,
+      "silent_errors": 1,
+      "radar_recoverable": 13,
+      "radar_recovered": 12,
+      "radar_decisions": 13,
+      "faithful_radar": 11,
+      "fidelity_checked": 13,
+      "escalations": 0,
+      "batch": {
+        "cost_usd": 2.4272,
+        "mean_turns": 7.07,
+        "minutes": 5.3
+      }
+    },
+    "oracle": {
+      "cases": 14,
+      "decided": 14,
+      "acceptable": 14,
+      "silent_errors": 0,
+      "radar_recoverable": 13,
+      "radar_recovered": 13,
+      "radar_decisions": 13,
+      "faithful_radar": null,
+      "fidelity_checked": 0,
+      "escalations": 0
+    }
+  },
+  "agreement": {
+    "rep1_vs_rep2": {
+      "cases": 14,
+      "same_choice_and_action": 14
+    },
+    "baseline_vs_rep1": {
+      "cases": 14,
+      "same_choice_and_action": 14
+    }
+  }
+}

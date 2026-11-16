@@ -1,0 +1,16 @@
+{"case_id": "case10",
+ "choice": "repair",
+ "repair": {"action": "shift_time", "param": -2},
+ "evidence": [
+  "check.result = fail (before repair)",
+  "check.tests.time_axis.pass = false; inside_model_times = false; hfr_times = [2021-08-10T03:00, 2021-08-12T02:00]; model_times = [2021-08-10T00:00, 2021-08-12T00:00]",
+  "check.tests.lag.pass = false; best_lag_hours = 2; max_abs_hours = 1",
+  "compare.best_lag_hours = 2; corr_by_lag 0 = 0.3923, 2 = 0.444, 3 = 0.4425",
+  "compare.speed_ratio_median = 1.091; corr_u = 0.4284; corr_v = 0.3561; corr_swapped = -0.2054",
+  "qc(radar).fill_value_hits = 0; speed_max = 1.0; time_step_s = 3600; largest_gap_s = 3600",
+  "repair shift_time param = -2.0; repairs_used = 1",
+  "check(repaired).result = pass; time_axis.inside_model_times = true; hfr_times = [2021-08-10T01:00, 2021-08-12T00:00]; lag.best_lag_hours = 0",
+  "check(repaired).speed_ratio_median = 1.104; corr_u = 0.4957; corr_v = 0.3924; corr_swapped = -0.2084"
+ ],
+ "reason": "The radar failed only the time_axis and lag tests, and compare showed a +2 h best lag with no unit, sign, swap, scale or fill problem, so it was shifted by -2 h. After the shift, every check test passes (lag 0, times inside the model window), so the repaired radar file runs/work/agent/case10/radar_shift.nc is used."
+}

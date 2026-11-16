@@ -1,0 +1,21 @@
+{
+  "case_id": "case11",
+  "choice": "model_only",
+  "repair": null,
+  "evidence": [
+    "check.result = fail",
+    "check.tests.coverage.pass = false",
+    "check.tests.coverage.good_hours_fraction = 0.3958",
+    "check.tests.coverage.min_good_hours_fraction = 0.8",
+    "check.tests.coverage.hour_fraction_mean = 0.1649",
+    "check.tests.coverage.hour_fraction_min = 0.0",
+    "qc.valid_fraction = 0.1321",
+    "check.tests.speed_ratio.speed_ratio_median = 1.07",
+    "check.tests.correlation_sign.corr_u = 0.4571",
+    "check.tests.correlation_sign.corr_v = 0.4189",
+    "check.tests.correlation_sign.corr_swapped = -0.1764",
+    "check.tests.lag.best_lag_hours = -1",
+    "check.tests.lag.pass = true"
+  ],
+  "reason": "Only the coverage test fails (good_hours_fraction 0.3958 vs. minimum 0.8), while units, speed, time axis, fill values, speed ratio, correlation and lag all pass, so the radar values that exist look sound but are too sparse. No repair on the menu can add missing radar data, so the radar cannot be made to pass and the forecast should use the model alone."
+}

@@ -1,0 +1,25 @@
+{
+  "case_id": "case09",
+  "choice": "repair",
+  "repair": {"action": "rescale", "param": 100.0},
+  "evidence": [
+    "check.result = fail",
+    "check.tests.speed_ratio.speed_ratio_median = 0.01107",
+    "check.tests.speed_ratio.pass = false",
+    "check.tests.correlation_sign.corr_u = 0.4977",
+    "check.tests.correlation_sign.corr_v = 0.3873",
+    "check.tests.correlation_sign.corr_swapped = -0.2007",
+    "check.tests.lag.best_lag_hours = -1",
+    "check.tests.lag.pass = true",
+    "qc.speed_median = 0.001924",
+    "qc.speed_max = 0.01",
+    "qc.units_normalized = m s-1",
+    "repair.action = rescale",
+    "repair.param = 100.0",
+    "repair.out = runs/work/agent/case09/radar_repaired.nc",
+    "check(repaired).result = pass",
+    "check(repaired).tests.speed_ratio.speed_ratio_median = 1.107",
+    "check(repaired).tests.speed_bound.speed_max = 1.0"
+  ],
+  "reason": "Only the speed-ratio test failed: radar speeds were about 100 times smaller than the model's, while correlation, sign, lag, coverage and units were all normal, which points to a scale fault. After rescaling by 100, check passes with a speed ratio of 1.107, so the repaired radar file is used."
+}

@@ -1,0 +1,85 @@
+policy,case,fault_type,detectable,choice,repair,acceptable,silent_error,radar_recoverable,radar_recovered,rms_m_s,coverage_retained,faithful
+always_model_only,case01,clean,True,model_only,null,True,False,True,False,,,
+always_model_only,case02,clean,True,model_only,null,True,False,True,False,,,
+always_model_only,case03,sentinel_off_list,True,model_only,null,True,False,True,False,,,
+always_model_only,case04,uv_swapped,True,model_only,null,True,False,True,False,,,
+always_model_only,case05,time_shift_+1h,False,model_only,null,True,False,True,False,,,
+always_model_only,case06,v_sign_flip,True,model_only,null,True,False,True,False,,,
+always_model_only,case07,clean,True,model_only,null,True,False,True,False,,,
+always_model_only,case08,fill_value_on_list,True,model_only,null,True,False,True,False,,,
+always_model_only,case09,hfr_x0.01,True,model_only,null,True,False,True,False,,,
+always_model_only,case10,time_shift_+3h,True,model_only,null,True,False,True,False,,,
+always_model_only,case11,hours_blanked_60pct,True,model_only,null,True,False,False,False,,,
+always_model_only,case12,clean,True,model_only,null,True,False,True,False,,,
+always_model_only,case13,partial_dropout_25pct,False,model_only,null,True,False,True,False,,,
+always_model_only,case14,hfr_x100,True,model_only,null,True,False,True,False,,,
+always_fused,case01,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+always_fused,case02,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+always_fused,case03,sentinel_off_list,True,fused,null,False,True,True,False,245.6956787109375,1.0,False
+always_fused,case04,uv_swapped,True,fused,null,False,True,True,False,0.3608790338039398,1.0,False
+always_fused,case05,time_shift_+1h,False,fused,null,True,False,True,True,0.1250174194574356,0.9514483190247487,False
+always_fused,case06,v_sign_flip,True,fused,null,False,True,True,False,0.32958775758743286,1.0,False
+always_fused,case07,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+always_fused,case08,fill_value_on_list,True,fused,null,False,True,True,False,3161.895751953125,1.0,False
+always_fused,case09,hfr_x0.01,True,fused,null,False,True,True,False,0.2379211038351059,1.0,False
+always_fused,case10,time_shift_+3h,True,fused,null,False,True,True,False,0.21413125097751617,0.9333139340946351,False
+always_fused,case11,hours_blanked_60pct,True,fused,null,False,True,False,False,0.0,0.3968392975325396,True
+always_fused,case12,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+always_fused,case13,partial_dropout_25pct,False,fused,null,True,False,True,True,0.0,0.7391818807784098,True
+always_fused,case14,hfr_x100,True,fused,null,False,True,True,False,23.792110443115234,1.0,False
+baseline,case01,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+baseline,case02,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+baseline,case03,sentinel_off_list,True,repair,"{""action"": ""mask_fill"", ""param"": 6.0}",True,False,True,True,0.0,0.9500023397755153,True
+baseline,case04,uv_swapped,True,repair,"{""action"": ""swap_components"", ""param"": null}",True,False,True,True,0.0,1.0,True
+baseline,case05,time_shift_+1h,False,fused,null,True,False,True,True,0.1250174194574356,0.9514483190247487,False
+baseline,case06,v_sign_flip,True,repair,"{""action"": ""flip_sign"", ""param"": ""v""}",True,False,True,True,0.0,1.0,True
+baseline,case07,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+baseline,case08,fill_value_on_list,True,repair,"{""action"": ""mask_fill"", ""param"": 6.0}",True,False,True,True,0.0,0.9500023397755153,True
+baseline,case09,hfr_x0.01,True,repair,"{""action"": ""rescale"", ""param"": 100.0}",True,False,True,True,5.383963053162688e-09,1.0,True
+baseline,case10,time_shift_+3h,True,repair,"{""action"": ""shift_time"", ""param"": -2.0}",False,True,True,False,0.1250174194574356,0.9514483190247487,False
+baseline,case11,hours_blanked_60pct,True,model_only,null,True,False,False,False,,,
+baseline,case12,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+baseline,case13,partial_dropout_25pct,False,fused,null,True,False,True,True,0.0,0.7391818807784098,True
+baseline,case14,hfr_x100,True,repair,"{""action"": ""rescale"", ""param"": 0.01}",True,False,True,True,6.105890015817295e-09,1.0,True
+agent_rep1,case01,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+agent_rep1,case02,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+agent_rep1,case03,sentinel_off_list,True,repair,"{""action"": ""mask_fill"", ""param"": 10.0}",True,False,True,True,0.0,0.9500023397755153,True
+agent_rep1,case04,uv_swapped,True,repair,"{""action"": ""swap_components"", ""param"": null}",True,False,True,True,0.0,1.0,True
+agent_rep1,case05,time_shift_+1h,False,fused,null,True,False,True,True,0.1250174194574356,0.9514483190247487,False
+agent_rep1,case06,v_sign_flip,True,repair,"{""action"": ""flip_sign"", ""param"": ""v""}",True,False,True,True,0.0,1.0,True
+agent_rep1,case07,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+agent_rep1,case08,fill_value_on_list,True,repair,"{""action"": ""mask_fill"", ""param"": 10.0}",True,False,True,True,0.0,0.9500023397755153,True
+agent_rep1,case09,hfr_x0.01,True,repair,"{""action"": ""rescale"", ""param"": 100}",True,False,True,True,5.383963053162688e-09,1.0,True
+agent_rep1,case10,time_shift_+3h,True,repair,"{""action"": ""shift_time"", ""param"": -2}",False,True,True,False,0.1250174194574356,0.9514483190247487,False
+agent_rep1,case11,hours_blanked_60pct,True,model_only,null,True,False,False,False,,,
+agent_rep1,case12,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+agent_rep1,case13,partial_dropout_25pct,False,fused,null,True,False,True,True,0.0,0.7391818807784098,True
+agent_rep1,case14,hfr_x100,True,repair,"{""action"": ""rescale"", ""param"": 0.01}",True,False,True,True,6.105890015817295e-09,1.0,True
+agent_rep2,case01,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+agent_rep2,case02,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+agent_rep2,case03,sentinel_off_list,True,repair,"{""action"": ""mask_fill"", ""param"": 5.0}",True,False,True,True,0.0,0.9500023397755153,True
+agent_rep2,case04,uv_swapped,True,repair,"{""action"": ""swap_components"", ""param"": null}",True,False,True,True,0.0,1.0,True
+agent_rep2,case05,time_shift_+1h,False,fused,null,True,False,True,True,0.1250174194574356,0.9514483190247487,False
+agent_rep2,case06,v_sign_flip,True,repair,"{""action"": ""flip_sign"", ""param"": ""v""}",True,False,True,True,0.0,1.0,True
+agent_rep2,case07,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+agent_rep2,case08,fill_value_on_list,True,repair,"{""action"": ""mask_fill"", ""param"": 10.0}",True,False,True,True,0.0,0.9500023397755153,True
+agent_rep2,case09,hfr_x0.01,True,repair,"{""action"": ""rescale"", ""param"": 100.0}",True,False,True,True,5.383963053162688e-09,1.0,True
+agent_rep2,case10,time_shift_+3h,True,repair,"{""action"": ""shift_time"", ""param"": -2.0}",False,True,True,False,0.1250174194574356,0.9514483190247487,False
+agent_rep2,case11,hours_blanked_60pct,True,model_only,null,True,False,False,False,,,
+agent_rep2,case12,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+agent_rep2,case13,partial_dropout_25pct,False,fused,null,True,False,True,True,0.0,0.7391818807784098,True
+agent_rep2,case14,hfr_x100,True,repair,"{""action"": ""rescale"", ""param"": 0.01}",True,False,True,True,6.105890015817295e-09,1.0,True
+oracle,case01,clean,True,fused,null,True,False,True,True,,,
+oracle,case02,clean,True,fused,null,True,False,True,True,,,
+oracle,case03,sentinel_off_list,True,repair,"{""action"": ""mask_fill"", ""param"": 777.0}",True,False,True,True,,,
+oracle,case04,uv_swapped,True,repair,"{""action"": ""swap_components"", ""param"": null}",True,False,True,True,,,
+oracle,case05,time_shift_+1h,False,repair,"{""action"": ""shift_time"", ""param"": -1.0}",True,False,True,True,,,
+oracle,case06,v_sign_flip,True,repair,"{""action"": ""flip_sign"", ""param"": ""v""}",True,False,True,True,,,
+oracle,case07,clean,True,fused,null,True,False,True,True,,,
+oracle,case08,fill_value_on_list,True,repair,"{""action"": ""mask_fill"", ""param"": 9999.0}",True,False,True,True,,,
+oracle,case09,hfr_x0.01,True,repair,"{""action"": ""rescale"", ""param"": 100.0}",True,False,True,True,,,
+oracle,case10,time_shift_+3h,True,repair,"{""action"": ""shift_time"", ""param"": -3.0}",True,False,True,True,,,
+oracle,case11,hours_blanked_60pct,True,model_only,null,True,False,False,False,,,
+oracle,case12,clean,True,fused,null,True,False,True,True,,,
+oracle,case13,partial_dropout_25pct,False,fused,null,True,False,True,True,,,
+oracle,case14,hfr_x100,True,repair,"{""action"": ""rescale"", ""param"": 0.01}",True,False,True,True,,,

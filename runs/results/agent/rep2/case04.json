@@ -1,0 +1,22 @@
+{
+  "case_id": "case04",
+  "choice": "repair",
+  "repair": {"action": "swap_components", "param": null},
+  "evidence": [
+    "check.result = fail (original radar)",
+    "check.tests.correlation_sign.corr_u = -0.1659",
+    "check.tests.correlation_sign.corr_v = -0.2356",
+    "check.tests.correlation_sign.corr_swapped = 0.4425",
+    "check.tests.lag.best_lag_hours = 6",
+    "compare.corr_by_lag: all lags -6..6 negative (range -0.2085 to -0.1164)",
+    "compare.flags = negative_corr_u, negative_corr_v, swapped_corr_exceeds_direct, best_lag_nonzero",
+    "compare.speed_ratio_median = 1.107",
+    "repair.action = swap_components, repairs_used = 1",
+    "check.result = pass (repaired radar)",
+    "check.tests.correlation_sign.corr_u = 0.4977 (repaired)",
+    "check.tests.correlation_sign.corr_v = 0.3873 (repaired)",
+    "check.tests.correlation_sign.corr_swapped = -0.2007 (repaired)",
+    "check.tests.lag.best_lag_hours = -1 (repaired)"
+  ],
+  "reason": "Radar correlated negatively with the model at every lag but positively when u and v were swapped (corr_swapped = 0.4425), so the 6 h lag was an artifact of the least-negative correlation rather than a time offset. After swap_components the repaired file (runs/work/agent/case04/radar_repaired.nc) passes every check test."
+}

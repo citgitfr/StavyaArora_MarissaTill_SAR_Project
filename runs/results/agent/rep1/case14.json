@@ -1,0 +1,22 @@
+{
+  "case_id": "case14",
+  "choice": "repair",
+  "repair": {"action": "rescale", "param": 0.01},
+  "evidence": [
+    "check.result = fail (original radar)",
+    "check.tests.speed_bound.speed_max = 100.0 (max_m_s = 3.0)",
+    "check.tests.speed_ratio.speed_ratio_median = 110.7 (allowed 0.5-2.0)",
+    "qc.units_normalized = m s-1",
+    "qc.speed_median = 19.24",
+    "qc.fill_value_hits = 0",
+    "compare.corr_u = 0.4977",
+    "compare.corr_v = 0.3873",
+    "compare.corr_swapped = -0.2007",
+    "check.tests.lag.best_lag_hours = -1 (pass)",
+    "repair.repairs_used = 1",
+    "check.result = pass (repaired radar)",
+    "check.tests.speed_bound.speed_max = 1.0 (repaired)",
+    "check.tests.speed_ratio.speed_ratio_median = 1.107 (repaired)"
+  ],
+  "reason": "Radar speeds were uniformly about 100 times the model (median ratio 110.7) with normal correlations, no fill hits and a passing lag test, which matches cm/s values labelled as m/s. Rescaling u and v by 0.01 made every check test pass, so the repaired radar is used."
+}

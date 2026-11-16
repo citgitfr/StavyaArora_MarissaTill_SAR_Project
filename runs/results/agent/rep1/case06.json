@@ -1,0 +1,21 @@
+{
+  "case_id": "case06",
+  "choice": "repair",
+  "repair": {"action": "flip_sign", "param": "v"},
+  "evidence": [
+    "check.result = fail",
+    "check.tests.correlation_sign.pass = false",
+    "check.tests.correlation_sign.corr_u = 0.4977",
+    "check.tests.correlation_sign.corr_v = -0.3873",
+    "check.tests.correlation_sign.corr_swapped = -0.03482",
+    "check.tests.speed_ratio.speed_ratio_median = 1.107",
+    "check.tests.lag.best_lag_hours = 0",
+    "compare.flags = [\"negative_corr_v\"]",
+    "qc.flags = []",
+    "repair.repairs_used = 1",
+    "check(repaired).result = pass",
+    "check(repaired).tests.correlation_sign.corr_v = 0.3873",
+    "check(repaired).tests.correlation_sign.corr_swapped = -0.2007"
+  ],
+  "reason": "Only the correlation-sign test failed: corr_v was negative while corr_u, speed ratio, lag, units and coverage were all clean, which points to a flipped v sign. After flip_sign v, every check test passes, so the repaired radar file is used for fused forcing."
+}

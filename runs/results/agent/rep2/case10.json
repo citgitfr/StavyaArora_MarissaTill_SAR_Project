@@ -1,0 +1,24 @@
+{
+  "case_id": "case10",
+  "choice": "repair",
+  "repair": {"action": "shift_time", "param": -2.0},
+  "evidence": [
+    "check.result = fail (original radar)",
+    "check.tests.lag.best_lag_hours = 2 (max_abs_hours = 1)",
+    "check.tests.time_axis.inside_model_times = false",
+    "check.tests.time_axis.hfr_times = [2021-08-10T03:00, 2021-08-12T02:00]",
+    "check.tests.time_axis.model_times = [2021-08-10T00:00, 2021-08-12T00:00]",
+    "compare.best_lag_hours = 2",
+    "compare.corr_by_lag[0] = 0.3923, compare.corr_by_lag[2] = 0.444",
+    "compare.speed_ratio_median = 1.091",
+    "compare.corr_swapped = -0.2054",
+    "qc.fill_value_hits = 0",
+    "repair.repairs_used = 1",
+    "check.result = pass (repaired radar)",
+    "check.tests.lag.best_lag_hours = 0 (repaired)",
+    "check.tests.time_axis.hfr_times = [2021-08-10T01:00, 2021-08-12T00:00] (repaired)",
+    "check.tests.correlation_sign.corr_u = 0.4957, corr_v = 0.3924 (repaired)",
+    "check.tests.speed_ratio.speed_ratio_median = 1.104 (repaired)"
+  ],
+  "reason": "The original radar failed only the lag and time-axis tests (best_lag_hours = 2, radar times running past the model's last time), while units, speeds, fill values, coverage and correlation signs were fine. Shifting radar time by -2 h made every check test pass, so the repaired radar is used."
+}
