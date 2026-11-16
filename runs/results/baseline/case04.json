@@ -1,0 +1,20 @@
+{
+  "case_id": "case04",
+  "choice": "repair",
+  "repair": {
+    "action": "swap_components",
+    "param": null
+  },
+  "evidence": [
+    "check.result = fail",
+    "check.tests.correlation_sign.corr_u = -0.1659",
+    "check.tests.correlation_sign.corr_v = -0.2356",
+    "check.tests.correlation_sign.corr_swapped = 0.4425",
+    "check.tests.correlation_sign.min = 0.1",
+    "check.tests.lag.best_lag_hours = 6",
+    "check.tests.lag.max_abs_hours = 1",
+    "repair1.rule = correlation_sign -> swap_components",
+    "check(repair1).result = pass"
+  ],
+  "reason": "check passes after 1 repair(s) chosen by the rule table."
+}

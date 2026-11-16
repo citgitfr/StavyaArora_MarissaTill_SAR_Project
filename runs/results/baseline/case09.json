@@ -1,0 +1,17 @@
+{
+  "case_id": "case09",
+  "choice": "repair",
+  "repair": {
+    "action": "rescale",
+    "param": 100.0
+  },
+  "evidence": [
+    "check.result = fail",
+    "check.tests.speed_ratio.speed_ratio_median = 0.01107",
+    "check.tests.speed_ratio.min = 0.5",
+    "check.tests.speed_ratio.max = 2.0",
+    "repair1.rule = speed_ratio -> rescale 100.0",
+    "check(repair1).result = pass"
+  ],
+  "reason": "check passes after 1 repair(s) chosen by the rule table."
+}

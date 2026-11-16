@@ -1,0 +1,27 @@
+{"case_id": "case03",
+ "choice": "repair",
+ "repair": {"action": "mask_fill", "param": 5.0},
+ "evidence": [
+  "check.result = fail",
+  "check.tests.speed_bound.speed_max = 1099.0",
+  "check.tests.speed_bound.max_m_s = 3.0",
+  "check.tests.correlation_sign.corr_u = -0.003511",
+  "check.tests.correlation_sign.corr_v = 0.0008845",
+  "check.tests.lag.best_lag_hours = 3",
+  "qc.speed_median = 0.2002",
+  "qc.speed_p95 = 1.0",
+  "qc.fill_value_hits = 0",
+  "compare.speed_ratio_median = 1.141",
+  "compare.rms_u = 173.6",
+  "repair.n_masked = 7479",
+  "check(repaired).result = pass",
+  "check(repaired).tests.speed_bound.speed_max = 1.0",
+  "check(repaired).tests.correlation_sign.corr_u = 0.4971",
+  "check(repaired).tests.correlation_sign.corr_v = 0.3865",
+  "check(repaired).tests.correlation_sign.corr_swapped = -0.1999",
+  "check(repaired).tests.lag.best_lag_hours = -1",
+  "check(repaired).tests.speed_ratio.speed_ratio_median = 1.107",
+  "check(repaired).tests.coverage.hour_fraction_min = 0.326"
+ ],
+ "reason": "The radar holds non-standard spike values (speed_max 1099.0 vs bound 3.0, fill_value_hits 0) while its median speed and speed ratio look normal, so the spikes alone wrecked correlation and lag. Masking |value| >= 5.0 (above the 3.0 bound, below the spikes) removed 7479 values and the repaired file passes every check test."
+}

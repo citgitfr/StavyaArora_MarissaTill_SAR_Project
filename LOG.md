@@ -12,6 +12,38 @@ Add a dated entry every work session. Include failures.
 - Fixed instruction inconsistencies found by a repo inventory
 - Froze forcing_tools.py for the evaluation runs: SHA-256 7AFE6B2FB8F9862D3D15085FC950A047BD3CEEF17186EF47244D648EFBDB2B13,
   last changed in commit dcd0f02. Thresholds frozen 2026-10-29.
+- Following the TA's feedback on Lab Report 2, memory/MEMORY.md is now written by the agent (decisions and
+  lasting facts, under 40 lines, no case results or answer-key information) and reviewed by us in the PR;
+  memory/USER.md is ours. Updated settings.json (allow Skill(forcing-tools), Edit(memory/MEMORY.md),
+  git add memory/MEMORY.md; ask for memory/USER.md), PERMISSIONS.md and CLAUDE.md to match. Evaluation runs pass
+  --disallowedTools "Edit(memory/)" "Bash(git add memory/)" so every run sees the same memory.
+- Set up the .venv on Marissa's Mac (uv, Python 3.12) and regenerated the cases with src/inject_faults.py.
+  The regenerated case03 gives the same tool numbers as the Windows pilot, so the generator is reproducible
+  across machines.
+- Permission smoke test (claude -p, dontAsk, memory locked) on case03: the Skill tool now loads, every tool call
+  ran, outputs went only to the paths in the prompt, memory was untouched, no permission denials; 7 turns.
+  Same decision as the pilot (mask_fill), different parameter (5 vs 10); both are allowed by SKILL.md, so the
+  scorer must not require one exact mask_fill value. Transcript: eval/transcripts/smoke_case03.jsonl (not a result).
+- Probe: asked the agent to run `wc -c heldout/labels.json`. No permission denial fired; the agent refused because
+  CLAUDE.md says never read heldout/. So for shell commands only an instruction protects the key.
+  Transcript: eval/transcripts/probe_heldout.jsonl. Decision: keep labels.json outside the repo folder during agent runs.
+- Wrote src/baseline.py (scripted baseline: same tools via the command line, first failing check test -> one repair
+  from the SKILL.md menu, re-check, at most 2 repairs, else model_only; tool error -> escalate) and
+  tests/test_baseline.py (15 tests). All 55 tests pass. Ran it on the 14 cases in about 25 s: 6 fused, 7 repair,
+  1 model_only (not yet scored against the key).
+- Found: compare's lag estimate is biased by the clean data's own -1 h best lag, so a shift_time -L repair can leave
+  a residual offset of about 1 h that the lag test cannot see, and check then passes. The scorer needs repair
+  fidelity (repaired radar vs. the clean fixture), not just check pass/fail. SKILL.md gives the agent the same -L rule.
+- Moved heldout/labels.json to ~/sar_heldout/ (outside the repo); heldout/ is now empty.
+- Found a wider leak: inside the repo, an evaluation run's shell could read the fault plan and acceptable answers
+  (src/inject_faults.py, docs/dev_notes.md), the clean radar (fixtures/), baseline decisions (runs/results/),
+  findings (LOG.md), transcripts (eval/) and git history. Read deny rules do not cover shell reads (the smoke test
+  ran `cat` with no denial). Fix: scripts/make_eval_workspace.py builds a folder outside the repo with only an
+  allowlist (CLAUDE.md, PERMISSIONS.md, README.md, memory/, configs/thresholds.yaml, .claude/settings.json, the
+  forcing-tools skill and script) plus runs/cases/. No .git, no heldout. It refuses uncommitted allowlisted files and
+  refuses to run if labels.json is in the repo, and writes a manifest (commit, SHA-256 per file) to
+  eval/workspaces/<run_id>.json. Self-test: 37 files, check runs inside it.
+
 
 ## 2026-10-28
 

@@ -1,0 +1,23 @@
+{
+  "case_id": "case03",
+  "choice": "repair",
+  "repair": {
+    "action": "mask_fill",
+    "param": 6.0
+  },
+  "evidence": [
+    "check.result = fail",
+    "check.tests.speed_bound.speed_max = 1099.0",
+    "check.tests.speed_bound.max_m_s = 3.0",
+    "check.tests.correlation_sign.corr_u = -0.003511",
+    "check.tests.correlation_sign.corr_v = 0.0008845",
+    "check.tests.correlation_sign.corr_swapped = -0.001924",
+    "check.tests.correlation_sign.min = 0.1",
+    "check.tests.lag.best_lag_hours = 3",
+    "check.tests.lag.max_abs_hours = 1",
+    "repair1.rule = speed_bound -> mask_fill 6.0",
+    "repair1.n_masked = 7479",
+    "check(repair1).result = pass"
+  ],
+  "reason": "check passes after 1 repair(s) chosen by the rule table."
+}

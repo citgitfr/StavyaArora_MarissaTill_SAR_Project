@@ -58,9 +58,16 @@ Anything that would ask is denied when nobody is there to answer.
 - Run in bypassPermissions mode.  [`disableBypassPermissionsMode: "disable"`]
   Note: `dontAsk` is NOT bypass. It is the strictest mode: anything not already
   allowed is refused.
-Note: the Read/Edit deny lines cover Claude's own file tools, not shell commands. What
-keeps a shell command away from `heldout/` is that the Bash allow-list names only
-forcing_tools.py and a few git commands, and that `heldout/` is not in git history.
+Note: the Read/Edit deny lines cover Claude's own file tools, not shell commands, and
+read-only shell commands (cat, ls) run without an allow rule. So nothing in settings.json
+stops an evaluation run from reading the fault plan, the clean fixtures, baseline results
+or the answer key if they are on disk next to it. What enforces this is physical:
+- `heldout/labels.json` is kept outside the repository during agent runs (and never committed).
+- Evaluation runs happen in a workspace built by `scripts/make_eval_workspace.py`, outside the
+  repository, holding only an allowlist (instructions, permissions, memory, thresholds, the
+  forcing-tools skill and script) and `runs/cases/`. No `.git`, no `src/`, `docs/`, `fixtures/`,
+  `runs/results/`, `eval/` or `LOG.md`. The manifest in `eval/workspaces/<run_id>.json`
+  records the commit and a SHA-256 for every file.
 
 ## 4. WHO approves, from WHERE
 - Owners: Stavya Arora and Marissa Till, by reviewing the pull request on github.com
