@@ -1,0 +1,101 @@
+# Pipeline
+
+How to run everything, step by step. Each step lists its command, what it reads and what it writes. Terms are
+defined in the [README](../README.md#key-terms).
+
+```
+messy radar → decision → forcing → OpenDrift → POC map → score vs answer key + score vs real drifter
+ (cases)     (baseline    (reader     (24 h)                (score.py)          (drifter_eval.py,
+             or agent)    priority)                                             decision_reality.py)
+```
+
+## 0. Setup (once per machine)
+```bash
+uv venv --python 3.12 .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
+uv pip install -r requirements.txt
+python -m unittest tests.test_forcing_tools tests.test_baseline tests.test_score tests.test_drift tests.test_drifter_eval
+```
+Activate the venv in every new terminal: the agent's `python` is whatever is first on PATH.
+
+## The one command
+```bash
+python src/run_demo.py --replay              # October 2021 (real-drifter window), ~13 min
+python src/run_demo.py --replay --august     # plus an appendix with the August 2021 benchmark
+```
+Runs steps 1-8 below on the October data, replaying the saved agent decisions (no Claude calls, no network, no API
+key), and writes `demo_results/lab3_demo.md` (all tables and figures), `demo_results/lab3_figures/` and
+`demo_results/lab3_run_log.txt`. At the top of the report is a PASS/FAIL table of reproducibility checks:
+regenerated cases and key match the stored ones; the rerun baseline matches its saved decisions; the agent's repaired
+files rebuild identically with the frozen tool (missing ones are rebuilt, as on a fresh clone).
+
+## Data
+Everything the demo needs is committed in `fixtures/`. The scripts below only show where it came from; **people run
+downloads, the agent never does** (they are denied in `.claude/settings.json`). Sources and dates: [data_sources.md](data_sources.md).
+```bash
+python scripts/list_ncei.py --month 202110 --save data/ncei_listing_202110.txt
+python src/data/pull_hfr_ncei.py --listing data/ncei_listing_202110.txt --start "2021-10-18 00:00" \
+    --end "2021-10-28 23:00" --box 33.8 35.8 -122 -119.8 --raw-dir data/hfr_raw_202110 --out data/hfr_20211018.nc
+python src/data/pull_fixtures.py --start "2021-10-18 00:00" --end "2021-10-29 00:00" --box 33 36.5 -123 -119 \
+    --out data/hycom_20211018.nc                                   # model box larger than the radar box
+python scripts/find_drifters.py --start 2018-01-01T00:00:00Z --end 2025-01-01T00:00:00Z --box 32 38.5 -124.5 -117
+python scripts/drifter_coverage.py --radar data/hfr_20211018.nc --drifters data/drifters/<csv>   # offline
+```
+With no options, the pull scripts rebuild the August fixtures. For another region or dates see [new_data.md](new_data.md).
+
+## Steps (October)
+Shorthand used below: `R=fixtures/hfr_20211018.nc  M=fixtures/hycom_20211018.nc  D=fixtures/drifter_300534061399950_202110.csv`
+
+| # | Step | Command | Reads | Writes |
+|---|---|---|---|---|
+| 1 | Plant faults | `python src/inject_faults.py --radar $R --model $M --cases runs/cases_oct --labels ~/sar_heldout/labels_oct.json --seed 1018` | clean radar, model | 14 cases; the answer key **outside the repo** |
+| 2 | Baseline decides | `python src/baseline.py --cases-dir runs/cases_oct --results runs/results/baseline_oct --work runs/work/baseline_oct` | cases | one decision JSON per case; repaired files |
+| 3 | Agent decides | `python scripts/run_agent_batch.py --run-id oct_rep1 --cases-dir runs/cases_oct` (~$2.60, ~15 min) | cases (in an isolated copy) | `runs/results/agent/oct_rep1/`, transcripts, `eval/batches/oct_rep1.json` |
+| 4 | Score vs key | `python src/score.py --labels ~/sar_heldout/labels_oct.json --agent-runs oct_rep1 --baseline runs/results/baseline_oct --baseline-work runs/work/baseline_oct --cases-dir runs/cases_oct --out runs/results/scores_oct` | decisions, key, clean radar | `runs/results/scores_oct/` (`cases.csv` reveals the key) |
+| 5 | Drift vs clean run | `python src/drift.py evaluate --cases-dir runs/cases_oct --clean $R --model $M --agent-runs oct_rep1 --baseline runs/results/baseline_oct --baseline-work runs/work/baseline_oct --out runs/results/drift_oct --figure case14 case06 --fig-prefix drift_oct_` | decisions, cases | `runs/results/drift_oct/`, `drift_oct_case*.png` |
+| 6 | Clean forecasts vs drifter | `python src/drifter_eval.py --radar $R --model $M --drifters $D` then `python src/drifter_viz.py --radar $R --model $M --drifters $D` | clean radar, model, drifter | `runs/results/drifter/<id>/`, drifter summary PNG and GIFs |
+| 7 | Decisions vs drifter | `python src/decision_reality.py --agent-runs oct_rep1 --clean $R --model $M --drifters $D` | decisions, cases, drifter | `runs/results/reality_oct/`, `decisions_vs_reality_oct.png` |
+| 8 | Baseline vs agent pictures | `python src/decision_viz.py --agent-run oct_rep1 --clean $R --model $M --drifters $D` | the above | `baseline_vs_agent_oct.png`, `decision_summary_oct.png`, `decision_oct_case*.gif` |
+
+Figures go to `docs/figures/`; `run_demo` copies them into `demo_results/lab3_figures/`. Steps 1, 3 and 4 touch the
+answer key or call Claude, so people run them; `run_demo` reruns 1 and 4 itself and replays 3.
+
+### What each step does
+1. **Plant faults.** Copies the clean radar 14 times and plants one fault in 10 of the copies (scaling, time shift,
+   sign flip, swapped components, blanked hours, a dropout, fill values). Seeded, so it is identical on every machine.
+2. **Baseline.** Runs `check`; if it passes, `fused`. If not, the first failing test picks one repair from the menu;
+   re-check, at most two repairs; otherwise `model_only`.
+3. **Agent.** For each case, `claude -p` runs inside `~/sar_eval/<run-id>/`, a folder holding only the agent's
+   instructions, permissions, memory, thresholds, its tool and the cases. It reads `SKILL.md`, runs the tool, decides
+   and writes a decision JSON. Results are copied back; the batch stops if a needed tool is denied.
+4. **Score vs key.** Counts acceptable choices, silent errors, radar recovered and faithful repairs for every policy.
+5. **Drift vs clean run.** For each decision, 1,000 particles from 5 points drift 24 h; distance to the same particles
+   in a run on the clean radar shows what the decision did to the forecast.
+6. **Clean forecasts vs drifter.** 20 forecasts of 24 h, each released at the real drifter's position: model only vs
+   radar + model; miss, skill, and whether the drifter falls inside the 50% / 90% areas.
+7. **Decisions vs drifter.** The same 20 forecasts for every policy's decision on every case, plus perfect repair and
+   a no-motion guess as references.
+8. **Pictures.** Side-by-side decisions, per-case outcomes, and animations of one forecast per policy.
+
+## August 2021 benchmark (the first benchmark; no drifter)
+Same steps on the August fixtures, with defaults: `python src/inject_faults.py` (seed 295; move the key from
+`heldout/` to `~/sar_heldout/labels.json`), `python src/baseline.py`, `python scripts/run_agent_batch.py --run-id rep1`
+(and `rep2`), `python src/score.py`, `python src/drift.py evaluate --figure case10`. Or `run_demo.py --replay --august`.
+
+## Rules that keep the evaluation honest
+- **Keys stay outside the repo** (`~/sar_heldout/`). The agent cannot read them; `run_demo` and the workspace builder
+  refuse to run if `heldout/` holds anything.
+- **Commit before an agent run.** The workspace builder refuses uncommitted changes to the files it copies, so every
+  run is tied to a commit; the receipt is in `eval/workspaces/<run-id>.json`.
+- **Frozen pieces:** `forcing_tools.py` (SHA in LOG.md), `configs/thresholds.yaml`, and `baseline.py` (committed before
+  any agent result was scored).
+- **One run id, one run.** Folders are never overwritten; pick a new `--run-id`.
+
+## Troubleshooting
+| Symptom | Fix |
+|---|---|
+| Skill or `forcing_tools.py` denied in an agent run | the batch passes `--settings .claude/settings.json`; add it if running `claude -p` by hand |
+| "allowlisted files have uncommitted changes" | commit, then rerun |
+| "heldout/ ... is not empty" | move the key to `~/sar_heldout/` |
+| "already exists; not overwriting" | use a new run id or output folder |
+| "`python` is not the repository's .venv" | `source .venv/bin/activate` |
+| `mkdir ... && python ...` denied in a transcript | harmless; the agent retries without `mkdir` |

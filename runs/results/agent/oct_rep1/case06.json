@@ -1,0 +1,28 @@
+{
+  "case_id": "case06",
+  "choice": "repair",
+  "repair": {"action": "shift_time", "param": -3},
+  "evidence": [
+    "check.result = fail",
+    "check.tests.time_axis.pass = false",
+    "check.tests.time_axis.inside_model_times = false",
+    "check.tests.time_axis.hfr_times = [2021-10-18T03:00, 2021-10-29T02:00]",
+    "check.tests.time_axis.model_times = [2021-10-18T00:00, 2021-10-29T00:00]",
+    "check.tests.lag.pass = false",
+    "compare.best_lag_hours = 3",
+    "compare.corr_by_lag.3 = 0.2576",
+    "compare.corr_by_lag.0 = 0.2157",
+    "qc.time_step_s = 3600",
+    "qc.fill_value_hits = 0",
+    "repair.action = shift_time",
+    "repair.param = -3.0",
+    "repair.out = runs/work/agent/case06/radar_repaired.nc",
+    "check(repaired).result = pass",
+    "check(repaired).tests.lag.best_lag_hours = 0",
+    "check(repaired).tests.time_axis.hfr_times = [2021-10-18T00:00, 2021-10-28T23:00]",
+    "check(repaired).tests.speed_ratio.speed_ratio_median = 1.857",
+    "check(repaired).tests.correlation_sign.corr_u = 0.2433",
+    "check(repaired).tests.correlation_sign.corr_v = 0.272"
+  ],
+  "reason": "The radar time axis started 3 h after the model and compare found best_lag_hours = 3, so the radar timestamps were offset by +3 h. After shift_time -3 every check test passes, so the repaired radar file is used."
+}

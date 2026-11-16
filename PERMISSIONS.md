@@ -38,8 +38,8 @@ Anything that would ask is denied when nobody is there to answer.
   [deny: `git merge *`, `git rebase *`, `git reset --hard *`, `git add .`, `git add -A*`,
   `git add --all*`, `git commit -a*`, `git commit --all*`]
 - Open or merge pull requests. Only the owners do, on github.com.  [deny: `gh *`]
-- Read or edit `heldout/` (the answer key). It is generated at evaluation time and is
-  never committed (`.gitignore`).  [deny: `Read(./heldout/**)`, `Edit(heldout/**)`]
+- Read or edit the answer keys. They live outside the repository during agent runs and are never committed.
+  [deny: `Read(./heldout/**)`, `Edit(heldout/**)`, `Read(~/sar_heldout/**)`]
 - Edit `fixtures/` (source data) or `configs/thresholds.yaml` (frozen thresholds).
   [deny: `Edit(fixtures/**)`, `Edit(configs/thresholds.yaml)`]
 - Run the data-download scripts. People run every download.

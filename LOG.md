@@ -96,6 +96,53 @@ Add a dated entry every work session. Include failures.
   helps most where it covers the drifter's path (e.g. windows 10-23..10-25, 90-100% coverage: 6-11 km vs 15-17 km
   for model_only), but in some well-covered windows (10-19 12:00, 10-20 00:00) radar+model is worse (30-37 km).
   Checked determinism: the same window gives the same result in a fresh process and after other runs.
+- Decisions vs reality (step D). inject_faults.py now takes --radar --model --cases --labels --seed and writes
+  zlib-compressed cases (values identical; 354 MB -> 77 MB for 264 h). Generated 14 October cases from the clean
+  October radar, seed 1018, key written straight to ~/sar_heldout/labels_oct.json. make_eval_workspace.py and
+  run_agent_batch.py take --cases-dir (cases still appear as runs/cases/ in the workspace) and refuse to run if
+  heldout/ holds anything. score.py takes --cases-dir --baseline-work --clean (clean radar read from the key).
+- Baseline on October cases: 41 s; shift_time -3 this time (lag estimate correct on this data). Agent oct_rep1:
+  14/14, 0 denials, $2.63. Against the key: baseline and agent both 14/14 acceptable, 0 silent errors, radar
+  recovered 12/13, faithful 11/12; they agree on 14/14 (only the mask_fill threshold differs, 10 vs 6).
+- Wrote src/decision_reality.py: each policy's decision on each faulty October case, forecast against the real
+  drifter (20 windows, K=10). Mean 24 h miss: always_model_only 18.9 km, always_fused 19.8 km (59 km on the worst
+  case), baseline 16.3 km, agent 16.3 km (identical forcings), clean radar 16.0 km. So good QC decisions get within
+  0.3 km of a perfect repair, and blind trust or ignoring the radar costs 3-4 km on average. But a no-motion guess
+  (the object stays where reported) misses by 15.0 km, less than every current-only forecast at 24 h, although the
+  forecasts keep higher path skill (0.20-0.22 vs 0). Without wind the forecast does not beat doing nothing on
+  end position; this limits what any QC decision can gain. Fixed: drifter_eval.run() now pads runs that OpenDrift
+  ends early when every particle leaves the domain; score.py crashed on a relative --out (files were written).
+- Wrote src/run_demo.py --replay: runs every stage, replays saved agent decisions (no Claude calls), and writes
+  reports/lab3/README.md (all tables and figures) and run_log.txt, with reproducibility checks at the top.
+  Tested without the keys: rerun baseline equals the committed decisions (August 14/14, October 14/14); agent repaired
+  files rebuilt with the frozen tool equal the originals (rep1, rep2, oct_rep1: 7/7 each); in a simulated fresh clone
+  (repair logs only, no .nc) all 7 repaired files were rebuilt identical. Fixed an argument-order bug in the rebuild.
+  Added --baseline-work to drift.py; gitignored runs/*/_replay_*. Only one October agent run so far (oct_rep1);
+  August showed rep1 = rep2 on all 14 actions, but a second October run (oct_rep2) would confirm it there.
+- run_demo now runs October only by default (--august adds the August appendix) and writes
+  demo_results/lab3_demo.md, demo_results/lab3_figures/ and demo_results/lab3_run_log.txt. drift.py takes
+  --cases-dir, several --figure cases, --fig-prefix, and adds the agent as a figure panel; October figures
+  drift_oct_case14/06.png. New src/decision_viz.py: baseline_vs_agent_oct.png (decisions side by side, per-case miss
+  vs the real drifter baseline vs agent, metrics) and decision_oct_case14/06.gif (one forecast per policy with the
+  perfect repair and the real drifter). In case14 (x0.01 radar) blind trust misses by 54.5 km in the animated
+  window, baseline and agent (rescale 0.01) 10.6 km, model only 17.2 km.
+- Figures made consistent: new src/plot_style.py gives every figure the same policy names and colours (No QC red,
+  scripted baseline blue, Claude agent purple hatched/dashed, model only orange, perfect repair green, drifter black),
+  plain-sentence titles and labelled axes. Every animation panel now has its own legend. New
+  docs/figures/decision_summary_oct.png (the drifter-summary layout for No QC vs baseline vs agent vs perfect repair:
+  case 14 forecast paths, miss by hour over all 14 cases x 20 windows, 24 h miss per case); it is in the demo report.
+- Rewrote README.md (proposal, a Lab 3 note on why results differ from the Lab 2 proposal, headline results, key
+  terms, how the agent is set up, every file and folder) and docs/pipeline.md (setup, the one command, data, each
+  step with command / reads / writes, rules, troubleshooting). README is loaded into the agent's workspace through
+  CLAUDE.md, so it no longer names the key folder; added deny Read(~/sar_heldout/**) to settings.json and
+  PERMISSIONS.md. Gitignored the drift run cache runs/work/drift/.
+- Checked our work against the Lab 3 requirements: loop, decisions on real tool output, LLM-free scoring and a
+  baseline were all in place; missing was a project diagram labelling finished modules with inputs and outputs.
+  Added to README: a drawn repo tree, a short "Where we are at Lab 3" note, and a "Project status" section (diagram
+  with module numbers + table: status built / planned / proposed, input, output). run_demo copies that section into
+  the report and adds "Decision traces" for three October cases (checks that failed, the agent's evidence and reason,
+  agent vs baseline choice, key verdict, 24 h miss vs the drifter), so the agent's decisions are visible, not just
+  counted. Honest note kept: on single clear-cut faults the agent matches the rule table; compound faults are next.
 
 
 ## 2026-10-28

@@ -1,0 +1,22 @@
+{
+  "case_id": "case09",
+  "choice": "fused",
+  "repair": null,
+  "evidence": [
+    "check.result = pass",
+    "check.tests.units.hfr = m s-1",
+    "check.tests.units.model = m/s",
+    "check.tests.speed_bound.speed_max = 1.004",
+    "check.tests.time_axis.largest_gap_s = 3600",
+    "check.tests.fill_values.hfr_hits = 0",
+    "check.tests.coverage.good_hours_fraction = 0.9697",
+    "check.tests.speed_ratio.speed_ratio_median = 1.857",
+    "check.tests.correlation_sign.corr_u = 0.2433",
+    "check.tests.correlation_sign.corr_v = 0.272",
+    "check.tests.correlation_sign.corr_swapped = 0.03849",
+    "check.tests.lag.best_lag_hours = 0",
+    "compare.flags = []",
+    "qc(radar).flags = []"
+  ],
+  "reason": "All eight check tests pass on the unmodified radar and model files, so the radar can be fused as is. The speed ratio (1.857) is higher and the correlations lower than typical clean data, but both are within the frozen thresholds and no repair is justified by a failing test."
+}

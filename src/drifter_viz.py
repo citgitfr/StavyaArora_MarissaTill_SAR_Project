@@ -27,7 +27,10 @@ REPO = Path(__file__).resolve().parents[1]
 _spec = importlib.util.spec_from_file_location("drifter_eval", REPO / "src" / "drifter_eval.py")
 de = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(de)
-COL = {"model_only": "tab:orange", "radar+model": "tab:blue"}
+_ps = importlib.util.spec_from_file_location("plot_style", REPO / "src" / "plot_style.py")
+ps = importlib.util.module_from_spec(_ps)
+_ps.loader.exec_module(ps)
+COL = {k: ps.color(k) for k in ("model_only", "radar+model")}
 
 
 def radar_hits(radar, obs):
@@ -55,20 +58,24 @@ def animate(track, obs, clouds, radar, path, title):
     rt = sub["time"].values
 
     fig, ax = plt.subplots(figsize=(8.5, 7))
-    fig.subplots_adjust(top=0.86)
+    fig.subplots_adjust(top=0.80)
     ax.set_xlim(x0, x1)
     ax.set_ylim(y0, y1)
-    ax.set_xlabel("lon")
-    ax.set_ylabel("lat")
+    ax.set_xlabel("Longitude", fontsize=ps.LABEL_SIZE)
+    ax.set_ylabel("Latitude", fontsize=ps.LABEL_SIZE)
     ax.plot(track["lon"], track["lat"], color="0.85", lw=1, zorder=1)
     mesh = ax.pcolormesh(sub["lon"], sub["lat"], valid[0], cmap="Greys", vmin=0, vmax=4, shading="auto", zorder=0)
-    path_line, = ax.plot([], [], color="k", lw=2, zorder=5, label="real drifter")
+    path_line, = ax.plot([], [], color="k", lw=2, zorder=5, label="Real drifter, path so far")
     head, = ax.plot([], [], "o", color="k", ms=6, zorder=6)
-    dots = {k: ax.plot([], [], ".", ms=2, color=COL[k], alpha=0.6, zorder=3, label=k)[0] for k in clouds}
-    ax.plot(obs["lon"].iloc[0], obs["lat"].iloc[0], "s", color="k", ms=6, zorder=6, label="release point")
-    ax.plot([], [], "s", color="0.75", label="radar has data")
-    ax.legend(loc="lower left", fontsize=8)
-    stamp = fig.suptitle("", fontsize=9)
+    dots = {k: ax.plot([], [], ".", ms=2, color=COL[k], alpha=0.6, zorder=3, label=f"Forecast particles: {ps.name(k)}")[0] for k in clouds}
+    ax.plot(obs["lon"].iloc[0], obs["lat"].iloc[0], "s", color="k", ms=6, zorder=6, label="Release point (drifter at 0 h)")
+    ax.plot([], [], "s", color="0.75", label="HF radar has data this hour")
+    leg = ax.legend(loc="lower left", fontsize=8)
+    for h in leg.legend_handles:
+        if hasattr(h, "set_markersize"):
+            h.set_markersize(6)
+            h.set_alpha(1)
+    stamp = fig.suptitle("", fontsize=ps.SUBTITLE_SIZE)
     t0 = obs.index[0]
 
     def frame(h):
@@ -80,8 +87,9 @@ def animate(track, obs, clouds, radar, path, title):
         for k, (plon, plat) in clouds.items():
             dots[k].set_data(plon[:, h], plat[:, h])
             d = de.haversine_km(np.nanmean(plon[:, h]), np.nanmean(plat[:, h]), obs["lon"].values[h], obs["lat"].values[h])
-            txt.append(f"{k} {d:.1f} km")
-        stamp.set_text(f"{title}\n+{h:02d} h  ({t0 + pd.Timedelta(hours=h):%Y-%m-%d %H:%M} UTC)   miss: " + ", ".join(txt))
+            txt.append(f"{ps.name(k)} {d:.1f} km")
+        stamp.set_text(f"{title}\nHour +{h:02d} ({t0 + pd.Timedelta(hours=h):%Y-%m-%d %H:%M} UTC)\n"
+                       "Distance from forecast centre to real drifter: " + "  |  ".join(txt))
         return [mesh, path_line, head, *dots.values(), stamp]
 
     anim = FuncAnimation(fig, frame, frames=len(obs), interval=400, blit=False)
@@ -104,39 +112,42 @@ def summary(track, results, path, title):
         for k in COL:
             a.plot(r[k]["clon"], r[k]["clat"], color=COL[k], lw=0.8, alpha=0.8)
         a.plot(r["obs"]["lon"].iloc[0], r["obs"]["lat"].iloc[0], "o", color="k", ms=2.5)
-    a.plot([], [], color="k", label="real drifter, each 24 h window")
+    a.plot([], [], color="k", label="Real drifter, each 24 h window")
     for k in COL:
-        a.plot([], [], color=COL[k], label=f"{k} forecast centre")
+        a.plot([], [], color=COL[k], label=f"Forecast centre: {ps.name(k)}")
     a.legend(fontsize=7, loc="lower left")
-    a.set_title("(a) every window: real path vs forecast centre paths", fontsize=9)
-    a.set_xlabel("lon")
-    a.set_ylabel("lat")
+    a.set_title("(a) Every window: the real path vs the forecast-centre paths", fontsize=ps.SUBTITLE_SIZE - 1)
+    a.set_xlabel("Longitude", fontsize=ps.LABEL_SIZE)
+    a.set_ylabel("Latitude", fontsize=ps.LABEL_SIZE)
 
     hours = np.arange(len(results[0]["obs"]))
     for k in COL:
         d = np.array([r[k]["sep"] for r in results])
-        b.plot(hours, np.median(d, 0), color=COL[k], lw=2, label=f"{k} (median)")
+        b.plot(hours, np.median(d, 0), color=COL[k], lw=2, label=f"{ps.name(k)} (median)")
         b.fill_between(hours, np.percentile(d, 25, 0), np.percentile(d, 75, 0), color=COL[k], alpha=0.2)
-    b.set_xlabel("hours after release")
-    b.set_ylabel("distance from forecast centre to drifter (km)")
-    b.set_title("(b) how fast the forecasts drift away from reality\n(line = median, band = middle 50% of windows)", fontsize=9)
+    b.set_xlabel("Hours after release", fontsize=ps.LABEL_SIZE)
+    b.set_ylabel("Distance from forecast centre to real drifter (km)", fontsize=ps.LABEL_SIZE)
+    b.set_title("(b) How fast each forecast drifts away from reality\nline = median over windows, band = middle 50%", fontsize=ps.SUBTITLE_SIZE - 1)
     b.legend(fontsize=8)
     b.grid(alpha=0.3)
 
     x = np.arange(len(results))
     w = 0.4
     for j, k in enumerate(COL):
-        c.bar(x + (j - 0.5) * w, [r[k]["sep"][-1] for r in results], w, color=COL[k], label=k)
+        c.bar(x + (j - 0.5) * w, [r[k]["sep"][-1] for r in results], w, color=COL[k], label=ps.name(k))
     c2 = c.twinx()
-    c2.plot(x, [100 * r["radar_share"] for r in results], "k.--", lw=0.8, label="radar data at drifter (%)")
+    c2.plot(x, [100 * r["radar_share"] for r in results], "k.--", lw=0.8, label="HF radar data at the drifter (%)")
     c2.set_ylim(0, 105)
-    c2.set_ylabel("% of the drifter's hours with radar data (dots)")
+    c2.set_ylabel("Share of the drifter's hours with HF radar data (%, dots)", fontsize=ps.LABEL_SIZE)
     c.set_xticks(x)
     c.set_xticklabels([f"{r['start']:%d %Hh}" for r in results], rotation=90, fontsize=7)
-    c.set_ylabel("miss after 24 h (km)")
-    c.set_title("(c) 24 h miss for every window (start day and hour)", fontsize=9)
-    c.legend(fontsize=8, loc="upper left")
-    fig.suptitle(title, fontsize=10)
+    c.set_ylabel("Miss after 24 h (km)", fontsize=ps.LABEL_SIZE)
+    c.set_xlabel("Window start (day, hour UTC)", fontsize=ps.LABEL_SIZE)
+    c.set_title("(c) The 24 h miss of every window", fontsize=ps.SUBTITLE_SIZE - 1)
+    h1, l1 = c.get_legend_handles_labels()
+    h2, l2 = c2.get_legend_handles_labels()
+    c.legend(h1 + h2, l1 + l2, fontsize=8, loc="upper left")
+    fig.suptitle(title, fontsize=ps.TITLE_SIZE)
     fig.tight_layout()
     fig.savefig(path, dpi=150, bbox_inches="tight")
     plt.close(fig)
@@ -183,8 +194,9 @@ def main(argv=None):
         print(f"  {s} done")
 
     fig_dir = REPO / "docs" / "figures"
-    title = (f"Drifter {a.id} (drogue lost), {starts[0]:%Y-%m-%d} to {starts[-1] + pd.Timedelta(hours=a.hours):%Y-%m-%d}: "
-             f"{len(starts)} forecasts of {a.hours} h, OceanDrift, no wind, K={a.k:g} m2/s")
+    title = (f"Clean forecasts vs real drifter {a.id}, {starts[0]:%Y-%m-%d} to "
+             f"{starts[-1] + pd.Timedelta(hours=a.hours):%Y-%m-%d}: {len(starts)} forecasts of {a.hours} h "
+             f"(OceanDrift, no wind, spread {a.k:g} m²/s)")
     summary(track, results, fig_dir / f"drifter_{a.id}_summary.png", title)
     print(f"wrote docs/figures/drifter_{a.id}_summary.png")
     missing = wanted - set(anim_clouds)
@@ -193,7 +205,8 @@ def main(argv=None):
     for s, (obs, clouds) in sorted(anim_clouds.items()):
         name = f"drifter_{a.id}_window_{s:%m%d_%H}.gif"
         animate(track, obs, clouds, radar, fig_dir / name,
-                f"Drifter {a.id}: one 24 h forecast, released {obs.index[0]:%Y-%m-%d %H:%M} at the drifter")
+                f"Clean forecasts vs real drifter {a.id}\none 24 h forecast released at the drifter, "
+                f"{obs.index[0]:%Y-%m-%d %H:%M} UTC")
         print(f"wrote docs/figures/{name}")
 
 

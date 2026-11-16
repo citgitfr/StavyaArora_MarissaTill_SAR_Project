@@ -1,0 +1,21 @@
+{
+  "case_id": "case01",
+  "choice": "repair",
+  "repair": {"action": "rescale", "param": 100},
+  "evidence": [
+    "check(original).result = fail",
+    "check(original).speed_ratio.speed_ratio_median = 0.01857",
+    "qc(radar).speed_median = 0.002195",
+    "qc(radar).speed_max = 0.01004",
+    "qc(model).speed_median = 0.1434",
+    "compare.corr_u = 0.2433",
+    "compare.corr_v = 0.272",
+    "compare.corr_swapped = 0.03849",
+    "compare.best_lag_hours = 0",
+    "repair.out = runs/work/agent/case01/radar_repaired.nc",
+    "check(repaired).result = pass",
+    "check(repaired).speed_ratio.speed_ratio_median = 1.857",
+    "check(repaired).speed_bound.speed_max = 1.004"
+  ],
+  "reason": "Only the speed_ratio test failed (radar/model median 0.01857) while sign, lag, units, coverage and correlations passed, which points to radar values about 100x too small (a cm-to-m scaling error). Rescaling u and v by 100 made check pass, so the repaired radar file should be used."
+}

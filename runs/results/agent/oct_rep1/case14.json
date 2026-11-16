@@ -1,0 +1,21 @@
+{"case_id": "case14",
+ "choice": "repair",
+ "repair": {"action": "rescale", "param": 0.01},
+ "evidence": [
+  "check.result = fail",
+  "check.tests.speed_bound.speed_max = 100.4",
+  "check.tests.speed_ratio.speed_ratio_median = 185.7",
+  "qc.speed_median = 21.95",
+  "qc.speed_p95 = 54.45",
+  "qc.fill_value_hits = 0",
+  "compare.best_lag_hours = 0",
+  "compare.corr_u = 0.2433",
+  "compare.corr_v = 0.272",
+  "compare.corr_swapped = 0.03849",
+  "repair.repairs_used = 1",
+  "check(repaired).result = pass",
+  "check(repaired).tests.speed_bound.speed_max = 1.004",
+  "check(repaired).tests.speed_ratio.speed_ratio_median = 1.857"
+ ],
+ "reason": "Radar speeds were about 100 times too large across the whole field, not in isolated spikes, while correlation, lag and coverage passed, which fits a cm/s-as-m/s unit-scale fault. Rescaling by 0.01 made check pass, so the repaired radar file runs/work/agent/case14/radar_repaired.nc is used."
+}

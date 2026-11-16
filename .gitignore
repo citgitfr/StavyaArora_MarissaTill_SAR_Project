@@ -225,3 +225,9 @@ outputs/
 *.nc
 heldout/
 !fixtures/*.nc
+# run_demo replay outputs (regenerated every run)
+runs/results/_replay_*/
+runs/work/_replay_*/
+
+# drift run cache (regenerated)
+runs/work/drift/

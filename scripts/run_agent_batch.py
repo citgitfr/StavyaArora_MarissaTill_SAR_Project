@@ -91,6 +91,7 @@ def main(argv=None):
     ap.add_argument("--cases", nargs="*", help="case ids (default: every case in the workspace)")
     ap.add_argument("--dest", default=str(DEFAULT_DEST))
     ap.add_argument("--dry-run", action="store_true", help="build the workspace and print the commands only")
+    ap.add_argument("--cases-dir", default="runs/cases", help="source of the cases, e.g. runs/cases_oct")
     a = ap.parse_args(argv)
 
     results = REPO / "runs" / "results" / "agent" / a.run_id
@@ -108,7 +109,8 @@ def main(argv=None):
             sys.exit("`python` is not the repository's .venv; activate it first (source .venv/bin/activate).")
 
     # a dry run costs nothing and is never scored, so it may use uncommitted files; a real run may not
-    ws = mew.main(["--run-id", a.run_id, "--dest", a.dest] + (["--allow-dirty"] if a.dry_run else []))
+    ws = mew.main(["--run-id", a.run_id, "--dest", a.dest, "--cases-dir", a.cases_dir]
+                  + (["--allow-dirty"] if a.dry_run else []))
     ids = a.cases or sorted(p.name for p in (ws / "runs" / "cases").glob("case*") if p.is_dir())
     missing = [c for c in ids if not (ws / "runs" / "cases" / c).is_dir()]
     if missing:

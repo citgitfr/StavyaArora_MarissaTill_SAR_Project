@@ -205,6 +205,10 @@ def main(argv=None):
     ap.add_argument("--baseline", default=str(REPO / "runs" / "results" / "baseline"))
     ap.add_argument("--out", default=str(REPO / "runs" / "results" / "scores"))
     ap.add_argument("--no-fidelity", action="store_true", help="skip the netCDF comparison (faster)")
+    ap.add_argument("--baseline-work", default=str(REPO / "runs" / "work" / "baseline"),
+                    help="where the baseline's repaired files are")
+    ap.add_argument("--cases-dir", default=str(CASES), help="the cases these decisions were made on")
+    ap.add_argument("--clean", help="clean radar for fidelity (default: the key's radar_path, else the fixture)")
     a = ap.parse_args(argv)
 
     labels_path = Path(a.labels).expanduser()
@@ -213,12 +217,22 @@ def main(argv=None):
     key = json.loads(labels_path.read_text(encoding="utf-8"))
     labels = key["cases"]
     smax = speed_bound()
+    cases_dir = Path(a.cases_dir)
+    if a.clean:
+        clean = Path(a.clean)
+    elif key.get("radar_path"):
+        clean = Path(key["radar_path"]) if Path(key["radar_path"]).is_absolute() else REPO / key["radar_path"]
+    else:
+        clean = CLEAN
+    if not a.no_fidelity and not clean.exists():
+        sys.exit(f"clean radar {clean} not found; pass --clean or --no-fidelity")
+    print(f"clean radar for fidelity: {clean}; cases: {cases_dir}")
     fid = not a.no_fidelity
 
     policies = {
         "always_model_only": ({c: {"choice": "model_only", "repair": None} for c in labels}, None),
         "always_fused": ({c: {"choice": "fused", "repair": None} for c in labels}, None),
-        "baseline": (load_decisions(a.baseline), REPO / "runs" / "work" / "baseline"),
+        "baseline": (load_decisions(a.baseline), Path(a.baseline_work)),
     }
     for run in a.agent_runs:
         d = REPO / "runs" / "results" / "agent" / run
@@ -228,9 +242,11 @@ def main(argv=None):
     policies["oracle"] = ({c: oracle_choice(lab["acceptable_choices"]) for c, lab in labels.items()}, None)
 
     all_rows, summary = [], {"labels": str(labels_path), "seed": key.get("seed"), "faithful_rms_m_s": FAITHFUL_RMS,
+                             "clean_radar": str(clean), "cases_dir": str(cases_dir),
                              "policies": {}, "agreement": {}}
     for name, (decs, work) in policies.items():
-        rows = score_policy(name, decs, labels, smax, work, with_fidelity=fid and name != "oracle")
+        rows = score_policy(name, decs, labels, smax, work, with_fidelity=fid and name != "oracle",
+                            cases_dir=cases_dir, clean=clean)
         all_rows += rows
         s = summarize(rows)
         if name.startswith("agent_"):
@@ -244,7 +260,7 @@ def main(argv=None):
         summary["agreement"]["baseline_vs_" + a.agent_runs[0]] = agreement(
             policies["baseline"][0], policies[f"agent_{a.agent_runs[0]}"][0])
 
-    out = Path(a.out)
+    out = Path(a.out).resolve()
     out.mkdir(parents=True, exist_ok=True)
     (out / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     with open(out / "cases.csv", "w", newline="", encoding="utf-8") as f:

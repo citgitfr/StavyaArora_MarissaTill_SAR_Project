@@ -52,6 +52,8 @@ def main(argv=None):
     ap.add_argument("--run-id", required=True, help="name for this run, e.g. rep1")
     ap.add_argument("--dest", default=str(DEFAULT_DEST), help=f"parent folder outside the repo (default {DEFAULT_DEST})")
     ap.add_argument("--allow-dirty", action="store_true", help="testing only: allow uncommitted allowlisted files")
+    ap.add_argument("--cases-dir", default=str(CASES),
+                    help="where the cases come from (copied to runs/cases/ in the workspace, so prompts do not change)")
     a = ap.parse_args(argv)
 
     ws = Path(a.dest).expanduser().resolve() / a.run_id
@@ -66,11 +68,12 @@ def main(argv=None):
     dirty = git("status", "--porcelain", "--", *ALLOWLIST)
     if dirty and not a.allow_dirty:
         sys.exit("These allowlisted files have uncommitted changes; commit them first:\n" + dirty)
-    cases = sorted(p for p in (REPO / CASES).glob("case*") if p.is_dir())
+    src_cases = Path(a.cases_dir) if Path(a.cases_dir).is_absolute() else REPO / a.cases_dir
+    cases = sorted(p for p in src_cases.glob("case*") if p.is_dir())
     if not cases:
-        sys.exit("no runs/cases/case*; run python src/inject_faults.py first")
-    if (REPO / "heldout" / "labels.json").exists():
-        sys.exit("heldout/labels.json is inside the repository; move it out before an agent run.")
+        sys.exit(f"no case* folders in {src_cases}; run python src/inject_faults.py first")
+    if (REPO / "heldout").is_dir() and any((REPO / "heldout").iterdir()):
+        sys.exit("heldout/ inside the repository is not empty; move answer keys out before an agent run.")
 
     copied = {}
     for rel in ALLOWLIST:
@@ -86,6 +89,7 @@ def main(argv=None):
             copied[rel] = sha256(ws / rel)
 
     manifest = {"run_id": a.run_id, "workspace": str(ws), "created_utc": datetime.now(timezone.utc).isoformat(),
+                "cases_from": str(src_cases.relative_to(REPO)) if REPO in src_cases.parents else str(src_cases),
                 "commit": git("rev-parse", "HEAD"), "dirty_allowed": bool(dirty), "files": copied}
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")

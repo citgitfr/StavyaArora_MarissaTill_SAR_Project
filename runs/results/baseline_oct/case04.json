@@ -1,0 +1,15 @@
+{
+  "case_id": "case04",
+  "choice": "model_only",
+  "repair": null,
+  "evidence": [
+    "check.result = fail",
+    "check.tests.coverage.ocean_cells = 7866",
+    "check.tests.coverage.hour_fraction_mean = 0.1485",
+    "check.tests.coverage.hour_fraction_min = 0.0",
+    "check.tests.coverage.good_hours_fraction = 0.3939",
+    "check.tests.coverage.min_hour_fraction = 0.2",
+    "check.tests.coverage.min_good_hours_fraction = 0.8"
+  ],
+  "reason": "first failing test 'coverage' has no repair rule."
+}

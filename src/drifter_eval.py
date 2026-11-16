@@ -155,6 +155,10 @@ def run(readers, lon, lat, start, hours, k):
         o.run(duration=timedelta(hours=hours), time_step=TIME_STEP_S, time_step_output=OUTPUT_STEP_S)
     plon = o.result["lon"].transpose("trajectory", "time").values.astype(float)
     plat = o.result["lat"].transpose("trajectory", "time").values.astype(float)
+    n_out = hours * 3600 // OUTPUT_STEP_S + 1
+    if plon.shape[1] < n_out:                   # OpenDrift stops early if every particle left the domain
+        pad = np.full((plon.shape[0], n_out - plon.shape[1]), np.nan)
+        plon, plat = np.hstack([plon, pad]), np.hstack([plat, pad])
     for a in (plon, plat):                      # carry stopped particles' last position forward
         for t in range(1, a.shape[1]):
             bad = np.isnan(a[:, t])
@@ -193,20 +197,29 @@ def figure(track, examples, path, drifter_id):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    fig, axs = plt.subplots(1, len(examples), figsize=(5 * len(examples), 5), sharex=True, sharey=True)
+    ps = _load("plot_style", REPO / "src" / "plot_style.py")
+    fig, axs = plt.subplots(1, len(examples), figsize=(5.5 * len(examples), 5.6), sharex=True, sharey=True)
     axs = np.atleast_1d(axs)
-    for ax, (title, (plon, plat, obs)) in zip(axs, examples.items()):
-        ax.plot(track["lon"], track["lat"], color="0.8", lw=1, label="whole drifter track")
-        ax.plot(plon[::10].T, plat[::10].T, color="tab:blue", lw=0.3, alpha=0.5)
-        ax.plot(plon[:, -1], plat[:, -1], ".", ms=1.5, color="tab:blue", label="particles at 24 h")
-        ax.plot(obs["lon"], obs["lat"], color="k", lw=1.5, label="drifter, same 24 h")
-        ax.plot(obs["lon"].iloc[0], obs["lat"].iloc[0], "o", color="k", ms=4)
-        ax.plot(obs["lon"].iloc[-1], obs["lat"].iloc[-1], "*", color="tab:red", ms=10, label="drifter at 24 h")
-        ax.set_title(title, fontsize=9)
-        ax.set_xlabel("lon")
-    axs[0].set_ylabel("lat")
-    axs[0].legend(fontsize=7, loc="best")
-    fig.suptitle(f"Drifter {drifter_id}: 24 h forecasts vs. the real track (one example window)", fontsize=10)
+    start = None
+    for ax, (key_, (plon, plat, obs)) in zip(axs, examples.items()):
+        forcing, k = key_.split("|")
+        start = obs.index[0]
+        col = ps.color(forcing)
+        ax.plot(track["lon"], track["lat"], color="0.8", lw=1, label="Drifter, whole 10-day track")
+        ax.plot(plon[::10].T, plat[::10].T, color=col, lw=0.3, alpha=0.5)
+        ax.plot(plon[:, -1], plat[:, -1], ".", ms=1.5, color=col, label="Forecast particles at 24 h")
+        ax.plot(obs["lon"], obs["lat"], color="k", lw=1.5, label="Real drifter, same 24 h")
+        ax.plot(obs["lon"].iloc[0], obs["lat"].iloc[0], "o", color="k", ms=5, label="Release point (drifter at 0 h)")
+        ax.plot(obs["lon"].iloc[-1], obs["lat"].iloc[-1], "*", color="#d62728", ms=11, label="Real drifter at 24 h")
+        ax.set_title(f"{ps.name(forcing)}  (spread {k} m²/s)", fontsize=ps.SUBTITLE_SIZE, color=col)
+        ax.set_xlabel("Longitude", fontsize=ps.LABEL_SIZE)
+        leg = ax.legend(fontsize=7, loc="best")
+        for h in leg.legend_handles:
+            if hasattr(h, "set_markersize"):
+                h.set_markersize(6)
+    axs[0].set_ylabel("Latitude", fontsize=ps.LABEL_SIZE)
+    fig.suptitle(f"Clean forecasts vs real drifter {drifter_id}: one 24 h forecast released "
+                 f"{start:%Y-%m-%d %H:%M} UTC", fontsize=ps.TITLE_SIZE)
     fig.savefig(path, dpi=150, bbox_inches="tight")
     plt.close(fig)
 
@@ -251,7 +264,7 @@ def main(argv=None):
                 plon, plat = run(readers, obs["lon"].iloc[0], obs["lat"].iloc[0], s, a.hours, k)
                 rows.append({"start": str(s), "forcing": fname, "diffusivity": k, **score_window(plon, plat, obs, a.hours)})
                 if n == (len(starts) + 1) // 2 and k == a.diffusivity[min(1, len(a.diffusivity) - 1)]:
-                    example[f"{fname} (K={k:g} m2/s), start {s:%m-%d %H:%M}"] = (plon, plat, obs)
+                    example[f"{fname}|{k:g}"] = (plon, plat, obs)
         print(f"  window {n}/{len(starts)} {s} done")
 
     out = Path(a.out) if a.out else REPO / "runs" / "results" / "drifter" / str(a.id)

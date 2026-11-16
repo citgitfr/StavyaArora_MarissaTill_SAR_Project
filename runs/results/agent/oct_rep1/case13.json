@@ -1,0 +1,19 @@
+{"case_id": "case13",
+ "choice": "repair",
+ "repair": {"action": "flip_sign", "param": "v"},
+ "evidence": [
+  "check.result = fail",
+  "check.tests.correlation_sign.pass = false",
+  "compare.corr_u = 0.2433",
+  "compare.corr_v = -0.272",
+  "compare.corr_swapped = 0.03856",
+  "compare.flags = [negative_corr_v, swapped_corr_exceeds_direct]",
+  "compare.best_lag_hours = 0",
+  "qc.fill_value_hits = 0",
+  "qc.speed_max = 1.004",
+  "repair.repairs_used = 1",
+  "check(repaired).result = pass",
+  "check(repaired).tests.correlation_sign.corr_v = 0.272",
+  "check(repaired).tests.speed_ratio.speed_ratio_median = 1.857"
+ ],
+ "reason": "Only the correlation_sign test failed, with corr_u positive but corr_v negative (-0.272), which points to a sign error in the radar v component. After flip_sign v, every check test passes (corr_v = 0.272), so the repaired radar file is used."}

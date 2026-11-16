@@ -1,0 +1,61 @@
+{
+  "drifter": 300534061399950,
+  "windows": 20,
+  "k": 10.0,
+  "cases_dir": "runs/cases_oct",
+  "clean_radar": "fixtures/hfr_20211018.nc",
+  "model": "fixtures/hycom_20211018.nc",
+  "distinct_forcings": 16,
+  "policies": {
+    "always_model_only": {
+      "cases": 14,
+      "mean_miss_km_24h": 18.91,
+      "mean_skill": 0.067,
+      "mean_in90_24h": 0.0,
+      "mean_excess_over_clean_km": 2.887,
+      "worst_excess_over_clean_km": 2.887,
+      "share_cases_better_than_model_only": 0.0
+    },
+    "always_fused": {
+      "cases": 14,
+      "mean_miss_km_24h": 19.82,
+      "mean_skill": 0.176,
+      "mean_in90_24h": 0.011,
+      "mean_excess_over_clean_km": 3.797,
+      "worst_excess_over_clean_km": 42.701,
+      "share_cases_better_than_model_only": 0.786
+    },
+    "baseline": {
+      "cases": 14,
+      "mean_miss_km_24h": 16.345,
+      "mean_skill": 0.199,
+      "mean_in90_24h": 0.011,
+      "mean_excess_over_clean_km": 0.322,
+      "worst_excess_over_clean_km": 2.887,
+      "share_cases_better_than_model_only": 0.857
+    },
+    "agent_oct_rep1": {
+      "cases": 14,
+      "mean_miss_km_24h": 16.345,
+      "mean_skill": 0.199,
+      "mean_in90_24h": 0.011,
+      "mean_excess_over_clean_km": 0.322,
+      "worst_excess_over_clean_km": 2.887,
+      "share_cases_better_than_model_only": 0.857
+    },
+    "clean_radar": {
+      "cases": 14,
+      "mean_miss_km_24h": 16.023,
+      "mean_skill": 0.219,
+      "mean_in90_24h": 0.0,
+      "mean_excess_over_clean_km": 0.0,
+      "worst_excess_over_clean_km": 0.0,
+      "share_cases_better_than_model_only": 1.0
+    }
+  },
+  "no_motion_reference": {
+    "median_miss_km_24h": 15.021,
+    "mean_miss_km_24h": 14.765,
+    "skill": 0.0
+  }
+}

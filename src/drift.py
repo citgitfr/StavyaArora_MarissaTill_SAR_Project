@@ -186,41 +186,65 @@ def compare(run, ref):
 
 
 # ---- evaluate --------------------------------------------------------------------------------
-def policies(agent_runs, baseline_dir):
-    ids = sorted(p.name for p in CASES.glob("case*") if p.is_dir())
+def policies(agent_runs, baseline_dir, baseline_work=None, cases_dir=CASES):
+    ids = sorted(p.name for p in Path(cases_dir).glob("case*") if p.is_dir())
     pols = {"always_model_only": ({c: {"choice": "model_only"} for c in ids}, None),
             "always_fused": ({c: {"choice": "fused"} for c in ids}, None),
-            "baseline": (score.load_decisions(baseline_dir), REPO / "runs" / "work" / "baseline")}
+            "baseline": (score.load_decisions(baseline_dir),
+                         Path(baseline_work) if baseline_work else REPO / "runs" / "work" / "baseline")}
     for r in agent_runs:
         pols[f"agent_{r}"] = (score.load_decisions(REPO / "runs" / "results" / "agent" / r),
                               REPO / "runs" / "work" / "agent" / r)
     return ids, pols
 
 
-def figure(case, runs, ref, path):
+def figure(case, panels, ref, path, start=None):
+    """panels: {policy key: ((lon, lat), decision)}. One panel per policy plus the clean-radar reference."""
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    ps = _load_style()
+    runs = {k: v[0] for k, v in panels.items()}
     edges = poc_edges(ref, *runs.values())
-    fig, axs = plt.subplots(1, len(runs) + 1, figsize=(4.2 * (len(runs) + 1), 4.2), sharex=True, sharey=True)
-    for ax, (title, r) in zip(axs, [("reference: clean radar + model", ref), *runs.items()]):
+    n = len(runs) + 1
+    fig, axs = plt.subplots(1, n, figsize=(4.2 * n, 5.4), sharex=True, sharey=True)
+    fig.subplots_adjust(top=0.80, bottom=0.25, wspace=0.08, left=0.05, right=0.99)
+    items = [("clean_radar", ref, None), *[(k, v[0], v[1]) for k, v in panels.items()]]
+    for ax, (k, r, dec) in zip(axs, items):
         ax.pcolormesh(edges[0], edges[1], poc_map(r[0][:, -1], r[1][:, -1], edges).T, cmap="Blues", shading="flat")
-        ax.plot(r[0][::25].T, r[1][::25].T, lw=0.4, color="0.4")
-        ax.plot(ref[0][:, -1], ref[1][:, -1], ",", color="tab:red")
-        ax.set_title(title, fontsize=9)
-        ax.set_xlabel("lon")
+        ax.plot(r[0][::25].T, r[1][::25].T, lw=0.5, color=ps.color(k), alpha=0.8)
+        ax.plot([], [], lw=1, color=ps.color(k), label="Sample particle tracks (24 h)")
+        ax.plot([], [], "s", color="#6baed6", label="Probability map at 24 h (shaded)")
+        ax.plot(ref[0][:, -1], ref[1][:, -1], ".", ms=1, color="k")
+        ax.plot([], [], ".", color="k", label="Reference end points (clean radar)")
+        sub = "reference for this figure" if dec is None else ps.decision_text(dec)
+        ax.set_title(f"{ps.name(k)}\n{sub}", fontsize=ps.SUBTITLE_SIZE - 1, color=ps.color(k))
+        ax.set_xlabel("Longitude", fontsize=8)
+        ax.tick_params(labelsize=7)
+        ax.legend(fontsize=7, loc="upper center", bbox_to_anchor=(0.5, -0.13), frameon=False)
     lons = np.concatenate([r[0].ravel() for r in (ref, *runs.values())])
     lats = np.concatenate([r[1].ravel() for r in (ref, *runs.values())])
-    axs[0].set_xlim(np.nanmin(lons) - 0.05, np.nanmax(lons) + 0.05)
-    axs[0].set_ylim(np.nanmin(lats) - 0.05, np.nanmax(lats) + 0.05)
-    axs[0].set_ylabel("lat")
-    fig.suptitle(f"{case}: 24 h OceanDrift, POC map (blue) and sample tracks; red = reference end points", fontsize=10)
-    fig.savefig(path, dpi=150, bbox_inches="tight")
+    axs[0].set_xlim(np.nanpercentile(lons, 0.5) - 0.05, np.nanpercentile(lons, 99.5) + 0.05)
+    axs[0].set_ylim(np.nanpercentile(lats, 0.5) - 0.05, np.nanpercentile(lats, 99.5) + 0.05)
+    axs[0].set_ylabel("Latitude", fontsize=8)
+    when = f" from {start:%Y-%m-%d %H:%M} UTC" if start is not None else ""
+    fig.suptitle(f"{ps.case_label(case)}: what each decision does to a 24 h forecast{when}\n"
+                 "1,000 particles from 5 release points; each panel is compared with the clean-radar reference (left)",
+                 fontsize=ps.SUBTITLE_SIZE)
+    fig.savefig(path, dpi=150)
     plt.close(fig)
 
 
+def _load_style():
+    spec = importlib.util.spec_from_file_location("plot_style", REPO / "src" / "plot_style.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
 def evaluate(a):
-    ids, pols = policies(a.agent_runs, a.baseline)
+    cases_dir = Path(a.cases_dir)
+    ids, pols = policies(a.agent_runs, a.baseline, a.baseline_work, cases_dir)
     clean, model0 = Path(a.clean), Path(a.model)
     start = pd.Timestamp(a.start) if a.start else default_start(clean, model0)
     points = seed_points(clean, start)
@@ -234,18 +258,18 @@ def evaluate(a):
             choice = dec.get("choice") if dec else None
             row = {"policy": name, "case": c, "choice": choice, "radar": None, "run": None}
             if choice in ("model_only", "escalate") or (choice in score.RADAR_CHOICES):
-                radar = score.radar_used(dec, c, work, CASES) if choice in score.RADAR_CHOICES else None
+                radar = score.radar_used(dec, c, work, cases_dir) if choice in score.RADAR_CHOICES else None
                 if choice in score.RADAR_CHOICES and radar is None:
                     rows.append({**row, "radar": "MISSING"})
                     continue
-                lon, lat, key = cached_run(radar, CASES / c / "model.nc", points, start)
+                lon, lat, key = cached_run(radar, cases_dir / c / "model.nc", points, start)
                 done[key] = True
-                row.update(radar=None if radar is None else str(Path(radar).relative_to(REPO)), run=key,
+                row.update(radar=None if radar is None else str(Path(radar).resolve().relative_to(REPO)), run=key,
                            **compare((lon, lat), ref))
             rows.append(row)
         print(f"  {name}: done ({len(done)} distinct runs so far)")
 
-    out = Path(a.out)
+    out = Path(a.out).resolve()
     out.mkdir(parents=True, exist_ok=True)
     fields = (["policy", "case", "choice", "radar", "run"] + [f"sep_km_{h}h" for h in SEP_HOURS]
               + [f"mean_sep_km_{HOURS}h", f"p90_sep_km_{HOURS}h", "poc_overlap"])
@@ -273,16 +297,16 @@ def evaluate(a):
               f"{s['mean_of_mean_sep_km_24h']:>10.2f}{s['max_sep_km_24h']:>9.2f}{s['mean_poc_overlap']:>13.2f}")
     print(f"\nwrote {(out / 'summary.json').relative_to(REPO)} and {(out / 'cases.csv').relative_to(REPO)}")
 
-    if a.figure:
-        c = a.figure
+    agents = [n for n in pols if n.startswith("agent_")][:1]
+    for c in a.figure or []:
         panels = {}
-        for name in ("always_fused", "baseline", "always_model_only"):
+        for name in ("always_fused", "baseline", *agents, "always_model_only"):
             decs, work = pols[name]
             dec = decs[c]
-            radar = score.radar_used(dec, c, work, CASES) if dec["choice"] in score.RADAR_CHOICES else None
-            panels[f"{name}: {dec['choice']}"] = cached_run(radar, CASES / c / "model.nc", points, start)[:2]
-        fig_path = REPO / "docs" / "figures" / f"drift_{c}.png"
-        figure(c, panels, ref, fig_path)
+            radar = score.radar_used(dec, c, work, cases_dir) if dec["choice"] in score.RADAR_CHOICES else None
+            panels[name] = (cached_run(radar, cases_dir / c / "model.nc", points, start)[:2], dec)
+        fig_path = REPO / "docs" / "figures" / f"{a.fig_prefix}{c}.png"
+        figure(c, panels, ref, fig_path, start)
         print(f"figure: {fig_path.relative_to(REPO)}")
 
 
@@ -293,11 +317,14 @@ def main(argv=None):
     e = sub.add_parser("evaluate")
     e.add_argument("--agent-runs", nargs="*", default=["rep1", "rep2"])
     e.add_argument("--baseline", default=str(REPO / "runs" / "results" / "baseline"))
+    e.add_argument("--baseline-work", default=str(REPO / "runs" / "work" / "baseline"))
     e.add_argument("--clean", default=str(CLEAN), help="clean radar for the reference run and release points")
     e.add_argument("--model", default=str(MODEL))
     e.add_argument("--start", help="release time (default: centred in the shared window)")
     e.add_argument("--out", default=str(OUT))
-    e.add_argument("--figure", help="case id for a 3-panel figure in docs/figures/")
+    e.add_argument("--figure", nargs="*", help="case id(s) for a panel figure in docs/figures/")
+    e.add_argument("--fig-prefix", default="drift_", help="figure file name prefix (e.g. drift_oct_)")
+    e.add_argument("--cases-dir", default=str(CASES))
     r = sub.add_parser("run")
     r.add_argument("--radar", help="radar file, or omit for model only")
     r.add_argument("--model", required=True)

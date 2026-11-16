@@ -1,0 +1,22 @@
+{
+  "case_id": "case03",
+  "choice": "repair",
+  "repair": {"action": "swap_components", "param": null},
+  "evidence": [
+    "check.result = fail (original radar)",
+    "check.correlation_sign.corr_u = -6.277e-05",
+    "check.correlation_sign.corr_v = 0.07705",
+    "check.correlation_sign.corr_swapped = 0.2576",
+    "check.lag.best_lag_hours = 6",
+    "compare.flags = [negative_corr_u, swapped_corr_exceeds_direct, best_lag_nonzero]",
+    "compare.corr_by_lag range = 0.02995 to 0.05403",
+    "repair.repairs_used = 1",
+    "check.result = pass (repaired radar)",
+    "check.correlation_sign.corr_u = 0.2433 (repaired)",
+    "check.correlation_sign.corr_v = 0.272 (repaired)",
+    "check.correlation_sign.corr_swapped = 0.03849 (repaired)",
+    "check.lag.best_lag_hours = 0 (repaired)",
+    "check.speed_ratio.speed_ratio_median = 1.857 (passes, max 2.0)"
+  ],
+  "reason": "Radar u/v correlated with the model only when swapped (corr_swapped 0.2576 vs corr_u -6.277e-05, corr_v 0.07705), and the flat lag curve was a symptom of the swap, not a time offset. After swap_components every check test passes, including lag (best_lag_hours 0), so the repaired radar is used."
+}

@@ -1,0 +1,19 @@
+{
+  "case_id": "case06",
+  "choice": "repair",
+  "repair": {
+    "action": "shift_time",
+    "param": -3.0
+  },
+  "evidence": [
+    "check.result = fail",
+    "check.tests.time_axis.largest_gap_s = 3600",
+    "check.tests.time_axis.max_gap_s = 7200",
+    "check.tests.time_axis.inside_model_times = False",
+    "check.tests.lag.best_lag_hours = 3",
+    "check.tests.lag.max_abs_hours = 1",
+    "repair1.rule = time_axis -> shift_time -3.0",
+    "check(repair1).result = pass"
+  ],
+  "reason": "check passes after 1 repair(s) chosen by the rule table."
+}

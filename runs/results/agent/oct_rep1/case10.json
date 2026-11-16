@@ -1,0 +1,27 @@
+{
+  "case_id": "case10",
+  "choice": "model_only",
+  "repair": null,
+  "evidence": [
+    "check.result = fail",
+    "check.tests.coverage.pass = false",
+    "check.tests.coverage.good_hours_fraction = 0.7992",
+    "check.tests.coverage.min_good_hours_fraction = 0.8",
+    "check.tests.coverage.hour_fraction_mean = 0.2555",
+    "check.tests.coverage.hour_fraction_min = 0.1257",
+    "qc.valid_fraction = 0.1745",
+    "qc.fill_value_hits = 0",
+    "qc.flags = []",
+    "check.tests.units.pass = true",
+    "check.tests.speed_bound.pass = true",
+    "check.tests.time_axis.pass = true",
+    "check.tests.fill_values.pass = true",
+    "check.tests.speed_ratio.speed_ratio_median = 1.867",
+    "check.tests.correlation_sign.corr_u = 0.2259",
+    "check.tests.correlation_sign.corr_v = 0.251",
+    "check.tests.correlation_sign.corr_swapped = 0.004562",
+    "check.tests.lag.best_lag_hours = 0",
+    "compare.flags = []"
+  ],
+  "reason": "Only the coverage test fails (good_hours_fraction 0.7992 below 0.8), and no repair on the menu can add missing radar data, so the radar cannot be made to pass. All other tests pass and the model file raised no error, so the model alone is used."
+}

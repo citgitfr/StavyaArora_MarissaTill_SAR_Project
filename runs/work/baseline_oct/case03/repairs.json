@@ -1,0 +1,8 @@
+[
+  {
+    "action": "swap_components",
+    "param": null,
+    "file": "runs/cases_oct/case03/radar.nc",
+    "out": "/Users/marissatill/ClaudeProjects/StavyaArora_MarissaTill_SAR_Project/runs/work/baseline_oct/case03/radar_fixed_1.nc"
+  }
+]

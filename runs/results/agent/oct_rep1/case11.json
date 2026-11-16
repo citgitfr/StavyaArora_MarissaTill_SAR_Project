@@ -1,0 +1,26 @@
+{"case_id": "case11",
+ "choice": "repair",
+ "repair": {"action": "mask_fill", "param": 10.0},
+ "evidence": [
+  "check(original).result = fail",
+  "check(original).speed_bound.speed_max = 1099.0",
+  "check(original).speed_bound.max_m_s = 3.0",
+  "check(original).correlation_sign.corr_u = -0.0007116",
+  "check(original).correlation_sign.corr_v = 0.001811",
+  "check(original).lag.best_lag_hours = 4",
+  "qc(radar).speed_p95 = 1.004",
+  "qc(radar).fill_value_hits = 0",
+  "compare.rms_u = 173.8",
+  "compare.bias_u = -38.92",
+  "compare.bias_v = -38.85",
+  "repair.n_masked = 37917",
+  "check(repaired).result = pass",
+  "check(repaired).speed_bound.speed_max = 1.004",
+  "check(repaired).correlation_sign.corr_u = 0.243",
+  "check(repaired).correlation_sign.corr_v = 0.272",
+  "check(repaired).correlation_sign.corr_swapped = 0.03841",
+  "check(repaired).lag.best_lag_hours = 0",
+  "check(repaired).speed_ratio.speed_ratio_median = 1.856"
+ ],
+ "reason": "The radar held undeclared spike values (speed_max 1099.0 against p95 1.004) that wrecked the correlation and lag tests; masking |u|,|v| >= 10 m/s removed them. After the single repair every check test passes, so the repaired radar is used."
+}

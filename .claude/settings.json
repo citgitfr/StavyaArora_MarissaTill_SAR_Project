@@ -37,6 +37,7 @@
       "Bash(git reset --hard *)",
       "Bash(gh *)",
       "Read(./heldout/**)",
+      "Read(~/sar_heldout/**)",
       "Edit(heldout/**)",
       "Edit(fixtures/**)",
       "Edit(configs/thresholds.yaml)",
