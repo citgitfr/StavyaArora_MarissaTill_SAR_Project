@@ -1,0 +1,28 @@
+{
+  "case_id": "case08",
+  "choice": "repair",
+  "repair": [
+    {"action": "flip_sign", "param": "u"},
+    {"action": "flip_sign", "param": "v"}
+  ],
+  "repaired_file": "runs/work/agent/case08/radar_repaired.nc",
+  "evidence": [
+    "check.result = fail (correlation_sign, lag)",
+    "check.correlation_sign.corr_u = -0.2433",
+    "check.correlation_sign.corr_v = -0.272",
+    "check.correlation_sign.corr_swapped = -0.03849",
+    "check.lag.best_lag_hours = -6",
+    "compare.corr_by_lag: all lags -6..6 negative; strongest at lag 0 = -0.2576, weakest at lag -6 = -0.1233",
+    "compare.speed_ratio_median = 1.857",
+    "qc.fill_value_hits = 0",
+    "qc.speed_max = 1.004",
+    "repair flip_sign u: repairs_used = 1",
+    "repair flip_sign v: repairs_used = 2",
+    "check (repaired).result = pass",
+    "check (repaired).correlation_sign.corr_u = 0.2433",
+    "check (repaired).correlation_sign.corr_v = 0.272",
+    "check (repaired).lag.best_lag_hours = 0",
+    "check (repaired).speed_ratio.speed_ratio_median = 1.857"
+  ],
+  "reason": "Both u and v correlate negatively with the model at every lag, strongest at lag 0, so the -6 h best lag is only the least-negative lag and points to flipped signs on both components, not a time offset. After flipping u and v, every check test passes, with best lag 0."
+}

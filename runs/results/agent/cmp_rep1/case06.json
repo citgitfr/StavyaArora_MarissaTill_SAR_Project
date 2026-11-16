@@ -1,0 +1,24 @@
+{
+  "case_id": "case06",
+  "choice": "repair",
+  "repair": [
+    {"action": "mask_fill", "param": 10.0},
+    {"action": "flip_sign", "param": "v"}
+  ],
+  "repaired_file": "runs/work/agent/case06/radar_repaired2.nc",
+  "evidence": [
+    "check.result = fail (original)",
+    "check.speed_bound.speed_max = 1099.0 (max_m_s = 3.0)",
+    "qc.speed_median = 0.2283",
+    "qc.speed_p95 = 1.004",
+    "qc.fill_value_hits = 0",
+    "compare.rms_u = 173.6",
+    "compare.corr_u = -0.0006774",
+    "compare.corr_v = -0.0003022",
+    "compare.best_lag_hours = 6",
+    "repair mask_fill 10.0: n_masked = 37917",
+    "check after mask_fill: result = fail; speed_bound.speed_max = 1.004; lag.best_lag_hours = 0; correlation_sign.corr_u = 0.2432, corr_v = -0.2716",
+    "check after flip_sign v: result = pass; corr_u = 0.2432, corr_v = 0.2716, corr_swapped = 0.03835; speed_ratio_median = 1.857; coverage.good_hours_fraction = 0.9545"
+  ],
+  "reason": "The radar held fill-like values not listed as fill values (speed_max 1099.0 vs a 3.0 bound) that drowned the correlations and the lag test; masking |value| >= 10 removed them and showed a negative corr_v, which flipping the sign of v fixed. Check passes after the two repairs, so the repaired radar is used; note speed_ratio_median 1.857 passes but is higher than the clean-data value of about 1.1 given in SKILL.md."
+}

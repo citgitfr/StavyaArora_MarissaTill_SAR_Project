@@ -1,0 +1,26 @@
+{
+  "case_id": "case08",
+  "choice": "model_only",
+  "repair": {
+    "action": "swap_components",
+    "param": null
+  },
+  "evidence": [
+    "check.result = fail",
+    "check.tests.correlation_sign.corr_u = -0.2433",
+    "check.tests.correlation_sign.corr_v = -0.272",
+    "check.tests.correlation_sign.corr_swapped = -0.03849",
+    "check.tests.correlation_sign.min = 0.1",
+    "check.tests.lag.best_lag_hours = -6",
+    "check.tests.lag.max_abs_hours = 1",
+    "repair1.rule = correlation_sign -> swap_components",
+    "check(repair1).result = fail",
+    "check(repair1).tests.correlation_sign.corr_u = 6.277e-05",
+    "check(repair1).tests.correlation_sign.corr_v = -0.07705",
+    "check(repair1).tests.correlation_sign.corr_swapped = -0.2576",
+    "check(repair1).tests.correlation_sign.min = 0.1",
+    "check(repair1).tests.lag.best_lag_hours = -5",
+    "check(repair1).tests.lag.max_abs_hours = 1"
+  ],
+  "reason": "first failing test 'correlation_sign' has no repair rule."
+}

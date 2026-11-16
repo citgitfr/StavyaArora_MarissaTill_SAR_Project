@@ -143,6 +143,28 @@ Add a dated entry every work session. Include failures.
   the report and adds "Decision traces" for three October cases (checks that failed, the agent's evidence and reason,
   agent vs baseline choice, key verdict, 24 h miss vs the drifter), so the agent's decisions are visible, not just
   counted. Honest note kept: on single clear-cut faults the agent matches the rule table; compound faults are next.
+- Test of real agency (harder cases). inject_faults.py --plan compound: 8 cases from the clean October radar (seed
+  2026): 2 clean, 3 controls with two radar faults (x100 + 3 h shift, swap + x0.01, spikes + v flip), radar rotated
+  180 deg and 90 deg, and a faulty MODEL (x100, clean radar; only escalate is acceptable). Every model file is
+  rewritten the same way so the faulty one is not visible from its encoding. Standard plan unchanged (October cases
+  regenerate 14/14 identical). Before the real run, a throwaway-seed test confirmed the frozen baseline fails where
+  predicted (rotations -> model only; faulty model -> repairs good radar, then uses the broken model).
+- decision_reality.py now uses each case's own model.nc and records escalate as handed to a person (no forecast);
+  October results unchanged (same data hash).
+- Agent cmp_rep1: 8/8 decisions, 0 denials, $2.00. Against the key: agent 8/8 acceptable, 0 silent errors, radar
+  recovered 6/7, 1 escalation; baseline 7/8, 0 silent, 5/7; always_fused 2/8 with 6 silent errors; always_model_only
+  7/8. The agent escalated the faulty model ("the model reports a median of 14.34 m/s and a max of 66.97 m/s ...
+  a person must inspect the model file") where the baseline produced a forecast 180 km off the real drifter; it
+  recovered the 180-deg rotation (flip u then v; 16.0 km, equal to perfect repair) where the baseline used model only
+  (18.9 km). It missed the 90-deg rotation (first tried a time shift, then model only, like the baseline). Mean 24 h
+  miss: agent 16.4 km on the 7 cases it forecast, baseline 37.2 km (16.8 km without the faulty-model case).
+  One run only; a second (cmp_rep2) would test whether this is reliable. run_demo reruns this part (report section 8,
+  with decision traces for the cases where the two chose differently); README and pipeline.md updated.
+- Caught a leak before cmp_rep2: the evaluation workspace copied README.md, which CLAUDE.md loads into the agent's
+  context, and the updated README now describes the agent's compound results (the escalation, the rotation). A second
+  run would have read the answers. make_eval_workspace.py now writes a neutral stand-in README into the workspace
+  instead of the real one (PERMISSIONS.md updated); a test workspace contains no results text. cmp_rep1 is clean: the
+  README it saw (commit fb9620a) only said compound faults were the next benchmark.
 
 
 ## 2026-10-28

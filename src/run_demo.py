@@ -18,6 +18,8 @@ October steps
   7 every policy's decision vs the real drifter                              (src/decision_reality.py)
   8 baseline vs agent pictures: summary over all cases and windows, side-by-side decisions, animations
                                                                              (src/decision_viz.py)
+  9 harder cases (seed 2026, --plan compound): regenerate + check, baseline, replay agent runs cmp_rep*, score vs key,
+    decisions vs the real drifter                                            (report section 8)
 Output: demo_results/lab3_demo.md (all tables and figures), demo_results/lab3_figures/, demo_results/lab3_run_log.txt
 
 Data comes from fixtures/ (committed): October radar, HYCOM and drifter files (data/ is used as a fallback).
@@ -44,7 +46,7 @@ LOG = OUT_DIR / "lab3_run_log.txt"
 HELDOUT = Path.home() / "sar_heldout"
 TOOL = REPO / ".claude" / "skills" / "forcing-tools" / "forcing_tools.py"
 DRIFTER_ID = 300534061399950
-OCT_SEED, AUG_SEED = 1018, 295
+OCT_SEED, AUG_SEED, CMP_SEED = 1018, 295, 2026
 OCT = {"radar": ["fixtures/hfr_20211018.nc", "data/hfr_20211018.nc"],
        "model": ["fixtures/hycom_20211018.nc", "data/hycom_20211018.nc"],
        "drifters": ["fixtures/drifter_300534061399950_202110.csv", "data/drifters/gdp_hourly_2018-01-01_2025-01-01.csv"]}
@@ -117,12 +119,12 @@ def same_decisions(a, b):
 
 
 # ---- stages ----------------------------------------------------------------------------------
-def cases_stage(demo, tag, radar, model, cases_dir, labels, seed):
+def cases_stage(demo, tag, radar, model, cases_dir, labels, seed, plan="standard"):
     """Regenerate cases into a temp folder; compare with the repo's cases and the key; fill whichever is missing."""
     tmp = Path(tempfile.mkdtemp(prefix=f"sar_{tag}_"))
     try:
         demo.run("src/inject_faults.py", "--radar", radar, "--model", model, "--cases", tmp / "cases",
-                 "--labels", tmp / "labels.json", "--seed", seed, label=f"{tag} cases")
+                 "--labels", tmp / "labels.json", "--seed", seed, "--plan", plan, label=f"{tag} cases")
         new_key = json.loads((tmp / "labels.json").read_text(encoding="utf-8"))
         if labels.exists():
             old = json.loads(labels.read_text(encoding="utf-8"))
@@ -247,19 +249,31 @@ def _csv(rel):
     return list(csv.DictReader(open(p, encoding="utf-8"))) if p.exists() else []
 
 
-def decision_traces(agent_run, base_dir):
+def _steps(d):
+    r = d.get("repair")
+    return r if isinstance(r, list) else ([] if r is None else [r])
+
+
+def decision_traces(agent_run, base_dir, cases=None, scores_csv="runs/results/scores_oct/cases.csv",
+                    reality_csv="runs/results/reality_oct/cases.csv",
+                    heading="## 7. Decision traces: what the agent saw, concluded and did", which="three October cases",
+                    only_differences=False):
     """For a few cases: what the checks found, what the agent concluded and why, what the baseline chose, and how
     each decision scored against the key and the real drifter."""
     ps = _load("plot_style", "src/plot_style.py")
     agent = decisions(REPO / "runs" / "results" / "agent" / agent_run)
     base = decisions(base_dir)
-    key_rows = {(r["policy"], r["case"]): r for r in _csv("runs/results/scores_oct/cases.csv")}
-    real_rows = {(r["policy"], r["case"]): r for r in _csv("runs/results/reality_oct/cases.csv")}
-    L = ["", "## 7. Decision traces: what the agent saw, concluded and did", "",
-         "For three October cases: the checks that failed (from the scripted baseline's first `check`), the agent's "
+    key_rows = {(r["policy"], r["case"]): r for r in _csv(scores_csv)}
+    real_rows = {(r["policy"], r["case"]): r for r in _csv(reality_csv)}
+    if only_differences:                 # cases where the two chose differently (not just order or mask threshold)
+        cases = [c for c in sorted(agent) if c in base and
+                 (agent[c].get("choice"), sorted(x.get("action") for x in _steps(agent[c])))
+                 != (base[c].get("choice"), sorted(x.get("action") for x in _steps(base[c])))]
+    L = ["", heading, "",
+         f"For {which}: the checks that failed (from the scripted baseline's first `check`), the agent's "
          "evidence and its own reason, the baseline's choice, and how each scored. Evidence lines are copied verbatim "
          "from the agent's decision file; numbers in them come from the tools."]
-    for c in TRACE_CASES:
+    for c in cases or TRACE_CASES:
         a, b = agent.get(c), base.get(c)
         if not a or not b:
             continue
@@ -267,7 +281,9 @@ def decision_traces(agent_run, base_dir):
         ka, kb = key_rows.get((f"agent_{agent_run}", c), {}), key_rows.get(("baseline", c), {})
         miss = {p: real_rows.get((p, c), {}).get("median_sep_km_24h") for p in
                 (f"agent_{agent_run}", "baseline", "always_fused", "clean_radar")}
-        fmt = lambda v: "n/a" if v in (None, "") else f"{float(v):.1f} km"
+        notes = {p: real_rows.get((p, c), {}).get("note") for p in miss}
+        fmt = lambda v, p=None: ("escalated, no forecast" if p and (notes.get(p) or "").startswith("escalated")
+                                 else "n/a" if v in (None, "") else f"{float(v):.1f} km")
         L += ["", f"### {ps.case_label(c)}", "",
               f"- **Checks that failed:** {', '.join(failed) if failed else 'none (all 8 passed)'}",
               f"- **Agent's evidence:** " + "; ".join(f"`{e}`" for e in a.get("evidence", [])[:6])
@@ -277,13 +293,44 @@ def decision_traces(agent_run, base_dir):
         if ka:
             L.append(f"- **Answer key:** planted fault `{ka.get('fault_type')}`; agent acceptable: "
                      f"{ka.get('acceptable')}, baseline acceptable: {kb.get('acceptable')}")
-        L.append(f"- **24 h miss vs real drifter (median of 20 forecasts):** agent {fmt(miss[f'agent_{agent_run}'])}, "
+        L.append(f"- **24 h miss vs real drifter (median of 20 forecasts):** agent "
+                 f"{fmt(miss[f'agent_{agent_run}'], f'agent_{agent_run}')}, "
                  f"baseline {fmt(miss['baseline'])}, No QC {fmt(miss['always_fused'])}, "
                  f"perfect repair {fmt(miss['clean_radar'])}")
     return L
 
 
-def write_report(demo, commit, oct_ok, aug, oct_runs, base_dir=None):
+def compound_section(cmp_runs, base_dir):
+    """Section 8: the harder cases (two faults at once, or a faulty model) where a fixed rule table can go wrong."""
+    s, r = jload("runs/results/scores_cmp/summary.json"), jload("runs/results/reality_cmp/summary.json")
+    if not s and not r:
+        return []
+    L = ["", "## 8. Harder cases: where judgment matters", "",
+         f"8 cases made from the same clean October radar (seed {CMP_SEED}): two clean, three with two radar faults at "
+         "once (controls a step-by-step rule can handle), two rotated radar fields (both components negated, or swapped "
+         "and one negated), and one case where the **model** file is faulty and the radar is clean. For the faulty "
+         "model the only acceptable choice is to escalate to a person: repairing good radar or falling back to the "
+         "broken model are both wrong."]
+    if s:
+        L += ["", "### Decisions vs the answer key", "", score_table(s)]
+    if r:
+        rows = [[k, v["cases"], v.get("escalated", 0), v["mean_miss_km_24h"], f"{v['mean_excess_over_clean_km']:+.2f}",
+                 f"{v['worst_excess_over_clean_km']:+.2f}"] for k, v in r["policies"].items()]
+        L += ["", "### Each decision's forecast vs the real drifter", "",
+              "Mean over the cases each policy actually forecast; an escalated case is handed to a person and has no "
+              "automatic forecast, so it is counted separately.", "",
+              table(["policy", "cases forecast", "escalated", "mean 24 h miss (km)", "vs perfect repair (km)",
+                     "worst case vs perfect repair (km)"], rows)]
+    L += fig("decisions_vs_reality_cmp.png", "compound decisions vs reality")
+    if cmp_runs:
+        L += decision_traces(cmp_runs[0], base_dir, scores_csv="runs/results/scores_cmp/cases.csv",
+                             reality_csv="runs/results/reality_cmp/cases.csv",
+                             heading="### Decision traces where the agent and the baseline chose differently",
+                             which="every harder case where the two chose differently", only_differences=True)
+    return L
+
+
+def write_report(demo, commit, oct_ok, aug, oct_runs, base_dir=None, cmp_runs=(), cmp_base=None):
     L = ["# Lab 3 demo: SAR forcing agent on a real October 2021 window", "",
          f"Generated by `python src/run_demo.py --replay{' --august' if aug else ''}` on "
          f"{datetime.now(timezone.utc):%Y-%m-%d %H:%M} UTC from commit `{commit}`. Agent decisions are replayed from the "
@@ -365,6 +412,7 @@ def write_report(demo, commit, oct_ok, aug, oct_runs, base_dir=None):
                   "3 s per case. Agent runs replayed in this demo: " + ", ".join(f"`{r}`" for r in oct_runs) + "."]
         if oct_runs:
             L += decision_traces(oct_runs[0], base_dir or REPO / "runs/results/baseline_oct")
+        L += compound_section(list(cmp_runs), cmp_base or REPO / "runs/results/baseline_cmp")
     if aug:
         s, d = jload("runs/results/scores/summary.json"), jload("runs/results/drift/summary.json")
         L += ["", "## Appendix: August 2021 benchmark (Southern California fixtures, no drifter)"]
@@ -388,6 +436,7 @@ def main(argv=None):
     ap.add_argument("--replay", action="store_true", required=True, help="replay saved agent decisions (required)")
     ap.add_argument("--august", action="store_true", help="also run and report the August 2021 benchmark")
     ap.add_argument("--labels-oct", default=str(HELDOUT / "labels_oct.json"))
+    ap.add_argument("--labels-cmp", default=str(HELDOUT / "labels_compound.json"), help="key for the harder cases")
     ap.add_argument("--labels", default=str(HELDOUT / "labels.json"), help="August key (with --august)")
     a = ap.parse_args(argv)
 
@@ -403,6 +452,7 @@ def main(argv=None):
     radar, model, drifters = (first_existing(OCT[k]) for k in ("radar", "model", "drifters"))
     oct_ok = all((radar, model, drifters))
     oct_runs = sorted(p.name for p in (REPO / "runs/results/agent").glob("oct_rep*") if p.is_dir())
+    cmp_runs = sorted(p.name for p in (REPO / "runs/results/agent").glob("cmp_rep*") if p.is_dir())
     if not oct_ok:
         demo.say("\n=== October data not found in fixtures/ or data/; see docs/pipeline.md stage 8 ===")
     else:
@@ -430,6 +480,20 @@ def main(argv=None):
                      "--baseline", o_res.relative_to(REPO), "--baseline-work", o_work.relative_to(REPO),
                      "--clean", radar, "--model", model, "--drifters", drifters, label="baseline vs agent pictures")
 
+        demo.say("\n=== Harder (compound) October cases ===")
+        ccases = REPO / "runs/cases_compound"
+        cases_stage(demo, "Compound", radar, model, ccases, Path(a.labels_cmp).expanduser(), CMP_SEED, plan="compound")
+        c_res, c_work = baseline_stage(demo, "Compound", ccases, REPO / "runs/results/baseline_cmp")
+        for r in cmp_runs:
+            replay_agent(demo, "Compound", r, ccases)
+        demo.run("src/score.py", "--labels", Path(a.labels_cmp).expanduser(), "--agent-runs", *cmp_runs,
+                 "--baseline", c_res, "--baseline-work", c_work, "--cases-dir", ccases, "--clean", radar,
+                 "--out", REPO / "runs/results/scores_cmp", label="compound score vs key")
+        demo.run("src/decision_reality.py", "--cases-dir", ccases.relative_to(REPO), "--agent-runs", *cmp_runs,
+                 "--baseline", c_res.relative_to(REPO), "--baseline-work", c_work.relative_to(REPO), "--clean", radar,
+                 "--model", model, "--drifters", drifters, "--out", "runs/results/reality_cmp",
+                 "--fig-name", "decisions_vs_reality_cmp.png", label="compound decisions vs reality")
+
     if a.august:
         demo.say("\n=== Appendix: August 2021 benchmark ===")
         cases_stage(demo, "August", REPO / "fixtures/hfr_2km_slice.nc", REPO / "fixtures/hycom_uv_slice.nc",
@@ -445,7 +509,8 @@ def main(argv=None):
                  "--figure", "case10", label="August drift")
 
     write_report(demo, commit, oct_ok, a.august, oct_runs,
-                 REPO / "runs/results/_replay_baseline_October" if oct_ok else None)
+                 REPO / "runs/results/_replay_baseline_October" if oct_ok else None,
+                 cmp_runs, REPO / "runs/results/_replay_baseline_Compound" if oct_ok else None)
     n_fail = sum(not ok for _, ok, _ in demo.checks)
     demo.say(f"\n=== done in {(time.time() - demo.t0) / 60:.1f} min; {len(demo.checks) - n_fail}/{len(demo.checks)} "
              f"reproducibility checks passed; report: {MD.relative_to(REPO)} ===")

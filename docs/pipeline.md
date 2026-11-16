@@ -81,6 +81,23 @@ Same steps on the August fixtures, with defaults: `python src/inject_faults.py` 
 `heldout/` to `~/sar_heldout/labels.json`), `python src/baseline.py`, `python scripts/run_agent_batch.py --run-id rep1`
 (and `rep2`), `python src/score.py`, `python src/drift.py evaluate --figure case10`. Or `run_demo.py --replay --august`.
 
+## Harder cases (compound; where a rule table can fail)
+8 cases from the same October radar: 2 clean, 3 with two radar faults at once, 2 rotated radar fields, and 1 with a
+faulty **model** (clean radar; the only acceptable choice is `escalate`). `run_demo` reruns this part too (report section 8).
+```bash
+python src/inject_faults.py --plan compound --radar $R --model $M --cases runs/cases_compound \
+    --labels ~/sar_heldout/labels_compound.json --seed 2026
+python src/baseline.py --cases-dir runs/cases_compound --results runs/results/baseline_cmp --work runs/work/baseline_cmp
+python scripts/run_agent_batch.py --run-id cmp_rep1 --cases-dir runs/cases_compound            # ~$2, ~10 min
+python src/score.py --labels ~/sar_heldout/labels_compound.json --agent-runs cmp_rep1 --baseline runs/results/baseline_cmp \
+    --baseline-work runs/work/baseline_cmp --cases-dir runs/cases_compound --clean $R --out runs/results/scores_cmp
+python src/decision_reality.py --cases-dir runs/cases_compound --baseline runs/results/baseline_cmp \
+    --baseline-work runs/work/baseline_cmp --agent-runs cmp_rep1 --clean $R --model $M --drifters $D \
+    --out runs/results/reality_cmp --fig-name decisions_vs_reality_cmp.png
+```
+`decision_reality.py` uses each case's own `model.nc` (it may be faulty) and records `escalate` as handed to a
+person, with no automatic forecast.
+
 ## Rules that keep the evaluation honest
 - **Keys stay outside the repo** (`~/sar_heldout/`). The agent cannot read them; `run_demo` and the workspace builder
   refuse to run if `heldout/` holds anything.

@@ -1,0 +1,43 @@
+{
+  "case_id": "case07",
+  "choice": "model_only",
+  "repair": [
+    {
+      "action": "rescale",
+      "param": 100.0
+    },
+    {
+      "action": "mask_fill",
+      "param": 6.0
+    }
+  ],
+  "evidence": [
+    "check.result = fail",
+    "check.tests.speed_ratio.speed_ratio_median = 0.01857",
+    "check.tests.speed_ratio.min = 0.5",
+    "check.tests.speed_ratio.max = 2.0",
+    "repair1.rule = speed_ratio -> rescale 100.0",
+    "check(repair1).result = fail",
+    "check(repair1).tests.speed_bound.speed_max = 100.4",
+    "check(repair1).tests.speed_bound.max_m_s = 3.0",
+    "repair2.rule = speed_bound -> mask_fill 6.0",
+    "repair2.n_masked = 714992",
+    "check(repair2).result = fail",
+    "check(repair2).tests.speed_bound.speed_max = 7.071",
+    "check(repair2).tests.speed_bound.max_m_s = 3.0",
+    "check(repair2).tests.coverage.ocean_cells = 7866",
+    "check(repair2).tests.coverage.hour_fraction_mean = 0.02053",
+    "check(repair2).tests.coverage.hour_fraction_min = 0.002034",
+    "check(repair2).tests.coverage.good_hours_fraction = 0.0",
+    "check(repair2).tests.coverage.min_hour_fraction = 0.2",
+    "check(repair2).tests.coverage.min_good_hours_fraction = 0.8",
+    "check(repair2).tests.speed_ratio.speed_ratio_median = 0.4012",
+    "check(repair2).tests.speed_ratio.min = 0.5",
+    "check(repair2).tests.speed_ratio.max = 2.0",
+    "check(repair2).tests.correlation_sign.corr_u = 0.03786",
+    "check(repair2).tests.correlation_sign.corr_v = 0.08774",
+    "check(repair2).tests.correlation_sign.corr_swapped = 0.01243",
+    "check(repair2).tests.correlation_sign.min = 0.1"
+  ],
+  "reason": "check still fails after 2 repairs."
+}

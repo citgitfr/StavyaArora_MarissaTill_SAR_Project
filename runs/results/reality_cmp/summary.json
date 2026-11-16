@@ -1,0 +1,66 @@
+{
+  "drifter": 300534061399950,
+  "windows": 20,
+  "k": 10.0,
+  "cases_dir": "runs/cases_compound",
+  "clean_radar": "fixtures/hfr_20211018.nc",
+  "model": "fixtures/hycom_20211018.nc",
+  "distinct_forcings": 12,
+  "policies": {
+    "always_model_only": {
+      "cases": 8,
+      "mean_miss_km_24h": 39.011,
+      "mean_skill": 0.059,
+      "mean_in90_24h": 0.0,
+      "mean_excess_over_clean_km": 22.988,
+      "worst_excess_over_clean_km": 163.693,
+      "share_cases_better_than_model_only": 0.0,
+      "escalated": 0
+    },
+    "always_fused": {
+      "cases": 8,
+      "mean_miss_km_24h": 23.719,
+      "mean_skill": 0.147,
+      "mean_in90_24h": 0.0,
+      "mean_excess_over_clean_km": 7.696,
+      "worst_excess_over_clean_km": 52.148,
+      "share_cases_better_than_model_only": 0.75,
+      "escalated": 0
+    },
+    "baseline": {
+      "cases": 8,
+      "mean_miss_km_24h": 37.198,
+      "mean_skill": 0.154,
+      "mean_in90_24h": 0.006,
+      "mean_excess_over_clean_km": 21.175,
+      "worst_excess_over_clean_km": 163.693,
+      "share_cases_better_than_model_only": 0.625,
+      "escalated": 0
+    },
+    "agent_cmp_rep1": {
+      "cases": 7,
+      "mean_miss_km_24h": 16.426,
+      "mean_skill": 0.198,
+      "mean_in90_24h": 0.007,
+      "mean_excess_over_clean_km": 0.403,
+      "worst_excess_over_clean_km": 2.887,
+      "share_cases_better_than_model_only": 0.857,
+      "escalated": 1
+    },
+    "clean_radar": {
+      "cases": 8,
+      "mean_miss_km_24h": 16.023,
+      "mean_skill": 0.219,
+      "mean_in90_24h": 0.0,
+      "mean_excess_over_clean_km": 0.0,
+      "worst_excess_over_clean_km": 0.0,
+      "share_cases_better_than_model_only": 1.0,
+      "escalated": 0
+    }
+  },
+  "no_motion_reference": {
+    "median_miss_km_24h": 15.021,
+    "mean_miss_km_24h": 14.765,
+    "skill": 0.0
+  }
+}

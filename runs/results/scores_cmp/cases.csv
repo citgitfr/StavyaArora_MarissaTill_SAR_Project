@@ -1,0 +1,41 @@
+policy,case,fault_type,detectable,choice,repair,acceptable,silent_error,radar_recoverable,radar_recovered,rms_m_s,coverage_retained,faithful
+always_model_only,case01,clean,True,model_only,null,True,False,True,False,,,
+always_model_only,case02,clean,True,model_only,null,True,False,True,False,,,
+always_model_only,case03,x100_plus_shift_+3h,True,model_only,null,True,False,True,False,,,
+always_model_only,case04,swap_plus_x0.01,True,model_only,null,True,False,True,False,,,
+always_model_only,case05,radar_rotated_90,True,model_only,null,True,False,True,False,,,
+always_model_only,case06,spikes_plus_v_flip,True,model_only,null,True,False,True,False,,,
+always_model_only,case07,model_x100,True,model_only,null,False,False,False,False,,,
+always_model_only,case08,radar_rotated_180,True,model_only,null,True,False,True,False,,,
+always_fused,case01,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+always_fused,case02,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+always_fused,case03,x100_plus_shift_+3h,True,fused,null,False,True,True,False,28.221467971801758,0.8831288871342275,False
+always_fused,case04,swap_plus_x0.01,True,fused,null,False,True,True,False,0.2928367555141449,1.0,False
+always_fused,case05,radar_rotated_90,True,fused,null,False,True,True,False,0.41365715861320496,1.0,False
+always_fused,case06,spikes_plus_v_flip,True,fused,null,False,True,True,False,245.7060546875,1.0,False
+always_fused,case07,model_x100,True,fused,null,False,True,False,False,0.0,1.0,True
+always_fused,case08,radar_rotated_180,True,fused,null,False,True,True,False,0.5849995613098145,1.0,False
+baseline,case01,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+baseline,case02,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+baseline,case03,x100_plus_shift_+3h,True,repair,"[{""action"": ""rescale"", ""param"": 0.01}, {""action"": ""shift_time"", ""param"": -3.0}]",True,False,True,True,7.543778046681382e-09,1.0,True
+baseline,case04,swap_plus_x0.01,True,repair,"[{""action"": ""rescale"", ""param"": 100.0}, {""action"": ""swap_components"", ""param"": null}]",True,False,True,True,7.946951541271119e-09,1.0,True
+baseline,case05,radar_rotated_90,True,model_only,null,True,False,True,False,,,
+baseline,case06,spikes_plus_v_flip,True,repair,"[{""action"": ""mask_fill"", ""param"": 6.0}, {""action"": ""flip_sign"", ""param"": ""v""}]",True,False,True,True,0.0,0.9500001318666248,True
+baseline,case07,model_x100,True,model_only,"[{""action"": ""rescale"", ""param"": 100.0}, {""action"": ""mask_fill"", ""param"": 6.0}]",False,False,False,False,,,
+baseline,case08,radar_rotated_180,True,model_only,"{""action"": ""swap_components"", ""param"": null}",True,False,True,False,,,
+agent_cmp_rep1,case01,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+agent_cmp_rep1,case02,clean,True,fused,null,True,False,True,True,0.0,1.0,True
+agent_cmp_rep1,case03,x100_plus_shift_+3h,True,repair,"[{""action"": ""rescale"", ""param"": 0.01}, {""action"": ""shift_time"", ""param"": -3}]",True,False,True,True,7.543778046681382e-09,1.0,True
+agent_cmp_rep1,case04,swap_plus_x0.01,True,repair,"[{""action"": ""swap_components"", ""param"": null}, {""action"": ""rescale"", ""param"": 100}]",True,False,True,True,7.946951541271119e-09,1.0,True
+agent_cmp_rep1,case05,radar_rotated_90,True,model_only,"{""action"": ""shift_time"", ""param"": -6}",True,False,True,False,,,
+agent_cmp_rep1,case06,spikes_plus_v_flip,True,repair,"[{""action"": ""mask_fill"", ""param"": 10.0}, {""action"": ""flip_sign"", ""param"": ""v""}]",True,False,True,True,0.0,0.9500001318666248,True
+agent_cmp_rep1,case07,model_x100,True,escalate,null,True,False,False,False,,,
+agent_cmp_rep1,case08,radar_rotated_180,True,repair,"[{""action"": ""flip_sign"", ""param"": ""u""}, {""action"": ""flip_sign"", ""param"": ""v""}]",True,False,True,True,0.0,1.0,True
+oracle,case01,clean,True,fused,null,True,False,True,True,,,
+oracle,case02,clean,True,fused,null,True,False,True,True,,,
+oracle,case03,x100_plus_shift_+3h,True,repair,"[{""action"": ""rescale"", ""param"": 0.01}, {""action"": ""shift_time"", ""param"": -3.0}]",True,False,True,True,,,
+oracle,case04,swap_plus_x0.01,True,repair,"[{""action"": ""rescale"", ""param"": 100.0}, {""action"": ""swap_components"", ""param"": null}]",True,False,True,True,,,
+oracle,case05,radar_rotated_90,True,repair,"[{""action"": ""swap_components"", ""param"": null}, {""action"": ""flip_sign"", ""param"": ""v""}]",True,False,True,True,,,
+oracle,case06,spikes_plus_v_flip,True,repair,"[{""action"": ""mask_fill"", ""param"": 777.0}, {""action"": ""flip_sign"", ""param"": ""v""}]",True,False,True,True,,,
+oracle,case07,model_x100,True,escalate,null,True,False,False,False,,,
+oracle,case08,radar_rotated_180,True,repair,"[{""action"": ""flip_sign"", ""param"": ""u""}, {""action"": ""flip_sign"", ""param"": ""v""}]",True,False,True,True,,,

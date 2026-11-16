@@ -27,7 +27,6 @@ REPO = Path(__file__).resolve().parents[1]
 ALLOWLIST = (
     "CLAUDE.md",
     "PERMISSIONS.md",
-    "README.md",
     "memory/MEMORY.md",
     "memory/USER.md",
     "configs/thresholds.yaml",
@@ -37,6 +36,15 @@ ALLOWLIST = (
 )
 CASES = Path("runs/cases")
 DEFAULT_DEST = Path.home() / "sar_eval"
+# The real README.md holds results (which policy did what on which kind of case). CLAUDE.md loads README.md into the
+# agent's context, so an evaluation workspace gets this neutral stand-in instead (added 2026-11-15, before cmp_rep2).
+WORKSPACE_README = """# SAR forcing agent
+
+Search-and-rescue drift forecasts use ocean currents from a model (HYCOM) and, near the coast, measured currents from
+HF radar. This agent checks one radar file against the model file with its forcing tools, diagnoses any problem,
+and decides which forcing a drift forecast should use: fused, repair (from the fixed menu), model_only, or escalate
+to a person. Every number must come from the tools. See CLAUDE.md, PERMISSIONS.md and the forcing-tools skill.
+"""
 
 
 def git(*args):
@@ -81,6 +89,8 @@ def main(argv=None):
         dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(REPO / rel, dst)
         copied[rel] = sha256(dst)
+    (ws / "README.md").write_text(WORKSPACE_README, encoding="utf-8")       # neutral stand-in, never the real one
+    copied["README.md (workspace stand-in)"] = sha256(ws / "README.md")
     for c in cases:
         for f in sorted(c.iterdir()):
             rel = (CASES / c.name / f.name).as_posix()

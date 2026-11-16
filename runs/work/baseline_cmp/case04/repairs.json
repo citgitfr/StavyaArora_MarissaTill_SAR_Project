@@ -1,0 +1,14 @@
+[
+  {
+    "action": "rescale",
+    "param": 100.0,
+    "file": "runs/cases_compound/case04/radar.nc",
+    "out": "/Users/marissatill/ClaudeProjects/StavyaArora_MarissaTill_SAR_Project/runs/work/baseline_cmp/case04/radar_fixed_1.nc"
+  },
+  {
+    "action": "swap_components",
+    "param": null,
+    "file": "runs/work/baseline_cmp/case04/radar_fixed_1.nc",
+    "out": "/Users/marissatill/ClaudeProjects/StavyaArora_MarissaTill_SAR_Project/runs/work/baseline_cmp/case04/radar_fixed_2.nc"
+  }
+]

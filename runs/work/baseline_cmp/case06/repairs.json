@@ -1,0 +1,14 @@
+[
+  {
+    "action": "mask_fill",
+    "param": 6.0,
+    "file": "runs/cases_compound/case06/radar.nc",
+    "out": "/Users/marissatill/ClaudeProjects/StavyaArora_MarissaTill_SAR_Project/runs/work/baseline_cmp/case06/radar_fixed_1.nc"
+  },
+  {
+    "action": "flip_sign",
+    "param": "v",
+    "file": "runs/work/baseline_cmp/case06/radar_fixed_1.nc",
+    "out": "/Users/marissatill/ClaudeProjects/StavyaArora_MarissaTill_SAR_Project/runs/work/baseline_cmp/case06/radar_fixed_2.nc"
+  }
+]

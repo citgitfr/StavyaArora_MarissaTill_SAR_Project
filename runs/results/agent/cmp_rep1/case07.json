@@ -1,0 +1,19 @@
+{"case_id": "case07",
+ "choice": "escalate",
+ "repair": null,
+ "evidence": [
+  "check.result = fail",
+  "check.tests.speed_ratio.speed_ratio_median = 0.01857 (min 0.5, max 2.0)",
+  "check.tests.speed_bound.speed_max = 1.004 (pass)",
+  "qc(radar).speed_median = 0.2195",
+  "qc(radar).speed_p95 = 0.5445",
+  "qc(model).units_attr = m/s",
+  "qc(model).speed_median = 14.34",
+  "qc(model).speed_p95 = 33.42",
+  "qc(model).speed_max = 66.97",
+  "compare.corr_u = 0.2433",
+  "compare.corr_v = 0.272",
+  "compare.corr_swapped = 0.03849",
+  "compare.best_lag_hours = 0"
+ ],
+ "reason": "The speed-ratio failure comes from the model file, not the radar: radar speeds are plausible (median 0.2195 m/s) while the model reports a median of 14.34 m/s and a max of 66.97 m/s, which is not a physical ocean current, so the fault is in the model and the repair menu only applies to radar. Rescaling good radar to match a bad model would be wrong and model_only would use the faulty model, so a person must inspect the model file."}

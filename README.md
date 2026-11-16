@@ -44,9 +44,11 @@ planner, comparing an IAMSAR-style plan with a highest-probability plan.
 ### Current project state: Lab 3
 - **The loop works end to end on real data:** faulty radar → decision → OpenDrift → POC map → scores against the key
   and a real drifter. Search planners and the 2×2 experiment are not built yet.
-- **The agent's decisions are correct, but not yet better than a rule table.** On single, clear-cut faults it matches
-  the scripted baseline on every case (14/14, no silent errors) at about $2.50 per 14 cases. Agency should matter on
-  ambiguous or compound faults, which is the next benchmark.
+- **On clear-cut faults the agent ties a rule table; on harder ones it does better.** On 14 single-fault cases it
+  matches the scripted baseline on every case (14/14, no silent errors). On 8 harder cases (two faults at once,
+  rotated fields, a faulty model) it scores 8/8 against the baseline's 7/8: it escalated a broken model file that the
+  baseline turned into a 180 km forecast error, and it recovered a rotated radar field the baseline threw away. One
+  agent run so far; it costs about $2 per 8 cases.
 - **The forecast itself is the bigger limit.** Radar helps, but with no wind even the best forecast misses a real
   drifter by about 16 km in 24 h, slightly more than guessing the object did not move. Wind comes before planners.
 
@@ -55,13 +57,14 @@ planner, comparing an IAMSAR-style plan with a highest-probability plan.
  [1] data pull ──► [2] fault injector ──► [3] decision ─────────────► [5] blend ──► [6] OpenDrift ──► [7] score
   (NOAA, HYCOM)     (cases + key)          agent [3a] | baseline [3b]   (reader      (24 h, POC map)   vs key [7a]
                                             using tools [4]               priority)                     vs drifter [7b]
- built: 1-7      planned (Lab 4): 8 wind + Leeway, 9 ensembles, 10 compound faults, 11 blend menu + investigator agent
+ built: 1-7, 10 (first version)   planned (Lab 4): 8 wind + Leeway, 9 ensembles, 10 mid-stream faults,
+                                  11 blend menu + investigator agent
                  proposed (final): 12 search planner, 13 multi-period SAR loop
 ```
 | # | Module | Status | Input | Output |
 |---|---|---|---|---|
 | 1 | Data pull (`src/data/`, `scripts/find_drifters.py`) | built | NOAA HF-radar archive, HYCOM server, drifter server | `fixtures/*.nc`, drifter CSV |
-| 2 | Fault injector (`src/inject_faults.py`) | built | clean radar + model | 14 cases + answer key |
+| 2 | Fault injector (`src/inject_faults.py`) | built | clean radar + model | 14 single-fault cases (or 8 harder ones with `--plan compound`) + answer key |
 | 3a | Agent (Claude + `SKILL.md`, `scripts/run_agent_batch.py`) | built | one case | decision JSON (choice, repair, evidence, reason), repaired radar, transcript |
 | 3b | Scripted baseline (`src/baseline.py`) | built | one case | decision JSON, repaired radar |
 | 4 | Forcing tools (`forcing_tools.py`: qc, compare, repair, check) | built, frozen | radar + model files | JSON numbers and pass/fail tests |
@@ -72,13 +75,15 @@ planner, comparing an IAMSAR-style plan with a highest-probability plan.
 | – | One command (`src/run_demo.py`) | built | all of the above | `demo_results/lab3_demo.md` |
 | 8 | Wind + Leeway model | planned (Lab 4) | wind data | drift for real SAR objects |
 | 9 | Forecast ensembles | planned (Lab 4) | perturbed forcing | calibrated POC maps |
-| 10 | Compound and mid-stream faults | planned (Lab 4) | clean radar | harder cases where a rule table can fail |
+| 10 | Harder faults | built: compound (two faults, rotations, faulty model); planned (Lab 4): mid-stream | clean radar + model | harder cases where a rule table can fail |
 | 11 | Blend menu + investigator agent | planned (Lab 4) | drift errors vs drifters | chosen blend (edge taper, hourly trust, ...) |
 | 12 | Search planner | proposed (final) | POC map, search assets | search plan, probability of success |
 | 13 | Multi-period SAR loop | proposed (final) | plan, unsuccessful search, new data | updated map and plan per period |
 
 ### Headline results (real October 2021 window; full tables in the demo report)
-| Policy | Decisions vs the key (14 faulty cases) | Mean 24 h miss vs real drifter |
+**Single-fault cases** (14; 4 clean, 10 with one planted fault):
+
+| Policy | Decisions vs the key | Mean 24 h miss vs real drifter |
 |---|---|---|
 | No QC (use the radar as delivered) | 6/14 acceptable, 8 silent errors | 19.8 km (59 km on the worst case) |
 | Model only (ignore the radar) | 14/14 acceptable, uses no radar | 18.9 km |
@@ -86,6 +91,16 @@ planner, comparing an IAMSAR-style plan with a highest-probability plan.
 | Claude agent | 14/14, 0 silent errors, same choices as the baseline | 16.3 km |
 | Perfect repair (reference) | — | 16.0 km |
 | No-motion guess (reference) | — | 15.0 km |
+
+**Harder cases** (8; two faults at once, rotated fields, or a faulty model with clean radar):
+
+| Policy | Decisions vs the key | Radar recovered | Mean 24 h miss vs real drifter |
+|---|---|---|---|
+| No QC | 2/8 acceptable, 6 silent errors | 2/7 | 23.7 km |
+| Model only | 7/8 (fails on the faulty model) | 0/7 | 39.0 km (180 km on the faulty model) |
+| Scripted baseline | 7/8, 0 silent errors | 5/7 | 37.2 km (180 km on the faulty model) |
+| Claude agent | **8/8**, 0 silent errors, 1 escalation | **6/7** | **16.4 km** on the 7 cases it forecast; escalated the faulty model |
+| Perfect repair (reference) | — | — | 16.0 km |
 
 Clean data only: radar + model beats model only against the drifter in 72% of forecasts (skill 0.22 vs 0.07), but
 the forecast's 90% area contained the drifter in at most 5% of forecasts (the maps are overconfident).
@@ -176,14 +191,14 @@ StavyaArora_MarissaTill_SAR_Project/
 ├── tests/                        unit tests: forcing_tools, baseline, score, drift, drifter_eval
 │
 ├── runs/                         ── everything the pipeline produces
-│   ├── cases/  cases_oct/        generated cases (August, October); regenerated by run_demo
+│   ├── cases/  cases_oct/  cases_compound/   generated cases (August, October, harder); regenerated by run_demo
 │   ├── results/
-│   │   ├── baseline/  baseline_oct/       baseline decisions
-│   │   ├── agent/                         agent decisions: rep1, rep2, oct_rep1 (smoke, trial = practice)
-│   │   ├── scores/  scores_oct/           scores vs the answer key
+│   │   ├── baseline/  baseline_oct/  baseline_cmp/   baseline decisions
+│   │   ├── agent/                         agent decisions: rep1, rep2, oct_rep1, cmp_rep1 (smoke, trial = practice)
+│   │   ├── scores/  scores_oct/  scores_cmp/      scores vs the answer key
 │   │   ├── drift/  drift_oct/             forecast impact vs a clean-radar run
 │   │   ├── drifter/                       clean forecasts vs the real drifter
-│   │   └── reality_oct/                   every decision vs the real drifter
+│   │   └── reality_oct/  reality_cmp/     every decision vs the real drifter
 │   └── work/                     repaired radar files and repair logs per policy and case; drift run cache
 ├── eval/                         ── records of agent runs
 │   ├── batches/                  per-run log: turns, cost, time, denials

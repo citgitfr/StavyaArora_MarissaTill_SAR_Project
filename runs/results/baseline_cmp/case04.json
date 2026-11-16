@@ -1,0 +1,37 @@
+{
+  "case_id": "case04",
+  "choice": "repair",
+  "repair": [
+    {
+      "action": "rescale",
+      "param": 100.0
+    },
+    {
+      "action": "swap_components",
+      "param": null
+    }
+  ],
+  "evidence": [
+    "check.result = fail",
+    "check.tests.speed_ratio.speed_ratio_median = 0.01857",
+    "check.tests.speed_ratio.min = 0.5",
+    "check.tests.speed_ratio.max = 2.0",
+    "check.tests.correlation_sign.corr_u = -6.277e-05",
+    "check.tests.correlation_sign.corr_v = 0.07705",
+    "check.tests.correlation_sign.corr_swapped = 0.2576",
+    "check.tests.correlation_sign.min = 0.1",
+    "check.tests.lag.best_lag_hours = 6",
+    "check.tests.lag.max_abs_hours = 1",
+    "repair1.rule = speed_ratio -> rescale 100.0",
+    "check(repair1).result = fail",
+    "check(repair1).tests.correlation_sign.corr_u = -6.277e-05",
+    "check(repair1).tests.correlation_sign.corr_v = 0.07705",
+    "check(repair1).tests.correlation_sign.corr_swapped = 0.2576",
+    "check(repair1).tests.correlation_sign.min = 0.1",
+    "check(repair1).tests.lag.best_lag_hours = 6",
+    "check(repair1).tests.lag.max_abs_hours = 1",
+    "repair2.rule = correlation_sign -> swap_components",
+    "check(repair2).result = pass"
+  ],
+  "reason": "check passes after 2 repair(s) chosen by the rule table."
+}

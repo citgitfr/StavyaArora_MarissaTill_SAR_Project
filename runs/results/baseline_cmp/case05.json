@@ -1,0 +1,15 @@
+{
+  "case_id": "case05",
+  "choice": "model_only",
+  "repair": null,
+  "evidence": [
+    "check.result = fail",
+    "check.tests.correlation_sign.corr_u = 6.277e-05",
+    "check.tests.correlation_sign.corr_v = 0.07705",
+    "check.tests.correlation_sign.corr_swapped = -0.01432",
+    "check.tests.correlation_sign.min = 0.1",
+    "check.tests.lag.best_lag_hours = 6",
+    "check.tests.lag.max_abs_hours = 1"
+  ],
+  "reason": "first failing test 'correlation_sign' has no repair rule."
+}

@@ -1,0 +1,85 @@
+{
+  "labels": "/Users/marissatill/sar_heldout/labels_compound.json",
+  "seed": 2026,
+  "faithful_rms_m_s": 0.001,
+  "clean_radar": "fixtures/hfr_20211018.nc",
+  "cases_dir": "runs/cases_compound",
+  "policies": {
+    "always_model_only": {
+      "cases": 8,
+      "decided": 8,
+      "acceptable": 7,
+      "silent_errors": 0,
+      "radar_recoverable": 7,
+      "radar_recovered": 0,
+      "radar_decisions": 0,
+      "faithful_radar": null,
+      "fidelity_checked": 0,
+      "escalations": 0
+    },
+    "always_fused": {
+      "cases": 8,
+      "decided": 8,
+      "acceptable": 2,
+      "silent_errors": 6,
+      "radar_recoverable": 7,
+      "radar_recovered": 2,
+      "radar_decisions": 8,
+      "faithful_radar": 3,
+      "fidelity_checked": 8,
+      "escalations": 0
+    },
+    "baseline": {
+      "cases": 8,
+      "decided": 8,
+      "acceptable": 7,
+      "silent_errors": 0,
+      "radar_recoverable": 7,
+      "radar_recovered": 5,
+      "radar_decisions": 5,
+      "faithful_radar": 5,
+      "fidelity_checked": 5,
+      "escalations": 0,
+      "batch": {
+        "cost_usd": 0.0,
+        "mean_turns": null,
+        "minutes": null
+      }
+    },
+    "agent_cmp_rep1": {
+      "cases": 8,
+      "decided": 8,
+      "acceptable": 8,
+      "silent_errors": 0,
+      "radar_recoverable": 7,
+      "radar_recovered": 6,
+      "radar_decisions": 6,
+      "faithful_radar": 6,
+      "fidelity_checked": 6,
+      "escalations": 1,
+      "batch": {
+        "cost_usd": 2.0022,
+        "mean_turns": 8.25,
+        "minutes": 4.9
+      }
+    },
+    "oracle": {
+      "cases": 8,
+      "decided": 8,
+      "acceptable": 8,
+      "silent_errors": 0,
+      "radar_recoverable": 7,
+      "radar_recovered": 7,
+      "radar_decisions": 7,
+      "faithful_radar": null,
+      "fidelity_checked": 0,
+      "escalations": 1
+    }
+  },
+  "agreement": {
+    "baseline_vs_cmp_rep1": {
+      "cases": 8,
+      "same_choice_and_action": 4
+    }
+  }
+}

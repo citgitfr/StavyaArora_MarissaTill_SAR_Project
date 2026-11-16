@@ -1,0 +1,21 @@
+{"case_id": "case05",
+ "choice": "model_only",
+ "repair": {"action": "shift_time", "param": -6},
+ "evidence": [
+  "check.result = fail (correlation_sign, lag)",
+  "check.correlation_sign.corr_u = 6.277e-05",
+  "check.correlation_sign.corr_v = 0.07705",
+  "check.correlation_sign.corr_swapped = -0.01432",
+  "check.lag.best_lag_hours = 6",
+  "compare.speed_ratio_median = 1.857",
+  "compare.corr_by_lag.6 = 0.142",
+  "qc.fill_value_hits = 0",
+  "qc.speed_max = 1.004",
+  "repair shift_time -6 -> check.result = fail (time_axis, correlation_sign)",
+  "repaired check.lag.best_lag_hours = 0",
+  "repaired check.correlation_sign.corr_u = 0.08801",
+  "repaired check.correlation_sign.corr_v = 0.1961",
+  "repaired check.time_axis.inside_model_times = false",
+  "repaired check.time_axis.hfr_times = [2021-10-17T18:00, 2021-10-28T17:00]"
+ ],
+ "reason": "The prescribed time shift (-6 h) fixed the lag test but corr_u stayed below 0.1 and the shifted radar now falls outside the model times, and no other menu repair matches the evidence (no fills, speeds in bound, corr_swapped not positive). The radar cannot be made to pass check, so the forecast should use the model only; the repaired file in runs/work/agent/case05/ must not be used."}

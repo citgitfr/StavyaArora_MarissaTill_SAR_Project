@@ -1,0 +1,14 @@
+[
+  {
+    "action": "flip_sign",
+    "param": "u",
+    "file": "runs/cases/case08/radar.nc",
+    "out": "/Users/marissatill/sar_eval/cmp_rep1/runs/work/agent/case08/radar_flipu.nc"
+  },
+  {
+    "action": "flip_sign",
+    "param": "v",
+    "file": "runs/work/agent/case08/radar_flipu.nc",
+    "out": "/Users/marissatill/sar_eval/cmp_rep1/runs/work/agent/case08/radar_repaired.nc"
+  }
+]

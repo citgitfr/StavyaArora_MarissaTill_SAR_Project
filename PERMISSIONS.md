@@ -69,8 +69,9 @@ or the answer key if they are on disk next to it. What enforces this is physical
 - Evaluation runs happen in a workspace built by `scripts/make_eval_workspace.py`, outside the
   repository, holding only an allowlist (instructions, permissions, memory, thresholds, the
   forcing-tools skill and script) and `runs/cases/`. No `.git`, no `src/`, `docs/`, `fixtures/`,
-  `runs/results/`, `eval/` or `LOG.md`. The manifest in `eval/workspaces/<run_id>.json`
-  records the commit and a SHA-256 for every file.
+  `runs/results/`, `eval/` or `LOG.md`. The real `README.md` holds results, so the workspace gets
+  a neutral stand-in instead (CLAUDE.md loads README.md into the agent's context). The manifest
+  in `eval/workspaces/<run_id>.json` records the commit and a SHA-256 for every file.
 
 ## 4. WHO approves, from WHERE
 - Owners: Stavya Arora and Marissa Till, by reviewing the pull request on github.com
