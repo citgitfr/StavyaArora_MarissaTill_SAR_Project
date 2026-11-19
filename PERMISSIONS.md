@@ -20,6 +20,10 @@ Anything that would ask is denied when nobody is there to answer.
   Commit messages start with "agent:". Starting on a `claude/` branch is a CLAUDE.md
   rule (a suggestion); what is enforced is that only `claude/*` can be pushed.
 - Load the forcing-tools skill.  [allow: `Skill(forcing-tools)`]
+- Run the blend tool (build, evaluate, diagnose blends of an approved radar file with the model, on a blend case's
+  tuning period) and load its skill. Added 2026-11-18 (Lab 4, Phase B), approved by the owners.
+  [allow: `Bash(python src/blend_tools.py *)`, `Skill(blend-tools)`; the tool refuses a case folder whose drifter
+  file runs past the split, and has a budget of 12 evaluations per run folder]
 - Update `memory/MEMORY.md` with decisions and lasting facts for future agents, and stage
   it on a `claude/` branch. The owners review every memory change in the pull request.
   [allow: `Edit(memory/MEMORY.md)`, `Bash(git add memory/MEMORY.md)`]
@@ -38,6 +42,9 @@ Anything that would ask is denied when nobody is there to answer.
   [deny: `git merge *`, `git rebase *`, `git reset --hard *`, `git add .`, `git add -A*`,
   `git add --all*`, `git commit -a*`, `git commit --all*`]
 - Open or merge pull requests. Only the owners do, on github.com.  [deny: `gh *`]
+- Read or look for a drifter's test period during a blend run. A blend case folder holds only the tuning period
+  (built by `src/make_blend_case.py`); the full track stays in the repository and only `src/blend_score.py` reads it.
+  [enforced physically: blend runs happen in a workspace that holds the case folder, not fixtures/ or data/]
 - Read or edit the answer keys. They live outside the repository during agent runs and are never committed.
   [deny: `Read(./heldout/**)`, `Edit(heldout/**)`, `Read(~/sar_heldout/**)`]
 - Edit `fixtures/` (source data) or `configs/thresholds.yaml` (frozen thresholds).

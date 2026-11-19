@@ -34,7 +34,17 @@ ALLOWLIST = (
     ".claude/skills/forcing-tools/SKILL.md",
     ".claude/skills/forcing-tools/forcing_tools.py",
 )
+# Blend runs (Lab 4, Phase B) also need the blend tool and the code it imports. None of these files holds a fault
+# plan, an answer key or a drifter's test period.
+BLEND_ALLOWLIST = (
+    ".claude/skills/blend-tools/SKILL.md",
+    "src/blend_tools.py",
+    "src/blend.py",
+    "src/forecast_eval.py",
+    "src/drifter_eval.py",
+)
 CASES = Path("runs/cases")
+BLEND_CASES = Path("runs/blend_cases")
 DEFAULT_DEST = Path.home() / "sar_eval"
 # The real README.md holds results (which policy did what on which kind of case). CLAUDE.md loads README.md into the
 # agent's context, so an evaluation workspace gets this neutral stand-in instead (added 2026-11-15, before cmp_rep2).
@@ -62,7 +72,11 @@ def main(argv=None):
     ap.add_argument("--allow-dirty", action="store_true", help="testing only: allow uncommitted allowlisted files")
     ap.add_argument("--cases-dir", default=str(CASES),
                     help="where the cases come from (copied to runs/cases/ in the workspace, so prompts do not change)")
+    ap.add_argument("--blend-case", default=None,
+                    help="blend run instead of cleaning cases: copy this blend case folder (src/make_blend_case.py) to "
+                         "runs/blend_cases/<name>/ plus the blend tool and its skill; no runs/cases")
     a = ap.parse_args(argv)
+    allowlist = ALLOWLIST + (BLEND_ALLOWLIST if a.blend_case else ())
 
     ws = Path(a.dest).expanduser().resolve() / a.run_id
     if REPO.resolve() in (ws, *ws.parents):
@@ -73,18 +87,26 @@ def main(argv=None):
     if out.exists():
         sys.exit(f"{out} already exists; not overwriting. Pick another --run-id.")
 
-    dirty = git("status", "--porcelain", "--", *ALLOWLIST)
+    dirty = git("status", "--porcelain", "--", *allowlist)
     if dirty and not a.allow_dirty:
         sys.exit("These allowlisted files have uncommitted changes; commit them first:\n" + dirty)
     src_cases = Path(a.cases_dir) if Path(a.cases_dir).is_absolute() else REPO / a.cases_dir
-    cases = sorted(p for p in src_cases.glob("case*") if p.is_dir())
-    if not cases:
+    cases = [] if a.blend_case else sorted(p for p in src_cases.glob("case*") if p.is_dir())
+    if not cases and not a.blend_case:
         sys.exit(f"no case* folders in {src_cases}; run python src/inject_faults.py first")
+    blend_case = None
+    if a.blend_case:
+        blend_case = Path(a.blend_case) if Path(a.blend_case).is_absolute() else REPO / a.blend_case
+        meta = json.loads((blend_case / "case.json").read_text(encoding="utf-8"))
+        last = max(line.split(",")[0] for line in
+                   (blend_case / "drifter_tune.csv").read_text(encoding="utf-8").splitlines()[1:])
+        if last > meta["split"]:
+            sys.exit(f"{blend_case}/drifter_tune.csv runs past the split {meta['split']}; refusing")
     if (REPO / "heldout").is_dir() and any((REPO / "heldout").iterdir()):
         sys.exit("heldout/ inside the repository is not empty; move answer keys out before an agent run.")
 
     copied = {}
-    for rel in ALLOWLIST:
+    for rel in allowlist:
         dst = ws / rel
         dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(REPO / rel, dst)
@@ -94,6 +116,12 @@ def main(argv=None):
     for c in cases:
         for f in sorted(c.iterdir()):
             rel = (CASES / c.name / f.name).as_posix()
+            (ws / rel).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(f, ws / rel)
+            copied[rel] = sha256(ws / rel)
+    if blend_case:
+        for f in sorted(blend_case.iterdir()):
+            rel = (BLEND_CASES / blend_case.name / f.name).as_posix()
             (ws / rel).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(f, ws / rel)
             copied[rel] = sha256(ws / rel)

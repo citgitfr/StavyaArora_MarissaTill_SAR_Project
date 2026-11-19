@@ -3,6 +3,7 @@
   "permissions": {
     "allow": [
       "Bash(python .claude/skills/forcing-tools/forcing_tools.py *)",
+      "Bash(python src/blend_tools.py *)",
       "Bash(git status *)",
       "Bash(git diff *)",
       "Bash(git log *)",
@@ -13,7 +14,8 @@
       "Bash(git push origin claude/*)",
       "Edit(runs/**)",
       "Edit(memory/MEMORY.md)",
-      "Skill(forcing-tools)"
+      "Skill(forcing-tools)",
+      "Skill(blend-tools)"
     ],
     "ask": [
       "Edit(CLAUDE.md)",
