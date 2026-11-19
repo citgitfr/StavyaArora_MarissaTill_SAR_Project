@@ -1,0 +1,191 @@
+{
+  "drifter": 300534061399950,
+  "split": "2021-10-23 12:00",
+  "window_hours": 24,
+  "every_hours": 6,
+  "tune_windows": [
+    "2021-10-18 00:00:00",
+    "2021-10-18 06:00:00",
+    "2021-10-18 12:00:00",
+    "2021-10-18 18:00:00",
+    "2021-10-19 00:00:00",
+    "2021-10-19 06:00:00",
+    "2021-10-19 12:00:00",
+    "2021-10-19 18:00:00",
+    "2021-10-20 00:00:00",
+    "2021-10-20 06:00:00",
+    "2021-10-20 12:00:00",
+    "2021-10-20 18:00:00",
+    "2021-10-21 00:00:00",
+    "2021-10-21 06:00:00",
+    "2021-10-21 12:00:00",
+    "2021-10-21 18:00:00",
+    "2021-10-22 00:00:00",
+    "2021-10-22 06:00:00",
+    "2021-10-22 12:00:00"
+  ],
+  "test_windows": [
+    "2021-10-23 12:00:00",
+    "2021-10-23 18:00:00",
+    "2021-10-24 00:00:00",
+    "2021-10-24 06:00:00",
+    "2021-10-24 12:00:00",
+    "2021-10-24 18:00:00",
+    "2021-10-25 00:00:00",
+    "2021-10-25 06:00:00",
+    "2021-10-25 12:00:00",
+    "2021-10-25 18:00:00",
+    "2021-10-26 00:00:00",
+    "2021-10-26 06:00:00",
+    "2021-10-26 12:00:00",
+    "2021-10-26 18:00:00",
+    "2021-10-27 00:00:00",
+    "2021-10-27 06:00:00",
+    "2021-10-27 12:00:00",
+    "2021-10-27 18:00:00"
+  ],
+  "inputs": {
+    "radar": "fixtures/hfr_20211018.nc",
+    "model": "fixtures/hycom_20211018.nc",
+    "wind": "data/era5_wind_20211018.nc",
+    "stokes": "data/era5_stokes_20211018.nc",
+    "drifters": "fixtures/drifter_300534061399950_202110.csv"
+  },
+  "particles": 500,
+  "radius_m": 100.0,
+  "quick": false,
+  "grid": {
+    "windage": [
+      0.0,
+      0.005,
+      0.01,
+      0.015,
+      0.02,
+      0.03
+    ],
+    "stokes": [
+      false,
+      true
+    ],
+    "track_K": 10.0,
+    "spread_K": [
+      10.0,
+      50.0,
+      100.0,
+      200.0,
+      400.0,
+      800.0,
+      1600.0,
+      3200.0
+    ]
+  },
+  "tuned_track": {
+    "model_only": {
+      "windage": 0.0,
+      "stokes": false,
+      "mean_sep_km_24h": 21.631,
+      "mean_skill": 0.022,
+      "n": 19
+    },
+    "radar+model": {
+      "windage": 0.01,
+      "stokes": false,
+      "mean_sep_km_24h": 23.1221,
+      "mean_skill": 0.1347,
+      "n": 19
+    }
+  },
+  "tuned_spread": {
+    "model_only": {
+      "K": 1600.0,
+      "in50_24h": 0.1579,
+      "in90_24h": 1.0,
+      "median_area90_km2_24h": 3481.6919,
+      "calib_error": 0.4421
+    },
+    "radar+model": {
+      "K": 3200.0,
+      "in50_24h": 0.6316,
+      "in90_24h": 1.0,
+      "median_area90_km2_24h": 7198.8893,
+      "calib_error": 0.2316
+    }
+  },
+  "test": [
+    {
+      "setup": "model_only currents only (Lab 3), K=10",
+      "windows": 18,
+      "median_sep_km_6h": 4.6204,
+      "median_sep_km_12h": 10.243,
+      "median_sep_km_24h": 17.6163,
+      "mean_sep_km_24h": 19.5149,
+      "mean_skill": 0.0645,
+      "in50_12h": 0.0,
+      "in90_12h": 0.0,
+      "in50_24h": 0.0,
+      "in90_24h": 0.0,
+      "median_area50_km2_24h": 7.7387,
+      "median_area90_km2_24h": 21.8849
+    },
+    {
+      "setup": "radar+model currents only (Lab 3), K=10",
+      "windows": 18,
+      "median_sep_km_6h": 3.6042,
+      "median_sep_km_12h": 6.1095,
+      "median_sep_km_24h": 10.9822,
+      "mean_sep_km_24h": 11.831,
+      "mean_skill": 0.3016,
+      "in50_12h": 0.0,
+      "in90_12h": 0.0555555556,
+      "in50_24h": 0.0,
+      "in90_24h": 0.0,
+      "median_area50_km2_24h": 5.8586,
+      "median_area90_km2_24h": 18.1573
+    },
+    {
+      "setup": "model_only tuned: windage 0, stokes off, K=1600",
+      "windows": 18,
+      "median_sep_km_6h": 3.9634,
+      "median_sep_km_12h": 8.5625,
+      "median_sep_km_24h": 15.2592,
+      "mean_sep_km_24h": 15.4468,
+      "mean_skill": 0.186,
+      "in50_12h": 0.9444444444,
+      "in90_12h": 1.0,
+      "in50_24h": 0.6111111111,
+      "in90_24h": 1.0,
+      "median_area50_km2_24h": 1216.4256,
+      "median_area90_km2_24h": 3568.2702
+    },
+    {
+      "setup": "radar+model tuned: windage 0.01, stokes off, K=3200",
+      "windows": 18,
+      "median_sep_km_6h": 3.5899,
+      "median_sep_km_12h": 6.613,
+      "median_sep_km_24h": 13.469,
+      "mean_sep_km_24h": 12.7809,
+      "mean_skill": 0.2969,
+      "in50_12h": 1.0,
+      "in90_12h": 1.0,
+      "in50_24h": 0.9444444444,
+      "in90_24h": 1.0,
+      "median_area50_km2_24h": 2366.731,
+      "median_area90_km2_24h": 7522.9792
+    },
+    {
+      "setup": "no-motion reference",
+      "windows": 18,
+      "median_sep_km_6h": 4.34,
+      "median_sep_km_12h": 7.3827,
+      "median_sep_km_24h": 12.5708,
+      "mean_sep_km_24h": 12.2458,
+      "mean_skill": 0.2483,
+      "in50_12h": null,
+      "in90_12h": null,
+      "in50_24h": null,
+      "in90_24h": null,
+      "median_area50_km2_24h": null,
+      "median_area90_km2_24h": null
+    }
+  ]
+}
