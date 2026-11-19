@@ -1,0 +1,10 @@
+{
+  "policy": "baseline_grid",
+  "currents": "model_only",
+  "windage": 0.0,
+  "stokes": "off",
+  "evaluations_used": 50,
+  "tuning_mean_sep_km_24h": 21.63,
+  "reason": "lowest mean 24 h separation on the tuning windows among 50 evaluations",
+  "case": "runs/blend_cases/oct21"
+}

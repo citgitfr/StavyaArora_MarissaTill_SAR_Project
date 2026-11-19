@@ -1,0 +1,41 @@
+{
+  "case_id": "oct21",
+  "window_hours": 24,
+  "every_hours": 6,
+  "split": "2021-10-23 12:00:00",
+  "tune_windows": [
+    "2021-10-18 00:00:00",
+    "2021-10-18 06:00:00",
+    "2021-10-18 12:00:00",
+    "2021-10-18 18:00:00",
+    "2021-10-19 00:00:00",
+    "2021-10-19 06:00:00",
+    "2021-10-19 12:00:00",
+    "2021-10-19 18:00:00",
+    "2021-10-20 00:00:00",
+    "2021-10-20 06:00:00",
+    "2021-10-20 12:00:00",
+    "2021-10-20 18:00:00",
+    "2021-10-21 00:00:00",
+    "2021-10-21 06:00:00",
+    "2021-10-21 12:00:00",
+    "2021-10-21 18:00:00",
+    "2021-10-22 00:00:00",
+    "2021-10-22 06:00:00",
+    "2021-10-22 12:00:00"
+  ],
+  "n_test_windows_held_back": 18,
+  "sources": {
+    "radar.nc": "/Users/stavya/StavyaArora_MarissaTill_SAR_Project/fixtures/hfr_20211018.nc",
+    "model.nc": "/Users/stavya/StavyaArora_MarissaTill_SAR_Project/fixtures/hycom_20211018.nc",
+    "wind.nc": "/Users/stavya/StavyaArora_MarissaTill_SAR_Project/data/era5_wind_20211018.nc",
+    "stokes.nc": "/Users/stavya/StavyaArora_MarissaTill_SAR_Project/data/era5_stokes_20211018.nc"
+  },
+  "sha256": {
+    "radar.nc": "7c0f7db4744e0fd062759daef2ede282e635617f2cdc0f54f9e38ffb916060db",
+    "model.nc": "123bb63058984dc4451ed43035cb834ccadf513233297a62b8a5e4ca3ccaa8a2",
+    "wind.nc": "a6d400d02ee428f9855a853defa09907723f1d3366be136f0d0183d5ba976609",
+    "stokes.nc": "1f15e6e5802706d1208db849203db5a23167fac8c309482231ac38630cfba3e3",
+    "drifter_tune.csv": "9563825487957a9da1ba62f66782299da0475e341124439a600321ffbc310480"
+  }
+}
