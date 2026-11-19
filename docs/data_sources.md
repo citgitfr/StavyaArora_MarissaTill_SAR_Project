@@ -43,6 +43,19 @@
 - HYCOM: same GLBy0.08 expt_93.0 2021 dataset, surface, 3-hourly, box 33-36.5 N, 123-119 W (larger than the radar
   box) -> data/hycom_20211018.nc. Both accessed 2026-11-15, not committed (rebuild with the commands in docs/pipeline.md).
 
+### ERA5 wind and Stokes drift for the drifter window (2021-10-18..29)
+- Source: ECMWF ERA5 hourly data on single levels (`reanalysis-era5-single-levels`), Copernicus Climate Change
+  Service (C3S) Climate Data Store: https://cds.climate.copernicus.eu . Hersbach et al. (2020), Q. J. R. Meteorol.
+  Soc. 146, 1999–2049, https://doi.org/10.1002/qj.3803 . Licence: Licence to use Copernicus Products (accepted by
+  the owners on the CDS).
+- Pulled with `python src/data/pull_era5.py --stokes` (the owners ran it; the agent has no network).
+- Used: 2021-10-18 00:00 to 2021-10-29 00:00 UTC (265 hours); box 32.5-37.0 N, 123.5-118.5 W (HYCOM box plus
+  0.5 deg). Wind: 10 m u/v (u10, v10) on a 0.25 deg grid -> data/era5_wind_20211018.nc (x_wind, y_wind). Stokes
+  drift: u/v Stokes drift (ust, vst) from the wave model, on a 0.5 deg grid, missing over land and near the coast
+  (32% of grid values are NaN) -> data/era5_stokes_20211018.nc (x_stokes, y_stokes). Raw CDS files in
+  data/era5_raw/. Not committed.
+- Accessed: 2026-11-18.
+
 ### Access problems found
 - hfrnet-tds.ucsd.edu timed out from the WorkSpace (port 443), and NOAA's ERDDAP mirror returned
   403 (IP blacklisted); the NCEI archive worked. See LOG.md.
