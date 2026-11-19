@@ -225,7 +225,7 @@ def blend(radar_path, model_path, out_path, spec, require_check=True, thresholds
     out.attrs.update(blend_spec=json.dumps(s, sort_keys=True), radar=str(radar_path), model=str(model_path),
                      check=check_result, made_by="src/blend.py")
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out.to_netcdf(out_path)
+    out.to_netcdf(out_path, encoding={v: {"zlib": True, "complevel": 4} for v in out.data_vars})  # ~40 MB raw
 
     oc = np.broadcast_to(ocean, u.shape)
     n = int(oc.sum())
