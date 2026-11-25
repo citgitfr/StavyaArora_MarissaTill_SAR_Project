@@ -157,8 +157,9 @@ def score_window(plon, plat, obs, hours):
 
 
 # ---- OpenDrift run ------------------------------------------------------------------------------
-def run(readers, lon, lat, start, hours, k, windage, stokes):
-    """Like drifter_eval.run, plus wind/Stokes readers and a wind drift factor. Same seed, particles and radius."""
+def run(readers, lon, lat, start, hours, k, windage, stokes, number=None):
+    """Like drifter_eval.run, plus wind/Stokes readers and a wind drift factor. Same seed and radius; `number`
+    particles (default drifter_eval.PARTICLES = 500)."""
     from opendrift.models.oceandrift import OceanDrift
     o = OceanDrift(loglevel=50)
     o.add_reader([de._reader(p) for p in readers])
@@ -168,8 +169,8 @@ def run(readers, lon, lat, start, hours, k, windage, stokes):
     o.set_config("drift:stokes_drift", bool(stokes))
     o.set_config("general:coastline_action", "stranding")
     np.random.seed(0)
-    o.seed_elements(lon=lon, lat=lat, radius=de.RADIUS_M, number=de.PARTICLES, time=start.to_pydatetime(),
-                    wind_drift_factor=float(windage))
+    o.seed_elements(lon=lon, lat=lat, radius=de.RADIUS_M, number=number or de.PARTICLES,
+                    time=start.to_pydatetime(), wind_drift_factor=float(windage))
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         o.run(duration=timedelta(hours=hours), time_step=de.TIME_STEP_S, time_step_output=de.OUTPUT_STEP_S)
