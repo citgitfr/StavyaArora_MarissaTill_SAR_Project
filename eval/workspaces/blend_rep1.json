@@ -1,0 +1,30 @@
+{
+  "run_id": "blend_rep1",
+  "workspace": "/Users/stavya/sar_eval/blend_rep1",
+  "created_utc": "2026-11-25T23:20:42.585269+00:00",
+  "cases_from": "runs/cases",
+  "commit": "59e8ae4c6103e0c12b4e87bc279c216043432c41",
+  "dirty_allowed": false,
+  "files": {
+    "CLAUDE.md": "75105fa26d69e9b4b9305d67fd304232db8902fd67b52bfe094d879b0bcd5162",
+    "PERMISSIONS.md": "fc14181a3092569de36fcfb784fc195a6292a1647be2ced3c8f8c181de851015",
+    "memory/MEMORY.md": "5f0a1fe66bbe5031c7b9a59a437b2824a739c7622651bb35b94a41767b96479c",
+    "memory/USER.md": "908ac36811fd7940b2f2457a0b7769060b3f8791ef8e69a68aaa4ab1ced8b808",
+    "configs/thresholds.yaml": "05f72562b37a07459844d17925d70ab6e2a25dbf339d0f76601753390c97a682",
+    ".claude/settings.json": "98e8e7e8f25b2e95d2763690dbba992d1d001150ddfaaa296fe88890e0d78325",
+    ".claude/skills/forcing-tools/SKILL.md": "e62bcb01fd83c59d5a5771e51ce6cf5bce31ecf93ac73e5a2829f5c4a3d14376",
+    ".claude/skills/forcing-tools/forcing_tools.py": "7afe6b2fb8f9862d3d15085fc950a047bd3ceef17186ef47244d648efbdb2b13",
+    ".claude/skills/blend-tools/SKILL.md": "c76953a09ce5ce081e120fe642e575b62f33741fbd63133885684c3389b2dcb9",
+    "src/blend_tools.py": "e6a33c831303ccd2af574c82e838f4e761a01a4074d7b7ee16417d46480f65e6",
+    "src/blend.py": "5f30f51e2ccddbf5cac0d63c21b67c3ba4bb9befdc117d392508f9fc64cdca7d",
+    "src/forecast_eval.py": "b5a6f9b3b3f215b420004e4ccd278406a4f0f1a21c711de30c6220f23ee323e2",
+    "src/drifter_eval.py": "eae288e6c81a433df7b1f46329547c8c3686e17ddf59dfb9e987e1e6f7534d54",
+    "README.md (workspace stand-in)": "494679974c727041fed7d6cbc95e974ccd14c5d7cf7f227537200481eccdc94c",
+    "runs/blend_cases/oct21/case.json": "7ed40e0dfb74d4d2a251725926f37b116b8b48c5c7fff49b2b7f2d6106bbeb44",
+    "runs/blend_cases/oct21/drifter_tune.csv": "9563825487957a9da1ba62f66782299da0475e341124439a600321ffbc310480",
+    "runs/blend_cases/oct21/model.nc": "123bb63058984dc4451ed43035cb834ccadf513233297a62b8a5e4ca3ccaa8a2",
+    "runs/blend_cases/oct21/radar.nc": "7c0f7db4744e0fd062759daef2ede282e635617f2cdc0f54f9e38ffb916060db",
+    "runs/blend_cases/oct21/stokes.nc": "1f15e6e5802706d1208db849203db5a23167fac8c309482231ac38630cfba3e3",
+    "runs/blend_cases/oct21/wind.nc": "a6d400d02ee428f9855a853defa09907723f1d3366be136f0d0183d5ba976609"
+  }
+}

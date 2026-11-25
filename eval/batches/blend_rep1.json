@@ -1,0 +1,36 @@
+{
+  "run_id": "blend_rep1",
+  "workspace": "/Users/stavya/sar_eval/blend_rep1",
+  "blend_case": "runs/blend_cases/oct21",
+  "started_utc": "2026-11-25T23:20:42.625419+00:00",
+  "finished_utc": "2026-11-25T23:24:51.514551+00:00",
+  "seconds": 248.9,
+  "prompt": "Evaluation run. Use the blend-tools skill to choose the forcing setup for runs/blend_cases/oct21. Use the run folder runs/results/blend/agent and write your decision to runs/results/blend/agent/decision.json. The run folder already exists. Do not edit memory. Do not commit.",
+  "flags": [
+    "--permission-mode",
+    "dontAsk",
+    "--settings",
+    ".claude/settings.json",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--disallowedTools",
+    "Edit(memory/**)"
+  ],
+  "exit_code": 0,
+  "turns": 20,
+  "cost_usd": 0.5598894000000001,
+  "decision_written": true,
+  "evaluations_used": 5,
+  "denials": [
+    {
+      "tool": "Bash",
+      "input": {
+        "command": "cd /Users/stavya/sar_eval/blend_rep1; for r in 0.1 0.15 0.2 0.3; do python src/blend_tools.py build --case runs/blend_cases/oct21 --run-dir runs/results/blend/agent --name hs_rms$r --spec \"{\\\"method\\\": \\\"hard_switch\\\", \\\"trust_max_rms\\\": $r}\"; done",
+        "description": "Build hard_switch blends with several trust_max_rms values"
+      }
+    }
+  ],
+  "critical_denials": 0,
+  "stderr_tail": "Ignoring 14 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects[\"/Users/stavya/sar_eval/blend_rep1\"].hasTrustDialogAccepted: true in /Users/stavya/.claude.json.\nWarning: claude.ai MCP servers blocked by enterprise policy: claude.ai Claude Docs, claude.ai BioRender, claude.ai Goodnotes"
+}

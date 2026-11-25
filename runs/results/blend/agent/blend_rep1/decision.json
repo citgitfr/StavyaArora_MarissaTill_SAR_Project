@@ -1,0 +1,57 @@
+{
+  "case_id": "oct21",
+  "policy": "agent",
+  "currents": "model_only",
+  "windage": 0.0,
+  "stokes": "off",
+  "evaluations_used": 5,
+  "hypotheses": [
+    {
+      "hypothesis": "The radar's large misses come from its worst hours (radar-model RMS above 0.3 m/s); dropping those hours should bring on-radar windows down to the model_only level.",
+      "test": "e_39b53a47d0 vs e_08b7060262 and e_9d55c8bef2",
+      "result": "not supported",
+      "evidence": [
+        "build(hs_rms03).hours_dropped = 67",
+        "evaluate(e_39b53a47d0).mean_sep_km_24h = 23.21",
+        "evaluate(e_39b53a47d0).mean_sep_km_24h_windows_mostly_on_radar = 25.54",
+        "evaluate(e_08b7060262).mean_sep_km_24h = 25.87",
+        "evaluate(e_9d55c8bef2).mean_sep_km_24h = 21.63"
+      ]
+    },
+    {
+      "hypothesis": "The radar adds error even in its agreeable hours, so the miss should shrink as radar weight falls and model_only should stay best.",
+      "test": "e_41ca447583 vs e_08b7060262 and e_9d55c8bef2",
+      "result": "supported",
+      "evidence": [
+        "evaluate(e_41ca447583).mean_sep_km_24h = 24.09",
+        "evaluate(e_41ca447583).mean_sep_km_24h_windows_mostly_on_radar = 26.79",
+        "evaluate(e_08b7060262).mean_sep_km_24h_windows_mostly_on_radar = 30.34",
+        "evaluate(e_9d55c8bef2).mean_sep_km_24h = 21.63"
+      ]
+    },
+    {
+      "hypothesis": "In the windy windows the model_only forecast already ends downwind of the drifter, so adding windage should increase the miss.",
+      "test": "e_9f7a7cb10c vs e_9d55c8bef2",
+      "result": "supported",
+      "evidence": [
+        "diagnose(e_9d55c8bef2).windows[2021-10-18 06:00:00].miss24_along_wind_km = -20.82 (mean_wind_m_s = 8.638)",
+        "diagnose(e_9d55c8bef2).windows[2021-10-18 12:00:00].miss24_along_wind_km = -22.27 (mean_wind_m_s = 8.595)",
+        "evaluate(e_9f7a7cb10c).mean_sep_km_24h = 22.67",
+        "evaluate(e_9d55c8bef2).mean_sep_km_24h = 21.63"
+      ]
+    }
+  ],
+  "evidence": [
+    "evaluate(e_9d55c8bef2, model_only, w=0, stokes off).mean_sep_km_24h = 21.63",
+    "evaluate(e_08b7060262, hard_switch, w=0, stokes off).mean_sep_km_24h = 25.87",
+    "evaluate(e_08b7060262).mean_sep_km_24h_windows_mostly_on_radar = 30.34",
+    "evaluate(e_08b7060262).mean_sep_km_24h_windows_mostly_off_radar = 19.71",
+    "evaluate(e_39b53a47d0, hard_switch trust_max_rms 0.3).mean_sep_km_24h = 23.21",
+    "evaluate(e_41ca447583, weighted 0.5).mean_sep_km_24h = 24.09",
+    "evaluate(e_9f7a7cb10c, model_only, w=0.01).mean_sep_km_24h = 22.67",
+    "build(hs_rms02).hours_dropped = 263"
+  ],
+  "reason": "Every radar blend tested had a larger mean 24 h separation than model_only (21.63 km), and the on-radar miss shrank as radar weight was reduced, so the radar adds error in this case. Removing the radar's worst hours helped but did not reach model_only. Windage pushed the forecast further downwind in the windy windows, where it was already too far downwind, and raised the miss to 22.67 km."
+  ,
+  "menu_gap": null
+}

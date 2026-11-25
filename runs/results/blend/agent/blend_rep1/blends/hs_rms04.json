@@ -1,0 +1,21 @@
+{
+  "out": "runs/results/blend/agent/blends/hs_rms04.nc",
+  "spec": {
+    "method": "hard_switch",
+    "taper_km": null,
+    "radar_weight": null,
+    "gap_fill_hours": 0,
+    "trust_min_coverage": null,
+    "trust_max_rms": 0.4
+  },
+  "check": "pass",
+  "ocean_cells": 7837,
+  "hours": 264,
+  "share_radar": 0.3665,
+  "share_mixed": 0.0,
+  "share_model": 0.6335,
+  "share_neither": 0.0,
+  "mean_radar_weight": 0.3665,
+  "cells_gap_filled": 0,
+  "hours_dropped": 0
+}
