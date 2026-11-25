@@ -106,6 +106,21 @@ python src/decision_reality.py --cases-dir runs/cases_compound --baseline runs/r
 `decision_reality.py` uses each case's own `model.nc` (it may be faulty) and records `escalate` as handed to a
 person, with no automatic forecast.
 
+## Lab 4 (branch claude/lab4; October 2021 window, one drifter)
+Status, findings and what is left: `docs/lab4_handoff.md`. Wind data is not in git:
+
+| # | Step | Command | Writes |
+|---|---|---|---|
+| L1 | ERA5 wind + Stokes (people run it; CDS key in `~/.cdsapirc`) | `python src/data/pull_era5.py --stokes` | `data/era5_wind_20211018.nc`, `data/era5_stokes_20211018.nc` |
+| L2 | Phase A: tune wind/Stokes/spread on early windows, score on late ones (~15 min) | `python src/forecast_eval.py` | `runs/results/forecast/` |
+| L3 | Blend case (tuning part of the drifter only) | `python src/make_blend_case.py --case-id oct21 --out runs/blend_cases/oct21` | `runs/blend_cases/oct21/` |
+| L4 | Try-everything blend baseline (~25 min) | `python src/blend_baseline.py --case runs/blend_cases/oct21 --out runs/results/blend/baseline` | `decision.json`, `ranking.json` |
+| L5 | Blend agent (Claude; see below) | `python scripts/run_blend_agent.py --run-id blend_rep1` | `runs/results/blend/agent/blend_rep1/decision.json`, transcript |
+| L6 | Score decisions on the test windows (~3 min per setup) | `python src/blend_score.py --decision baseline=runs/results/blend/baseline/decision.json --decision agent=<decision.json> --out runs/results/blend/<new folder>` | `summary.json`, `test.csv`, `spread.csv` |
+
+One blend by hand: `python src/blend.py --radar $R --model $M --out runs/work/blend/x.nc --spec '{"method": "edge_taper", "taper_km": 10}'`.
+Splitting rule: tuning windows end by `--split` (default 2021-10-23 12:00 UTC), test windows start at or after it.
+
 ## Rules that keep the evaluation honest
 - **Keys stay outside the repo** (`~/sar_heldout/`). The agent cannot read them; `run_demo` and the workspace builder
   refuse to run if `heldout/` holds anything.
@@ -114,6 +129,8 @@ person, with no automatic forecast.
 - **Frozen pieces:** `forcing_tools.py` (SHA in LOG.md), `configs/thresholds.yaml`, and `baseline.py` (committed before
   any agent result was scored).
 - **One run id, one run.** Folders are never overwritten; pick a new `--run-id`.
+- **Blend runs never see the drifter's test period.** The blend case holds only positions up to the split, the tool
+  refuses a case that runs past it, and only `blend_score.py` reads the full track.
 
 ## Troubleshooting
 | Symptom | Fix |

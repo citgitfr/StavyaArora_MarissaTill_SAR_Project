@@ -3,6 +3,52 @@ Team: Stavya Arora, Marissa Till | REPO: https://github.com/citgitfr/StavyaArora
 
 Add a dated entry every work session. Include failures.
 
+## 2026-11-18 (Lab 4 start, branch claude/lab4)
+
+**Done**
+- Agreed the Lab 4 plan: stay on the October 2021 window and its one drifter until the whole chain works
+  (A wind and honest spread, B blend menu + investigator agent, C search planner, D multi-period loop), then add
+  drifters (E). Details and status: docs/lab4_handoff.md.
+- Data: the partner's data/ folder (same October radar/HYCOM as fixtures/, plus a 2018-2024 GDP drifter search off
+  California, 38 drifters). Only drifter 300534061399950 is in the October radar window; November 2021 has about 3
+  drifters near the coast (not pulled yet). Pulled ERA5 hourly 10 m wind and wave Stokes drift for 2021-10-18..29
+  with src/data/pull_era5.py (we ran it; free CDS account, key in ~/.cdsapirc). Checks: no gaps, mostly NW winds about
+  6 m/s along the track, the Oct 24-25 storm shows as southerly winds; Stokes is missing near the coast (32% NaN) but
+  not along the drifter.
+- Phase A, src/forecast_eval.py: 24 h windows every 6 h; tuning = windows ending by 2021-10-23 12:00 (19), test =
+  windows starting from it (18), no shared hours. Wind barely helps (model only best with no wind; radar+model best at
+  1% windage, 0.1 km better than none); Stokes made every setup worse. Along the track the drifter moved north
+  (about 9 cm/s) while HYCOM pointed south (about 7 cm/s) and the wind blew SE.
+- Phase B: src/blend.py (fixed menu, one gap-free current file, refuses unless check passes), src/blend_tools.py (the
+  agent's tool: menu/build/evaluate/diagnose/list, 12-evaluation budget), src/make_blend_case.py (case folder holds
+  only the tuning part of the drifter), src/blend_baseline.py (try-everything, 50 evaluations), src/blend_score.py
+  (spread calibrated on tuning windows, scored on test windows). Skill .claude/skills/blend-tools/SKILL.md, allowed
+  in settings.json and PERMISSIONS.md (owner-approved). make_eval_workspace.py --blend-case.
+- Tests: tests/test_pull_era5.py, test_forecast_eval.py, test_blend.py, test_blend_tools.py,
+  test_blend_baseline_score.py; all pass.
+
+**Found (one drifter; early evidence)**
+- Bug in the Lab 3 containment measure: a 0.01 deg histogram of 500 particles undercounts hits for wide clouds (90%
+  area 372 km2 vs true 1447 km2 on a 10 km Gaussian test). Replaced in Lab 4 code by a kernel density estimate
+  (forecast_eval.hdr_kde). Lab 3's clouds were about 1 km wide, where both agree, so Lab 3's conclusion stands.
+- OpenDrift's default interpolation fills radar holes from the largest neighbouring radar value (up to 10 times), so
+  Lab 3's "radar where it has data, else the model" was really 56% radar, 40% stretched radar (median 4.7 km, max
+  30 km from real data), 3% HYCOM along the drifter. src/blend.py removes this (57% radar, 43% model). Lab 3 wording
+  left for later (owners' decision).
+- Honest 50/90% areas need K = 1600-3200 m2/s (90% areas 3,500-7,500 km2), and then they are too wide on the test
+  windows; random-walk spread grows like sqrt(t) while our error is a steady drift.
+- The try-everything baseline picked model only, no wind (every step toward more radar was worse on the tuning
+  windows). On the test windows the ranking flips: mean 24 h miss 15.4 km model only, 13.2 km hard_switch, 11.8 km
+  Lab 3 reader priority, 12.2 km no motion. A choice made on five days did not carry over to the next five.
+
+**Failures / problems**
+- First quick test suggested "wind makes it worse"; that was 3 windows. The full tuning grid showed it is nearly flat.
+- xarray's interpolate_na(max_gap) needs bottleneck (not installed); blend.py does its own gap fill.
+- Blend files were 40 MB each uncompressed; now zlib (about 13 MB).
+
+**Next**
+- Run the blend agent once and score it; ensemble spread; Phase C search planner; Phase D loop.
+
 ## 2026-11-15 
 
 **Done**
