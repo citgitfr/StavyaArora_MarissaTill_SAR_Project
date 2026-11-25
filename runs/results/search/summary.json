@@ -1,0 +1,278 @@
+{
+  "test_windows": 18,
+  "effort_km2_per_asset": 111.2,
+  "assumptions": {
+    "sweep_width_km": 1.0,
+    "speed_kmh": 27.8,
+    "hours_on_scene": 4.0,
+    "assets": 1
+  },
+  "cell_km": 1.0,
+  "quick": false,
+  "table": [
+    {
+      "hours": 12,
+      "assets": 1,
+      "forecast": "model only (K=1600)",
+      "planner": "iamsar",
+      "found_mean": 0.1888,
+      "pos_pred_mean": 0.0785,
+      "found_any_share": 0.7778,
+      "area_searched_km2": 400.0,
+      "datum_to_truth_km": 8.5625
+    },
+    {
+      "hours": 12,
+      "assets": 1,
+      "forecast": "model only (K=1600)",
+      "planner": "greedy",
+      "found_mean": 0.1585,
+      "pos_pred_mean": 0.0812,
+      "found_any_share": 0.7222,
+      "area_searched_km2": 512.5,
+      "datum_to_truth_km": 8.5625
+    },
+    {
+      "hours": 12,
+      "assets": 3,
+      "forecast": "model only (K=1600)",
+      "planner": "iamsar",
+      "found_mean": 0.3906,
+      "pos_pred_mean": 0.1914,
+      "found_any_share": 0.9444,
+      "area_searched_km2": 625.0,
+      "datum_to_truth_km": 8.5625
+    },
+    {
+      "hours": 12,
+      "assets": 3,
+      "forecast": "model only (K=1600)",
+      "planner": "greedy",
+      "found_mean": 0.3744,
+      "pos_pred_mean": 0.1996,
+      "found_any_share": 0.9444,
+      "area_searched_km2": 851.0,
+      "datum_to_truth_km": 8.5625
+    },
+    {
+      "hours": 24,
+      "assets": 1,
+      "forecast": "model only (K=1600)",
+      "planner": "iamsar",
+      "found_mean": 0.072,
+      "pos_pred_mean": 0.0431,
+      "found_any_share": 0.3333,
+      "area_searched_km2": 400.0,
+      "datum_to_truth_km": 15.2592
+    },
+    {
+      "hours": 24,
+      "assets": 1,
+      "forecast": "model only (K=1600)",
+      "planner": "greedy",
+      "found_mean": 0.049,
+      "pos_pred_mean": 0.0448,
+      "found_any_share": 0.3333,
+      "area_searched_km2": 680.5,
+      "datum_to_truth_km": 15.2592
+    },
+    {
+      "hours": 24,
+      "assets": 3,
+      "forecast": "model only (K=1600)",
+      "planner": "iamsar",
+      "found_mean": 0.1606,
+      "pos_pred_mean": 0.1101,
+      "found_any_share": 0.5,
+      "area_searched_km2": 900.0,
+      "datum_to_truth_km": 15.2592
+    },
+    {
+      "hours": 24,
+      "assets": 3,
+      "forecast": "model only (K=1600)",
+      "planner": "greedy",
+      "found_mean": 0.1401,
+      "pos_pred_mean": 0.115,
+      "found_any_share": 0.5,
+      "area_searched_km2": 1209.0,
+      "datum_to_truth_km": 15.2592
+    },
+    {
+      "hours": 12,
+      "assets": 1,
+      "forecast": "hard_switch (K=3200)",
+      "planner": "iamsar",
+      "found_mean": 0.1896,
+      "pos_pred_mean": 0.0452,
+      "found_any_share": 1.0,
+      "area_searched_km2": 625.0,
+      "datum_to_truth_km": 6.2235
+    },
+    {
+      "hours": 12,
+      "assets": 1,
+      "forecast": "hard_switch (K=3200)",
+      "planner": "greedy",
+      "found_mean": 0.2093,
+      "pos_pred_mean": 0.0469,
+      "found_any_share": 0.9444,
+      "area_searched_km2": 690.5,
+      "datum_to_truth_km": 6.2235
+    },
+    {
+      "hours": 12,
+      "assets": 3,
+      "forecast": "hard_switch (K=3200)",
+      "planner": "iamsar",
+      "found_mean": 0.3213,
+      "pos_pred_mean": 0.1159,
+      "found_any_share": 1.0,
+      "area_searched_km2": 900.0,
+      "datum_to_truth_km": 6.2235
+    },
+    {
+      "hours": 12,
+      "assets": 3,
+      "forecast": "hard_switch (K=3200)",
+      "planner": "greedy",
+      "found_mean": 0.3747,
+      "pos_pred_mean": 0.1206,
+      "found_any_share": 1.0,
+      "area_searched_km2": 1156.5,
+      "datum_to_truth_km": 6.2235
+    },
+    {
+      "hours": 24,
+      "assets": 1,
+      "forecast": "hard_switch (K=3200)",
+      "planner": "iamsar",
+      "found_mean": 0.1059,
+      "pos_pred_mean": 0.0243,
+      "found_any_share": 0.6111,
+      "area_searched_km2": 625.0,
+      "datum_to_truth_km": 12.5244
+    },
+    {
+      "hours": 24,
+      "assets": 1,
+      "forecast": "hard_switch (K=3200)",
+      "planner": "greedy",
+      "found_mean": 0.13,
+      "pos_pred_mean": 0.0255,
+      "found_any_share": 0.7222,
+      "area_searched_km2": 800.5,
+      "datum_to_truth_km": 12.5244
+    },
+    {
+      "hours": 24,
+      "assets": 3,
+      "forecast": "hard_switch (K=3200)",
+      "planner": "iamsar",
+      "found_mean": 0.2483,
+      "pos_pred_mean": 0.0639,
+      "found_any_share": 0.8889,
+      "area_searched_km2": 900.0,
+      "datum_to_truth_km": 12.5244
+    },
+    {
+      "hours": 24,
+      "assets": 3,
+      "forecast": "hard_switch (K=3200)",
+      "planner": "greedy",
+      "found_mean": 0.2421,
+      "pos_pred_mean": 0.0674,
+      "found_any_share": 0.7778,
+      "area_searched_km2": 1484.5,
+      "datum_to_truth_km": 12.5244
+    },
+    {
+      "hours": 12,
+      "assets": 1,
+      "forecast": "ensemble (K=1600)",
+      "planner": "iamsar",
+      "found_mean": 0.1348,
+      "pos_pred_mean": 0.0679,
+      "found_any_share": 0.5556,
+      "area_searched_km2": 400.0,
+      "datum_to_truth_km": 9.7767
+    },
+    {
+      "hours": 12,
+      "assets": 1,
+      "forecast": "ensemble (K=1600)",
+      "planner": "greedy",
+      "found_mean": 0.1876,
+      "pos_pred_mean": 0.0764,
+      "found_any_share": 0.7222,
+      "area_searched_km2": 469.0,
+      "datum_to_truth_km": 9.7767
+    },
+    {
+      "hours": 12,
+      "assets": 3,
+      "forecast": "ensemble (K=1600)",
+      "planner": "iamsar",
+      "found_mean": 0.2757,
+      "pos_pred_mean": 0.1666,
+      "found_any_share": 0.6667,
+      "area_searched_km2": 625.0,
+      "datum_to_truth_km": 9.7767
+    },
+    {
+      "hours": 12,
+      "assets": 3,
+      "forecast": "ensemble (K=1600)",
+      "planner": "greedy",
+      "found_mean": 0.3567,
+      "pos_pred_mean": 0.184,
+      "found_any_share": 0.8889,
+      "area_searched_km2": 912.5,
+      "datum_to_truth_km": 9.7767
+    },
+    {
+      "hours": 24,
+      "assets": 1,
+      "forecast": "ensemble (K=1600)",
+      "planner": "iamsar",
+      "found_mean": 0.09,
+      "pos_pred_mean": 0.043,
+      "found_any_share": 0.3889,
+      "area_searched_km2": 400.0,
+      "datum_to_truth_km": 23.2534
+    },
+    {
+      "hours": 24,
+      "assets": 1,
+      "forecast": "ensemble (K=1600)",
+      "planner": "greedy",
+      "found_mean": 0.0569,
+      "pos_pred_mean": 0.0451,
+      "found_any_share": 0.3333,
+      "area_searched_km2": 648.0,
+      "datum_to_truth_km": 23.2534
+    },
+    {
+      "hours": 24,
+      "assets": 3,
+      "forecast": "ensemble (K=1600)",
+      "planner": "iamsar",
+      "found_mean": 0.1435,
+      "pos_pred_mean": 0.1085,
+      "found_any_share": 0.3889,
+      "area_searched_km2": 900.0,
+      "datum_to_truth_km": 23.2534
+    },
+    {
+      "hours": 24,
+      "assets": 3,
+      "forecast": "ensemble (K=1600)",
+      "planner": "greedy",
+      "found_mean": 0.1353,
+      "pos_pred_mean": 0.1151,
+      "found_any_share": 0.3889,
+      "area_searched_km2": 1081.5,
+      "datum_to_truth_km": 23.2534
+    }
+  ]
+}
