@@ -1,0 +1,157 @@
+{
+  "scenarios": {
+    "S1": {
+      "t0": "2021-10-23 12:00",
+      "periods": 4,
+      "period_h": 6
+    },
+    "S2": {
+      "t0": "2021-10-24 00:00",
+      "periods": 4,
+      "period_h": 6
+    },
+    "S3": {
+      "t0": "2021-10-24 12:00",
+      "periods": 4,
+      "period_h": 6
+    },
+    "S4": {
+      "t0": "2021-10-25 00:00",
+      "periods": 4,
+      "period_h": 6
+    },
+    "S5": {
+      "t0": "2021-10-25 12:00",
+      "periods": 4,
+      "period_h": 6
+    },
+    "S6": {
+      "t0": "2021-10-26 00:00",
+      "periods": 4,
+      "period_h": 6
+    }
+  },
+  "delivery_h": 72,
+  "cases": {
+    "case01": {
+      "scenario": "S5",
+      "period": 1,
+      "t_end": "2021-10-25 18:00:00"
+    },
+    "case02": {
+      "scenario": "S2",
+      "period": 3,
+      "t_end": "2021-10-24 18:00:00"
+    },
+    "case03": {
+      "scenario": "S4",
+      "period": 3,
+      "t_end": "2021-10-25 18:00:00"
+    },
+    "case04": {
+      "scenario": "S1",
+      "period": 2,
+      "t_end": "2021-10-24 00:00:00"
+    },
+    "case05": {
+      "scenario": "S2",
+      "period": 2,
+      "t_end": "2021-10-24 12:00:00"
+    },
+    "case06": {
+      "scenario": "S5",
+      "period": 3,
+      "t_end": "2021-10-26 06:00:00"
+    },
+    "case07": {
+      "scenario": "S4",
+      "period": 2,
+      "t_end": "2021-10-25 12:00:00"
+    },
+    "case08": {
+      "scenario": "S5",
+      "period": 2,
+      "t_end": "2021-10-26 00:00:00"
+    },
+    "case09": {
+      "scenario": "S3",
+      "period": 4,
+      "t_end": "2021-10-25 12:00:00"
+    },
+    "case10": {
+      "scenario": "S2",
+      "period": 4,
+      "t_end": "2021-10-25 00:00:00"
+    },
+    "case11": {
+      "scenario": "S3",
+      "period": 1,
+      "t_end": "2021-10-24 18:00:00"
+    },
+    "case12": {
+      "scenario": "S6",
+      "period": 2,
+      "t_end": "2021-10-26 12:00:00"
+    },
+    "case13": {
+      "scenario": "S6",
+      "period": 4,
+      "t_end": "2021-10-27 00:00:00"
+    },
+    "case14": {
+      "scenario": "S6",
+      "period": 1,
+      "t_end": "2021-10-26 06:00:00"
+    },
+    "case15": {
+      "scenario": "S1",
+      "period": 3,
+      "t_end": "2021-10-24 06:00:00"
+    },
+    "case16": {
+      "scenario": "S1",
+      "period": 4,
+      "t_end": "2021-10-24 12:00:00"
+    },
+    "case17": {
+      "scenario": "S5",
+      "period": 4,
+      "t_end": "2021-10-26 12:00:00"
+    },
+    "case18": {
+      "scenario": "S3",
+      "period": 3,
+      "t_end": "2021-10-25 06:00:00"
+    },
+    "case19": {
+      "scenario": "S2",
+      "period": 1,
+      "t_end": "2021-10-24 06:00:00"
+    },
+    "case20": {
+      "scenario": "S4",
+      "period": 1,
+      "t_end": "2021-10-25 06:00:00"
+    },
+    "case21": {
+      "scenario": "S1",
+      "period": 1,
+      "t_end": "2021-10-23 18:00:00"
+    },
+    "case22": {
+      "scenario": "S3",
+      "period": 2,
+      "t_end": "2021-10-25 00:00:00"
+    },
+    "case23": {
+      "scenario": "S6",
+      "period": 3,
+      "t_end": "2021-10-26 18:00:00"
+    },
+    "case24": {
+      "scenario": "S4",
+      "period": 4,
+      "t_end": "2021-10-26 00:00:00"
+    }
+  }
+}
