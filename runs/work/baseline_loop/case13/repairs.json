@@ -1,0 +1,14 @@
+[
+  {
+    "action": "flip_sign",
+    "param": "u",
+    "file": "runs/cases_loop/case13/radar.nc",
+    "out": "/Users/stavya/StavyaArora_MarissaTill_SAR_Project/runs/work/baseline_loop/case13/radar_fixed_1.nc"
+  },
+  {
+    "action": "flip_sign",
+    "param": "u",
+    "file": "runs/work/baseline_loop/case13/radar_fixed_1.nc",
+    "out": "/Users/stavya/StavyaArora_MarissaTill_SAR_Project/runs/work/baseline_loop/case13/radar_fixed_2.nc"
+  }
+]

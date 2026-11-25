@@ -1,0 +1,8 @@
+[
+  {
+    "action": "flip_sign",
+    "param": "v",
+    "file": "runs/cases_loop/case18/radar.nc",
+    "out": "/Users/stavya/StavyaArora_MarissaTill_SAR_Project/runs/work/baseline_loop/case18/radar_fixed_1.nc"
+  }
+]

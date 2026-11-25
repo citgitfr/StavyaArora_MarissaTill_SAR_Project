@@ -1,0 +1,14 @@
+[
+  {
+    "action": "rescale",
+    "param": 0.01,
+    "file": "runs/cases_loop/case06/radar.nc",
+    "out": "/Users/stavya/StavyaArora_MarissaTill_SAR_Project/runs/work/baseline_loop/case06/radar_fixed_1.nc"
+  },
+  {
+    "action": "shift_time",
+    "param": -3.0,
+    "file": "runs/work/baseline_loop/case06/radar_fixed_1.nc",
+    "out": "/Users/stavya/StavyaArora_MarissaTill_SAR_Project/runs/work/baseline_loop/case06/radar_fixed_2.nc"
+  }
+]

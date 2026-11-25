@@ -1,0 +1,16 @@
+{
+  "case_id": "case03",
+  "choice": "repair",
+  "repair": {
+    "action": "shift_time",
+    "param": -3.0
+  },
+  "evidence": [
+    "check.result = fail",
+    "check.tests.lag.best_lag_hours = 3",
+    "check.tests.lag.max_abs_hours = 1",
+    "repair1.rule = lag -> shift_time -3.0",
+    "check(repair1).result = pass"
+  ],
+  "reason": "check passes after 1 repair(s) chosen by the rule table."
+}

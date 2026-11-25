@@ -1,0 +1,9 @@
+{
+  "case_id": "case15",
+  "choice": "fused",
+  "repair": null,
+  "evidence": [
+    "check.result = pass"
+  ],
+  "reason": "check passes on the original radar."
+}

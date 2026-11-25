@@ -1,0 +1,40 @@
+{
+  "case_id": "case12",
+  "choice": "model_only",
+  "repair": [
+    {
+      "action": "flip_sign",
+      "param": "u"
+    },
+    {
+      "action": "flip_sign",
+      "param": "u"
+    }
+  ],
+  "evidence": [
+    "check.result = fail",
+    "check.tests.correlation_sign.corr_u = 0.01531",
+    "check.tests.correlation_sign.corr_v = 0.1068",
+    "check.tests.correlation_sign.corr_swapped = 0.3484",
+    "check.tests.correlation_sign.min = 0.1",
+    "check.tests.lag.best_lag_hours = 3",
+    "check.tests.lag.max_abs_hours = 1",
+    "repair1.rule = correlation_sign -> flip_sign u",
+    "check(repair1).result = fail",
+    "check(repair1).tests.correlation_sign.corr_u = -0.01531",
+    "check(repair1).tests.correlation_sign.corr_v = 0.1068",
+    "check(repair1).tests.correlation_sign.corr_swapped = -0.01357",
+    "check(repair1).tests.correlation_sign.min = 0.1",
+    "check(repair1).tests.lag.best_lag_hours = 6",
+    "check(repair1).tests.lag.max_abs_hours = 1",
+    "repair2.rule = correlation_sign -> flip_sign u",
+    "check(repair2).result = fail",
+    "check(repair2).tests.correlation_sign.corr_u = 0.01531",
+    "check(repair2).tests.correlation_sign.corr_v = 0.1068",
+    "check(repair2).tests.correlation_sign.corr_swapped = 0.3484",
+    "check(repair2).tests.correlation_sign.min = 0.1",
+    "check(repair2).tests.lag.best_lag_hours = 3",
+    "check(repair2).tests.lag.max_abs_hours = 1"
+  ],
+  "reason": "check still fails after 2 repairs."
+}

@@ -1,0 +1,20 @@
+{
+  "case_id": "case09",
+  "choice": "repair",
+  "repair": {
+    "action": "flip_sign",
+    "param": "v"
+  },
+  "evidence": [
+    "check.result = fail",
+    "check.tests.correlation_sign.corr_u = 0.2532",
+    "check.tests.correlation_sign.corr_v = -0.2935",
+    "check.tests.correlation_sign.corr_swapped = 0.08173",
+    "check.tests.correlation_sign.min = 0.1",
+    "check.tests.lag.best_lag_hours = -6",
+    "check.tests.lag.max_abs_hours = 1",
+    "repair1.rule = correlation_sign -> flip_sign v",
+    "check(repair1).result = pass"
+  ],
+  "reason": "check passes after 1 repair(s) chosen by the rule table."
+}

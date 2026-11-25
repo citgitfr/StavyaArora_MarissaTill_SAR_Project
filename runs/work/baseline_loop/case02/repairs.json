@@ -1,0 +1,8 @@
+[
+  {
+    "action": "rescale",
+    "param": 0.01,
+    "file": "runs/cases_loop/case02/radar.nc",
+    "out": "/Users/stavya/StavyaArora_MarissaTill_SAR_Project/runs/work/baseline_loop/case02/radar_fixed_1.nc"
+  }
+]

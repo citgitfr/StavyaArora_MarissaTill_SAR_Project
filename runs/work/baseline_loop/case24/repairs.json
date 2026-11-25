@@ -1,0 +1,8 @@
+[
+  {
+    "action": "shift_time",
+    "param": -3.0,
+    "file": "runs/cases_loop/case24/radar.nc",
+    "out": "/Users/stavya/StavyaArora_MarissaTill_SAR_Project/runs/work/baseline_loop/case24/radar_fixed_1.nc"
+  }
+]

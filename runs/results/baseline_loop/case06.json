@@ -1,0 +1,31 @@
+{
+  "case_id": "case06",
+  "choice": "repair",
+  "repair": [
+    {
+      "action": "rescale",
+      "param": 0.01
+    },
+    {
+      "action": "shift_time",
+      "param": -3.0
+    }
+  ],
+  "evidence": [
+    "check.result = fail",
+    "check.tests.speed_bound.speed_max = 100.4",
+    "check.tests.speed_bound.max_m_s = 3.0",
+    "check.tests.speed_ratio.speed_ratio_median = 150.1",
+    "check.tests.speed_ratio.min = 0.5",
+    "check.tests.speed_ratio.max = 2.0",
+    "check.tests.lag.best_lag_hours = 3",
+    "check.tests.lag.max_abs_hours = 1",
+    "repair1.rule = speed_bound -> rescale 0.01",
+    "check(repair1).result = fail",
+    "check(repair1).tests.lag.best_lag_hours = 3",
+    "check(repair1).tests.lag.max_abs_hours = 1",
+    "repair2.rule = lag -> shift_time -3.0",
+    "check(repair2).result = pass"
+  ],
+  "reason": "check passes after 2 repair(s) chosen by the rule table."
+}

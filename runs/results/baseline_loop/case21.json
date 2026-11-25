@@ -1,0 +1,16 @@
+{
+  "case_id": "case21",
+  "choice": "model_only",
+  "repair": null,
+  "evidence": [
+    "check.result = fail",
+    "check.tests.speed_ratio.speed_ratio_median = 2.14",
+    "check.tests.speed_ratio.min = 0.5",
+    "check.tests.speed_ratio.max = 2.0",
+    "check.tests.correlation_sign.corr_u = 0.1991",
+    "check.tests.correlation_sign.corr_v = 0.09291",
+    "check.tests.correlation_sign.corr_swapped = -0.03478",
+    "check.tests.correlation_sign.min = 0.1"
+  ],
+  "reason": "first failing test 'speed_ratio' has no repair rule."
+}
