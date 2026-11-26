@@ -65,6 +65,16 @@ Add a dated entry every work session. Include failures.
   persistence 13.3; reweighted ensemble 11.9. Tuning windows: 21.7 / 26.0 without a marker, corrected 8.5 / 14.1,
   persistence 9.1. The correction beats restart-only and persistence in both halves, so the observation idea is worth
   testing with a separate marker (another drifter), which needs the November data.
+- Stavya pointed out that step 0 uses the answer (the marker is the target's own track). Honest version
+  (src/pair_marker_eval.py): two real drifter pairs that floated within 30 km of each other (Nov 8-18 and Dec 6-13
+  2021, from the existing GDP file), each in both roles, 116 windows; the target is known only at t0 and a DIFFERENT
+  drifter is the marker. Pulled HYCOM (data/hycom_20211108.nc) and ERA5 wind (data/era5_wind_20211108.nc) for
+  2021-11-08..12-15. Mean 24 h target miss: no marker 8.0 km; corrected current 11.0 (6 h observed) / 12.6 (3 h);
+  reweighted windage members 9.0; marker persistence 11.6. The correction beat no marker in only 40 of 116 windows,
+  and was worse even with the marker within 10 km (7.8 -> 9.2 km). Conclusion: a uniform correction from a nearby
+  drifter's first hours does not carry over to the target here; the step 0 gain came from using the target's own
+  track. A possible physical reason (not tested): a 3-6 h mean velocity samples part of an inertial or tidal
+  oscillation (the inertial period is about 22 h at 32.5 N) and is then extrapolated as a constant.
 
 ## 2026-11-18 (Lab 4 start, branch claude/lab4)
 
