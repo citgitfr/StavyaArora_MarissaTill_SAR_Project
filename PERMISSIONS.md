@@ -49,9 +49,11 @@ Anything that would ask is denied when nobody is there to answer.
   [deny: `Read(./heldout/**)`, `Edit(heldout/**)`, `Read(~/sar_heldout/**)`]
 - Edit `fixtures/` (source data) or `configs/thresholds.yaml` (frozen thresholds).
   [deny: `Edit(fixtures/**)`, `Edit(configs/thresholds.yaml)`]
-- Run the data-download scripts. People run every download.
-  [deny: `Bash(python src/data/*)`, `Bash(python scripts/list_ncei.py*)`,
-  `Bash(python scripts/find_drifters.py*)`; deny wins even if someone approves by mistake]
+- Run the data-download scripts (`src/data/pull_*.py`, `scripts/list_ncei.py`, `scripts/find_drifters.py`).
+  [enforced for evaluation runs: dontAsk mode allows only the two tool scripts, and the isolated workspace does not
+  contain the download scripts. Changed 2026-11-25 by the owners: the explicit deny lines were removed so that a
+  developer session (a person, or Claude Code building the project) may run these scripts; downloads write only to
+  `data/`, and the ERA5 key stays in `~/.cdsapirc`, read by the cdsapi library, never by an agent.]
 - Use the network, other than `git push origin claude/*`.
   [deny: curl, wget, ssh, scp, pip install, uv pip install, WebFetch, WebSearch]
 - Read `.env` files or `~/.ssh`.  [deny: `Read(./.env)`, `Read(./.env.*)`, `Read(~/.ssh/**)`]
