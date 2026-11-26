@@ -50,6 +50,22 @@ Add a dated entry every work session. Include failures.
 - More drifters (November 2021), several fault seeds, a second agent repeat; the agent's per-period choices beyond
   QC (re-forecast or not, escalate on contradictory evidence); owners: Lab 3 wording.
 
+**Later the same day**
+- Repo tidy: removed docs/lab4_handoff.md (findings are in this log), .gitignore for runs/work/blend/, runs/work/loop/
+  and .DS_Store; sar_loop uses forecast_eval.run (loop results identical).
+- Owner decision: developer sessions may run the download scripts; the deny lines for python src/data/*,
+  scripts/list_ncei.py and scripts/find_drifters.py were removed from .claude/settings.json (the evaluated agent still
+  cannot run them). curl, wget and answer-key reads stay denied.
+- November 2021 radar: the NCEI catalog returned HTTP 502 after 4 min, and single files (October ones that downloaded
+  before, too) time out after 150 s; NCEI's main site, HYCOM, the GDP ERDDAP and the CDS all answered, so the
+  thredds-ocean file server was down. A listing built from the file-name pattern is in data/; retries continue.
+- Step 0 marker test (src/marker_eval.py): the drifter's own first M hours act as a datum marker buoy (best case);
+  every method restarts from the marker's position at t0 + M. Mean 24 h miss on the test windows, M = 6 h: no marker
+  19.8 km (model only) / 14.7 km (radar blend); restart only 15.5 / 11.6; corrected current 11.7 / 10.7; straight-line
+  persistence 13.3; reweighted ensemble 11.9. Tuning windows: 21.7 / 26.0 without a marker, corrected 8.5 / 14.1,
+  persistence 9.1. The correction beats restart-only and persistence in both halves, so the observation idea is worth
+  testing with a separate marker (another drifter), which needs the November data.
+
 ## 2026-11-18 (Lab 4 start, branch claude/lab4)
 
 **Done**
