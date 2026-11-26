@@ -26,12 +26,13 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--month", default="202108", help="YYYYMM")
     ap.add_argument("--save", help="also write the listing to this file (e.g. data/ncei_listing_202108.txt)")
+    ap.add_argument("--timeout", type=float, default=30, help="seconds to wait for the catalog (large months are slow)")
     a = ap.parse_args(argv)
     if not re.fullmatch(r"\d{6}", a.month):
         sys.exit("--month must be YYYYMM")
     url = CATALOG.format(y=a.month[:4], ym=a.month)
 
-    r = requests.get(url, timeout=30)
+    r = requests.get(url, timeout=a.timeout)
     print(f"GET {url} -> HTTP {r.status_code}, {len(r.content)} bytes")
     if r.status_code != 200:
         sys.exit("Catalog request failed; stopping.")
