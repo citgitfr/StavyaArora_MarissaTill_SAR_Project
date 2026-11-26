@@ -239,3 +239,10 @@ runs/work/_merged_baseline/
 runs/results/agent/all_rep*/
 runs/work/agent/all_rep*/
 eval/batches/all_rep*.json
+
+# Lab 4 working files (blend files, evaluation caches; regenerated)
+runs/work/blend/
+runs/work/loop/
+
+# macOS folder metadata
+.DS_Store

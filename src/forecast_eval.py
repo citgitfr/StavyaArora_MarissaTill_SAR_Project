@@ -157,9 +157,11 @@ def score_window(plon, plat, obs, hours):
 
 
 # ---- OpenDrift run ------------------------------------------------------------------------------
-def run(readers, lon, lat, start, hours, k, windage, stokes, number=None):
-    """Like drifter_eval.run, plus wind/Stokes readers and a wind drift factor. Same seed and radius; `number`
-    particles (default drifter_eval.PARTICLES = 500)."""
+def run(readers, lon, lat, start, hours, k, windage, stokes, number=None, radius=None):
+    """Like drifter_eval.run, plus wind/Stokes readers and a wind drift factor. Same seed. `number` particles
+    (default drifter_eval.PARTICLES = 500) released within `radius` m (default drifter_eval.RADIUS_M) of lon, lat;
+    lon and lat may also be arrays of start positions (one per particle, with radius=0).
+    Returns lon, lat arrays (particles, hours + 1); a particle that stopped keeps its last position."""
     from opendrift.models.oceandrift import OceanDrift
     o = OceanDrift(loglevel=50)
     o.add_reader([de._reader(p) for p in readers])
@@ -169,7 +171,7 @@ def run(readers, lon, lat, start, hours, k, windage, stokes, number=None):
     o.set_config("drift:stokes_drift", bool(stokes))
     o.set_config("general:coastline_action", "stranding")
     np.random.seed(0)
-    o.seed_elements(lon=lon, lat=lat, radius=de.RADIUS_M, number=number or de.PARTICLES,
+    o.seed_elements(lon=lon, lat=lat, radius=de.RADIUS_M if radius is None else radius, number=number or de.PARTICLES,
                     time=start.to_pydatetime(), wind_drift_factor=float(windage))
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")

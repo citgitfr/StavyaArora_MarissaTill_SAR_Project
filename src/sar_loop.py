@@ -30,7 +30,6 @@ import importlib.util
 import json
 import sys
 import warnings
-from datetime import timedelta
 from pathlib import Path
 
 import numpy as np
@@ -62,27 +61,9 @@ MODEL = REPO / "fixtures" / "hycom_20211018.nc"
 
 def run_from(readers, lons, lats, start, hours, k):
     """Advance particles that start at (lons, lats) for `hours`; returns their final positions (order kept)."""
-    from opendrift.models.oceandrift import OceanDrift
-    o = OceanDrift(loglevel=50)
-    o.add_reader([de._reader(str(p)) for p in readers])
-    o.set_config("environment:fallback:horizontal_diffusivity", float(k))
-    o.set_config("environment:fallback:x_wind", 0)
-    o.set_config("environment:fallback:y_wind", 0)
-    o.set_config("drift:stokes_drift", False)
-    o.set_config("general:coastline_action", "stranding")
-    np.random.seed(0)
-    o.seed_elements(lon=np.asarray(lons), lat=np.asarray(lats), number=len(lons), time=start.to_pydatetime(),
-                    wind_drift_factor=0.0)
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        o.run(duration=timedelta(hours=hours), time_step=fe.de.TIME_STEP_S, time_step_output=fe.de.OUTPUT_STEP_S)
-    lon = o.result["lon"].transpose("trajectory", "time").values.astype(float)
-    lat = o.result["lat"].transpose("trajectory", "time").values.astype(float)
-    out_lon, out_lat = np.array(lons, float), np.array(lats, float)
-    for t in range(lon.shape[1]):                        # last finite position of each particle
-        ok = np.isfinite(lon[:, t])
-        out_lon[ok], out_lat[ok] = lon[ok, t], lat[ok, t]
-    return out_lon, out_lat
+    plon, plat = fe.run([str(p) for p in readers], np.asarray(lons), np.asarray(lats), start, hours, k, 0.0, False,
+                        number=len(lons), radius=0)
+    return plon[:, -1], plat[:, -1]
 
 
 def faithful(radar_path, clean, t0, t1, tol=1e-3):

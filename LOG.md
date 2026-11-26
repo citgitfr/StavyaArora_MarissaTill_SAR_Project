@@ -55,7 +55,7 @@ Add a dated entry every work session. Include failures.
 **Done**
 - Agreed the Lab 4 plan: stay on the October 2021 window and its one drifter until the whole chain works
   (A wind and honest spread, B blend menu + investigator agent, C search planner, D multi-period loop), then add
-  drifters (E). Details and status: docs/lab4_handoff.md.
+  drifters (E).
 - Data: the partner's data/ folder (same October radar/HYCOM as fixtures/, plus a 2018-2024 GDP drifter search off
   California, 38 drifters). Only drifter 300534061399950 is in the October radar window; November 2021 has about 3
   drifters near the coast (not pulled yet). Pulled ERA5 hourly 10 m wind and wave Stokes drift for 2021-10-18..29

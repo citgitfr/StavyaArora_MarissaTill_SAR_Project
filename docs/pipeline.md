@@ -107,7 +107,9 @@ python src/decision_reality.py --cases-dir runs/cases_compound --baseline runs/r
 person, with no automatic forecast.
 
 ## Lab 4 (branch claude/lab4; October 2021 window, one drifter)
-Status, findings and what is left: `docs/lab4_handoff.md`. Wind data is not in git:
+Findings and what is left: the 2026-11-18 and 2026-11-25 entries in `LOG.md`. Not in git (rebuild or copy into
+`data/`): `era5_wind_20211018.nc` and `era5_stokes_20211018.nc` (step L1), and the drifter search
+`drifters/gdp_hourly_2018-01-01_2025-01-01.csv` (`scripts/find_drifters.py`, command above).
 
 | # | Step | Command | Writes |
 |---|---|---|---|

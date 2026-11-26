@@ -21,7 +21,6 @@ import argparse
 import importlib.util
 import json
 import sys
-from itertools import product
 from pathlib import Path
 
 import numpy as np
