@@ -3,6 +3,53 @@ Team: Stavya Arora, Marissa Till | REPO: https://github.com/citgitfr/StavyaArora
 
 Add a dated entry every work session. Include failures.
 
+## 2026-11-25 (Lab 4, phases B to D, branch claude/lab4)
+
+**Done**
+- Caught up LOG.md, AI_USE.md, docs/pipeline.md (Lab 4 section) and requirements.txt (cdsapi==0.7.7) for 2026-11-18.
+- B: scripts/run_blend_agent.py; blend agent run blend_rep1 on oct21 (20 turns, $0.56, 249 s, 5 of 12 evaluations,
+  one non-critical denial of a shell for-loop). It chose model_only, no wind, Stokes off: the same setup as the
+  try-everything baseline (50 evaluations), so the same test score. Its three hypotheses are in its decision.json,
+  with numbers copied from tool output.
+- U: src/ensemble_eval.py: 9 forcings (model only, hard_switch, 50/50 blend x windage 0/1/2%) x 100 particles,
+  extra K chosen on tuning windows (1600).
+- C: src/search.py (probability grid, exponential detection, greedy optimal and IAMSAR-style square planners, POD at
+  the true position, Bayes update) and src/search_eval.py; 18 test windows, 2 search times, 1 and 3 assets.
+- D: src/make_loop_cases.py (6 scenarios x 4 periods of 6 h; each period delivers the latest 72 h of radar; feed
+  faults start at period 2 or 3: x100, flip_v, +3 h shift, x100 + shift, swap; one clean scenario), src/sar_loop.py
+  (forecast, plan, score at the true position, Bayes update, every period). Scripted decisions (src/baseline.py) and
+  a cleaning-agent batch loop_rep1 (24 cases, $5.21, 0 denials). No answer key for the loop (owner decision): silent
+  errors are judged by comparing the radar used with the clean fixture.
+- Tests: test_search.py (8), test_sar_loop.py (6); all pass.
+
+**Found (one drifter; early evidence)**
+- The blend agent reached the baseline's choice with a tenth of the evaluations. On this case that choice (model
+  only) is the worst on the test half; the agent's reasoning was sound for the tuning period, which differs from
+  the test period.
+- Forcing ensemble: member centroids only 5.5 km apart at 24 h vs about 20 km misses, so plausible forcing
+  differences do not explain the error. With K = 1600 the 24 h hit rates (44% / 83% for 50% / 90%) are the closest
+  to nominal of all setups, but at 6 h they are 89% / 100% (too wide early).
+- Search (24 h, 3 assets, mean probability the plan would have found the drifter): model only 0.16 (IAMSAR) /
+  0.14 (greedy), hard_switch radar 0.25 / 0.24, ensemble 0.14 / 0.14. The forecast matters more than the planner;
+  every plan found the drifter more often than it predicted.
+- Frozen check on short radar slices: on 24 h slices it fails clean October radar often (lag, correlation); on
+  72 h slices 19 of 21 clean slices pass and x100, flip_v, +3 h shift and swap are caught 21 of 21.
+- Loop, mean P(found by 24 h): perfect radar 0.866, agent 0.867, scripted 0.852, no QC 0.824 (13 silent errors),
+  model only 0.806. Agent and script differ on 2 deliveries (swap): the script's first-failing-test rule tried
+  flip_sign u twice and fell back to the model; the agent chose swap_components (faithful), lifting that scenario
+  from 0.674 to 0.761. Both share one false alarm (clean slice ending 2021-10-23 18:00 fails speed_ratio) and one
+  silent error (x100 + 3 h shift repaired with shift -4 h: the lag bias found on 2026-11-15).
+
+**Failures / problems**
+- A first loop design used 24 h radar slices; the frozen check fails clean data on those, so deliveries are 72 h.
+- Listing ~/sar_heldout/ was (correctly) denied; the loop now writes no key at all.
+- Differences between policies are small and come from 6 overlapping scenarios on one drifter; no confidence
+  intervals yet.
+
+**Next**
+- More drifters (November 2021), several fault seeds, a second agent repeat; the agent's per-period choices beyond
+  QC (re-forecast or not, escalate on contradictory evidence); owners: Lab 3 wording.
+
 ## 2026-11-18 (Lab 4 start, branch claude/lab4)
 
 **Done**

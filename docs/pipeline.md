@@ -117,6 +117,12 @@ Status, findings and what is left: `docs/lab4_handoff.md`. Wind data is not in g
 | L4 | Try-everything blend baseline (~25 min) | `python src/blend_baseline.py --case runs/blend_cases/oct21 --out runs/results/blend/baseline` | `decision.json`, `ranking.json` |
 | L5 | Blend agent (Claude; see below) | `python scripts/run_blend_agent.py --run-id blend_rep1` | `runs/results/blend/agent/blend_rep1/decision.json`, transcript |
 | L6 | Score decisions on the test windows (~3 min per setup) | `python src/blend_score.py --decision baseline=runs/results/blend/baseline/decision.json --decision agent=<decision.json> --out runs/results/blend/<new folder>` | `summary.json`, `test.csv`, `spread.csv` |
+| L7 | Forcing ensemble, spread calibrated on tuning windows (~25 min) | `python src/ensemble_eval.py` | `runs/results/ensemble/` |
+| L8 | Phase C: one search period, 3 forecasts x 2 planners x 1/3 assets x 12/24 h (~15 min; needs L6 and L7 summaries) | `python src/search_eval.py` | `runs/results/search/` |
+| L9 | Phase D data stream: 24 radar deliveries (6 scenarios x 4 periods, mid-stream faults) | `python src/make_loop_cases.py` | `runs/cases_loop/` (+ `mapping.json`, no key) |
+| L10 | Scripted decisions on the deliveries (~1.5 min) | `python src/baseline.py --cases-dir runs/cases_loop --results runs/results/baseline_loop --work runs/work/baseline_loop` | `runs/results/baseline_loop/` |
+| L11 | Agent decisions on the deliveries (~$5, ~25 min) | `python scripts/run_agent_batch.py --run-id loop_rep1 --cases-dir runs/cases_loop` | `runs/results/agent/loop_rep1/` |
+| L12 | Phase D loop: all policies, 4 periods each (~1 min) | `python src/sar_loop.py --agent-runs loop_rep1` | `runs/results/loop/` |
 
 One blend by hand: `python src/blend.py --radar $R --model $M --out runs/work/blend/x.nc --spec '{"method": "edge_taper", "taper_km": 10}'`.
 Splitting rule: tuning windows end by `--split` (default 2021-10-23 12:00 UTC), test windows start at or after it.
