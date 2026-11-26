@@ -1,0 +1,8 @@
+[
+  {
+    "action": "rescale",
+    "param": 0.01,
+    "file": "runs/cases/case05/radar.nc",
+    "out": "/Users/stavya/sar_eval/loop_rep1/runs/work/agent/case05/radar_repaired.nc"
+  }
+]

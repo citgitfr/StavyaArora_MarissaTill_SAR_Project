@@ -1,0 +1,17 @@
+{
+  "case_id": "case08",
+  "choice": "fused",
+  "repair": null,
+  "evidence": [
+    "check.result = pass",
+    "check.tests.speed_bound.speed_max = 1.004",
+    "check.tests.coverage.hour_fraction_mean = 0.3965",
+    "check.tests.speed_ratio.speed_ratio_median = 1.517",
+    "check.tests.correlation_sign.corr_u = 0.3398",
+    "check.tests.correlation_sign.corr_v = 0.3624",
+    "check.tests.correlation_sign.corr_swapped = 0.08324",
+    "check.tests.lag.best_lag_hours = 0",
+    "compare.flags = []"
+  ],
+  "reason": "All eight check tests pass on the original radar and model files, so no repair is justified and the fused forcing is used. The speed ratio (1.517) and positive corr_swapped (0.08324) differ from typical clean values but stay inside the frozen thresholds."
+}

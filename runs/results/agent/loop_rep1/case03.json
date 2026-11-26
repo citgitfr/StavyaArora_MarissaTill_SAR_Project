@@ -1,0 +1,25 @@
+{
+  "case_id": "case03",
+  "choice": "repair",
+  "repair": {"action": "shift_time", "param": -3},
+  "evidence": [
+    "check.result = fail (original radar.nc)",
+    "check.tests.lag.pass = false",
+    "check.tests.lag.best_lag_hours = 3",
+    "check.tests.lag.max_abs_hours = 1",
+    "compare.best_lag_hours = 3",
+    "compare.corr_by_lag.0 = 0.2595",
+    "compare.corr_by_lag.3 = 0.3129",
+    "compare.corr_u = 0.2575",
+    "compare.corr_v = 0.2614",
+    "compare.speed_ratio_median = 1.454",
+    "repair.action = shift_time, repair.param = -3.0, repair.repairs_used = 1",
+    "check.result = pass (runs/work/agent/case03/radar_repaired.nc)",
+    "check.tests.lag.best_lag_hours = 0 (repaired)",
+    "check.tests.correlation_sign.corr_u = 0.311 (repaired)",
+    "check.tests.correlation_sign.corr_v = 0.3149 (repaired)",
+    "check.tests.correlation_sign.corr_swapped = 0.0857 (repaired)",
+    "check.tests.speed_ratio.speed_ratio_median = 1.505 (repaired)"
+  ],
+  "reason": "Only the lag test failed: radar best matched the model at a 3 h lag, above the 1 h limit, so the radar time axis was shifted by -3 h. The repaired file passes every check test (best_lag_hours = 0), so it should be used as the radar in a fused forecast."
+}

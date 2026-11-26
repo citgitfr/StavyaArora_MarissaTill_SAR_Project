@@ -1,0 +1,14 @@
+[
+  {
+    "action": "rescale",
+    "param": 0.01,
+    "file": "runs/cases/case06/radar.nc",
+    "out": "/Users/stavya/sar_eval/loop_rep1/runs/work/agent/case06/radar_rescaled.nc"
+  },
+  {
+    "action": "shift_time",
+    "param": -3.0,
+    "file": "runs/work/agent/case06/radar_rescaled.nc",
+    "out": "/Users/stavya/sar_eval/loop_rep1/runs/work/agent/case06/radar_repaired.nc"
+  }
+]

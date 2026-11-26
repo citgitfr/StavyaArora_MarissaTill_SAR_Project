@@ -1,0 +1,27 @@
+{
+  "case_id": "case18",
+  "choice": "repair",
+  "repair": {"action": "flip_sign", "param": "v"},
+  "evidence": [
+    "check(original).result = fail",
+    "check(original).correlation_sign.pass = false",
+    "check(original).correlation_sign.corr_u = 0.2504",
+    "check(original).correlation_sign.corr_v = -0.2399",
+    "check(original).correlation_sign.corr_swapped = 0.09361",
+    "check(original).lag.pass = false",
+    "check(original).lag.best_lag_hours = -6",
+    "compare.flags = [negative_corr_v, swapped_corr_exceeds_direct, best_lag_nonzero]",
+    "compare.corr_by_lag.-6 = 0.02412",
+    "compare.corr_by_lag.0 = 0.005267",
+    "qc(radar).fill_value_hits = 0",
+    "qc(radar).speed_max = 1.004",
+    "repair.repairs_used = 1",
+    "check(repaired).result = pass",
+    "check(repaired).correlation_sign.corr_v = 0.2399",
+    "check(repaired).correlation_sign.corr_swapped = 0.006899",
+    "check(repaired).lag.best_lag_hours = -1",
+    "check(repaired).speed_ratio.speed_ratio_median = 1.628"
+  ],
+  "repaired_file": "runs/work/agent/case18/radar_flipv.nc",
+  "reason": "corr_v was negative with the same size as corr_u, and corr_by_lag was weak at every lag, so a reversed v sign fit the evidence better than a time offset. Flipping v made check pass on every test, including the lag test (best_lag_hours -1), so no time shift was applied."
+}

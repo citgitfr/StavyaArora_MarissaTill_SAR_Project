@@ -1,0 +1,17 @@
+{"case_id": "case15",
+ "choice": "fused",
+ "repair": null,
+ "evidence": [
+  "check.result = pass",
+  "check.tests.speed_ratio.speed_ratio_median = 1.809 (max 2.0)",
+  "check.tests.correlation_sign.corr_u = 0.2154",
+  "check.tests.correlation_sign.corr_v = 0.1779",
+  "check.tests.correlation_sign.corr_swapped = -0.1187",
+  "check.tests.lag.best_lag_hours = -1 (max_abs_hours 1)",
+  "check.tests.coverage.good_hours_fraction = 0.9306",
+  "check.tests.time_axis.hfr_times = 2021-10-21T07:00 to 2021-10-24T06:00",
+  "qc(radar).speed_max = 1.003",
+  "qc(radar).fill_value_hits = 0",
+  "compare.flags = [best_lag_nonzero]"
+ ],
+ "reason": "All eight check tests pass on the unmodified radar and model files, so per the skill the radar is fused with the model and no repair is applied. Caveat for the owners: speed_ratio_median 1.809 is near the 2.0 limit and corr_u/corr_v (0.2154/0.1779) are well below the clean reference, and the case's dates (2021-10-21 to 2021-10-24) lie outside the documented data period, so this pass deserves a human look."}

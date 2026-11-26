@@ -1,0 +1,19 @@
+{
+  "case_id": "case24",
+  "choice": "repair",
+  "repair": {"action": "shift_time", "param": -3},
+  "evidence": [
+    "check.result = fail (original)",
+    "check.tests.lag.pass = false, best_lag_hours = 3, max_abs_hours = 1 (original)",
+    "check.tests.units/speed_bound/time_axis/fill_values/coverage/speed_ratio/correlation_sign.pass = true (original)",
+    "compare.best_lag_hours = 3",
+    "compare.corr_by_lag: 0 = 0.2851, 3 = 0.3511 (peak)",
+    "qc.flags = [] (original radar), qc.fill_value_hits = 0, qc.speed_max = 1.004",
+    "repair.action = shift_time, repair.param = -3.0, repairs_used = 1",
+    "check.result = pass (repaired)",
+    "check.tests.lag.best_lag_hours = 0 (repaired)",
+    "check.tests.correlation_sign.corr_u = 0.3398, corr_v = 0.3624 (repaired)",
+    "check.tests.speed_ratio.speed_ratio_median = 1.517 (repaired)"
+  ],
+  "reason": "Only the lag test failed, with compare showing a clear correlation peak at best_lag_hours = 3, so the radar time axis was shifted by -3 h. The repaired file (runs/work/agent/case24/radar_repaired.nc) passes every check test with best_lag_hours = 0."
+}

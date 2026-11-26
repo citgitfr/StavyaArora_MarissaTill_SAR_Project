@@ -1,0 +1,25 @@
+{
+  "case_id": "case17",
+  "choice": "repair",
+  "repair": [
+    {"action": "rescale", "param": 0.01},
+    {"action": "shift_time", "param": -4}
+  ],
+  "evidence": [
+    "check(original).result = fail",
+    "check(original).speed_bound.speed_max = 100.4",
+    "check(original).speed_ratio.speed_ratio_median = 147.3",
+    "check(original).lag.best_lag_hours = 4",
+    "qc(radar).speed_median = 22.8",
+    "qc(model).speed_median = 0.1584",
+    "compare.best_lag_hours = 4",
+    "check(rescaled).speed_ratio.speed_ratio_median = 1.473",
+    "check(rescaled).lag.best_lag_hours = 4",
+    "check(repaired).result = pass",
+    "check(repaired).speed_ratio.speed_ratio_median = 1.503",
+    "check(repaired).correlation_sign.corr_u = 0.3407",
+    "check(repaired).correlation_sign.corr_v = 0.3614",
+    "check(repaired).lag.best_lag_hours = 0"
+  ],
+  "reason": "Radar speeds were about 100 times too large (speed_ratio_median 147.3, speed_max 100.4, consistent with cm/s labelled m/s) and lagged the model by 4 h, so it was rescaled by 0.01 and then shifted by -4 h. The repaired file runs/work/agent/case17/radar_repaired.nc passes every check test."
+}

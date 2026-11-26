@@ -1,0 +1,16 @@
+{"case_id": "case04",
+ "choice": "fused",
+ "repair": null,
+ "evidence": [
+  "check.result = pass",
+  "check.tests.speed_ratio.speed_ratio_median = 1.943",
+  "check.tests.correlation_sign.corr_u = 0.2021",
+  "check.tests.correlation_sign.corr_v = 0.1113",
+  "check.tests.correlation_sign.corr_swapped = -0.09597",
+  "check.tests.lag.best_lag_hours = -1",
+  "check.tests.speed_bound.speed_max = 1.003",
+  "check.tests.coverage.good_hours_fraction = 0.9306",
+  "compare.flags = [best_lag_nonzero]"
+ ],
+ "reason": "All eight check tests pass on the original radar file, so the radar is used fused with the model and no repair is applied. Note for reviewers: speed_ratio_median 1.943 is close to the 2.0 bound and correlations are below typical clean values, but no test fails, so the frozen rule selects fused."
+}

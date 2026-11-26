@@ -1,0 +1,8 @@
+[
+  {
+    "action": "swap_components",
+    "param": null,
+    "file": "runs/cases/case12/radar.nc",
+    "out": "/Users/stavya/sar_eval/loop_rep1/runs/work/agent/case12/radar_swapped.nc"
+  }
+]

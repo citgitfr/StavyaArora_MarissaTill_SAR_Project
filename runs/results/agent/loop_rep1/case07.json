@@ -1,0 +1,23 @@
+{
+  "case_id": "case07",
+  "choice": "repair",
+  "repair": {"action": "shift_time", "param": -3},
+  "evidence": [
+    "check.result = fail",
+    "check.tests.lag.pass = false",
+    "check.tests.lag.best_lag_hours = 3",
+    "check.tests.lag.max_abs_hours = 1",
+    "compare.best_lag_hours = 3",
+    "compare.corr_by_lag.0 = 0.2527",
+    "compare.corr_by_lag.3 = 0.2734",
+    "qc.hfr.fill_value_hits = 0",
+    "qc.hfr.speed_max = 1.004",
+    "repair.action = shift_time, repair.param = -3.0, repair.repairs_used = 1",
+    "check(repaired).result = pass",
+    "check(repaired).tests.lag.best_lag_hours = 0",
+    "check(repaired).tests.speed_ratio.speed_ratio_median = 1.543",
+    "check(repaired).tests.correlation_sign.corr_u = 0.2532",
+    "check(repaired).tests.correlation_sign.corr_v = 0.2935"
+  ],
+  "reason": "Only the lag test failed (best_lag_hours = 3, limit 1), so the radar was shifted by -3 h per the menu rule. The repaired file (runs/work/agent/case07/radar_repaired.nc) passes every check test."
+}

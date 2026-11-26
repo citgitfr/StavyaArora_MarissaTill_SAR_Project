@@ -1,0 +1,8 @@
+[
+  {
+    "action": "flip_sign",
+    "param": "v",
+    "file": "runs/cases/case09/radar.nc",
+    "out": "/Users/stavya/sar_eval/loop_rep1/runs/work/agent/case09/radar_repaired.nc"
+  }
+]

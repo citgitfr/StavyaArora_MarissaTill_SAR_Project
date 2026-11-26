@@ -1,0 +1,22 @@
+{
+  "case_id": "case09",
+  "choice": "repair",
+  "repair": {"action": "flip_sign", "param": "v"},
+  "evidence": [
+    "check.result = fail (original radar)",
+    "check.tests.correlation_sign.corr_u = 0.2532",
+    "check.tests.correlation_sign.corr_v = -0.2935",
+    "check.tests.correlation_sign.corr_swapped = 0.08173",
+    "check.tests.lag.best_lag_hours = -6",
+    "compare.flags = [negative_corr_v, swapped_corr_exceeds_direct, best_lag_nonzero]",
+    "compare.corr_by_lag.-6 = 0.01536",
+    "compare.corr_by_lag.0 = -0.02018",
+    "qc.speed_max = 1.004",
+    "qc.fill_value_hits = 0",
+    "repair.repairs_used = 1",
+    "check.result = pass (repaired radar runs/work/agent/case09/radar_repaired.nc)",
+    "check.tests.correlation_sign.corr_v = 0.2935 (repaired)",
+    "check.tests.lag.best_lag_hours = 0 (repaired)"
+  ],
+  "reason": "The radar v component had the wrong sign: corr_v was -0.2935 while corr_u was 0.2532, and the -6 h lag came from near-zero lag correlations. After flip_sign v, check passes on every test including lag (best_lag_hours = 0), so the repaired radar file is used."
+}

@@ -1,0 +1,22 @@
+{
+  "case_id": "case23",
+  "choice": "repair",
+  "repair": {"action": "swap_components", "param": null},
+  "evidence": [
+    "check.result = fail",
+    "check.tests.correlation_sign.corr_u = 0.03347",
+    "check.tests.correlation_sign.corr_v = 0.08065",
+    "check.tests.correlation_sign.corr_swapped = 0.3562",
+    "check.tests.lag.best_lag_hours = 2",
+    "compare.flags = [swapped_corr_exceeds_direct, best_lag_nonzero]",
+    "compare.corr_by_lag ranges from 0.02688 (-6) to 0.05819 (2)",
+    "repair.repairs_used = 1",
+    "check(repaired).result = pass",
+    "check(repaired).tests.correlation_sign.corr_u = 0.3371",
+    "check(repaired).tests.correlation_sign.corr_v = 0.3754",
+    "check(repaired).tests.correlation_sign.corr_swapped = 0.05706",
+    "check(repaired).tests.lag.best_lag_hours = 1",
+    "check(repaired).tests.speed_ratio.speed_ratio_median = 1.493"
+  ],
+  "reason": "The radar correlated with the model only when u and v were swapped (corr_swapped 0.3562 vs corr_u 0.03347, corr_v 0.08065), and the lag curve was nearly flat, so the lag failure looked like a side effect of the swap. After swap_components every check test passes, so the repaired file runs/work/agent/case23/radar_swapped.nc is used as the radar."
+}

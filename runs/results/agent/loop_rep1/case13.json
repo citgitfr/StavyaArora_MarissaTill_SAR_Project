@@ -1,0 +1,22 @@
+{
+  "case_id": "case13",
+  "choice": "repair",
+  "repair": {"action": "swap_components", "param": null},
+  "evidence": [
+    "check(original).result = fail",
+    "check(original).tests.correlation_sign.pass = false",
+    "check(original).tests.correlation_sign.corr_u = 0.05752",
+    "check(original).tests.correlation_sign.corr_v = 0.1136",
+    "check(original).tests.correlation_sign.corr_swapped = 0.3586",
+    "compare(original).flags = [\"swapped_corr_exceeds_direct\"]",
+    "compare(original).best_lag_hours = 0",
+    "repair.repairs_used = 1",
+    "check(repaired).result = pass",
+    "check(repaired).tests.correlation_sign.corr_u = 0.3418",
+    "check(repaired).tests.correlation_sign.corr_v = 0.3753",
+    "check(repaired).tests.correlation_sign.corr_swapped = 0.08558",
+    "check(repaired).tests.speed_ratio.speed_ratio_median = 1.555",
+    "check(repaired).tests.lag.best_lag_hours = 1"
+  ],
+  "reason": "Only the correlation_sign test failed, and the swapped correlation (0.3586) was far above the direct correlations, which points to radar u and v being swapped. After swap_components the check passes (corr_u 0.3418, corr_v 0.3753), so the repaired radar file runs/work/agent/case13/radar_repaired.nc should be used for fused forcing."
+}

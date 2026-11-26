@@ -1,0 +1,19 @@
+{
+  "case_id": "case21",
+  "choice": "model_only",
+  "repair": null,
+  "evidence": [
+    "check.result = fail",
+    "check.tests.speed_ratio.speed_ratio_median = 2.14 (max 2.0, pass = false)",
+    "check.tests.correlation_sign.corr_u = 0.1991",
+    "check.tests.correlation_sign.corr_v = 0.09291 (min 0.1, pass = false)",
+    "check.tests.correlation_sign.corr_swapped = -0.03478",
+    "check.tests.lag.best_lag_hours = 0 (pass = true)",
+    "check.tests.units/speed_bound/time_axis/fill_values/coverage pass = true",
+    "check.tests.time_axis.hfr_times = 2021-10-20T19:00 to 2021-10-23T18:00",
+    "compare.corr_by_lag peak = 0.146 at lag 0",
+    "qc(radar).speed_max = 1.003, fill_value_hits = 0, flags = []",
+    "qc(model).flags = [], fill_value_hits = 0"
+  ],
+  "reason": "Check fails on speed ratio (2.14) and on weak radar-model correlation (corr_v 0.09291, corr_u 0.1991) with no sign-flip, swap, lag, fill-value or unit pattern, so no menu repair fits: rescale cannot raise a correlation and flip_sign/swap_components are contradicted by corr_swapped -0.03478. The radar cannot be made to pass, so the forecast should use the model alone; the model file passed qc with no flags."
+}

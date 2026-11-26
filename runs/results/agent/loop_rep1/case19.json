@@ -1,0 +1,22 @@
+{"case_id": "case19",
+ "choice": "fused",
+ "repair": null,
+ "evidence": [
+  "check.result = pass",
+  "check.tests.units.hfr = m s-1",
+  "check.tests.units.model = m/s",
+  "check.tests.speed_bound.speed_max = 1.003",
+  "check.tests.time_axis.largest_gap_s = 3600",
+  "check.tests.time_axis.inside_model_times = true",
+  "check.tests.fill_values.hfr_hits = 0",
+  "check.tests.coverage.good_hours_fraction = 0.9306",
+  "check.tests.speed_ratio.speed_ratio_median = 1.809",
+  "check.tests.correlation_sign.corr_u = 0.2154",
+  "check.tests.correlation_sign.corr_v = 0.1779",
+  "check.tests.correlation_sign.corr_swapped = -0.1187",
+  "check.tests.lag.best_lag_hours = -1",
+  "compare.corr_by_lag.0 = 0.1967",
+  "compare.corr_by_lag.-1 = 0.1968"
+ ],
+ "reason": "check passed every test (units, speed bound, time axis, fill values, coverage, speed ratio, correlation sign, lag), so the skill rule is to choose fused with no repair. The speed ratio (1.809) and correlations (corr_u 0.2154, corr_v 0.1779) are inside the frozen thresholds but far from typical clean values, so an owner may want to look at this case."
+}

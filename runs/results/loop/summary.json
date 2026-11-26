@@ -1,0 +1,100 @@
+{
+  "K": 1600.0,
+  "assets_per_period": 3,
+  "effort_km2_per_period": 333.6,
+  "particles": 500,
+  "policies": [
+    {
+      "policy": "no_qc",
+      "radar_periods": 24,
+      "silent_errors": 13,
+      "false_alarms": 0,
+      "escalations": 0,
+      "mean_datum_to_truth_km": 11.5215,
+      "mean_p_found_24h": 0.8241
+    },
+    {
+      "policy": "model_only",
+      "radar_periods": 0,
+      "silent_errors": 0,
+      "false_alarms": 0,
+      "escalations": 0,
+      "mean_datum_to_truth_km": 9.1495,
+      "mean_p_found_24h": 0.8062
+    },
+    {
+      "policy": "scripted",
+      "radar_periods": 21,
+      "silent_errors": 1,
+      "false_alarms": 1,
+      "escalations": 0,
+      "mean_datum_to_truth_km": 8.9452,
+      "mean_p_found_24h": 0.8522
+    },
+    {
+      "policy": "agent_loop_rep1",
+      "radar_periods": 23,
+      "silent_errors": 1,
+      "false_alarms": 1,
+      "escalations": 0,
+      "mean_datum_to_truth_km": 8.8482,
+      "mean_p_found_24h": 0.8668
+    },
+    {
+      "policy": "perfect",
+      "radar_periods": 24,
+      "silent_errors": 0,
+      "false_alarms": 0,
+      "escalations": 0,
+      "mean_datum_to_truth_km": 8.6566,
+      "mean_p_found_24h": 0.8662
+    }
+  ],
+  "p_found_24h_by_scenario": {
+    "S1": {
+      "no_qc": 0.9079,
+      "model_only": 0.8586,
+      "scripted": 0.8921,
+      "agent_loop_rep1": 0.8921,
+      "perfect": 0.9079
+    },
+    "S2": {
+      "no_qc": 0.6464,
+      "model_only": 0.9072,
+      "scripted": 0.8594,
+      "agent_loop_rep1": 0.8594,
+      "perfect": 0.8594
+    },
+    "S3": {
+      "no_qc": 0.7777,
+      "model_only": 0.8751,
+      "scripted": 0.8591,
+      "agent_loop_rep1": 0.8591,
+      "perfect": 0.8454
+    },
+    "S4": {
+      "no_qc": 0.8925,
+      "model_only": 0.8412,
+      "scripted": 0.9077,
+      "agent_loop_rep1": 0.9077,
+      "perfect": 0.9077
+    },
+    "S5": {
+      "no_qc": 0.9268,
+      "model_only": 0.8444,
+      "scripted": 0.9216,
+      "agent_loop_rep1": 0.9216,
+      "perfect": 0.9161
+    },
+    "S6": {
+      "no_qc": 0.7932,
+      "model_only": 0.5107,
+      "scripted": 0.6736,
+      "agent_loop_rep1": 0.7608,
+      "perfect": 0.7608
+    }
+  },
+  "agent_cost_usd": {
+    "agent_loop_rep1": 5.2116
+  }
+}

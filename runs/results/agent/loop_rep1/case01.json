@@ -1,0 +1,17 @@
+{"case_id": "case01",
+ "choice": "fused",
+ "repair": null,
+ "evidence": [
+  "check.result = pass",
+  "check.tests.units.hfr = m s-1, check.tests.units.model = m/s",
+  "check.tests.speed_bound.speed_max = 1.004",
+  "check.tests.time_axis.largest_gap_s = 3600",
+  "check.tests.fill_values.hfr_hits = 0",
+  "check.tests.coverage.hour_fraction_min = 0.3469",
+  "check.tests.speed_ratio.speed_ratio_median = 1.505",
+  "check.tests.correlation_sign.corr_u = 0.311",
+  "check.tests.correlation_sign.corr_v = 0.3149",
+  "check.tests.correlation_sign.corr_swapped = 0.0857",
+  "check.tests.lag.best_lag_hours = 0"
+ ],
+ "reason": "All eight check tests pass on the original radar and model files, so no repair is needed. Per the skill's decision rule, a passing check means the fused forcing is used."}

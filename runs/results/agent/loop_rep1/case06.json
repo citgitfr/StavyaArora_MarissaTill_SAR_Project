@@ -1,0 +1,26 @@
+{
+  "case_id": "case06",
+  "choice": "repair",
+  "repair": [
+    {"action": "rescale", "param": 0.01},
+    {"action": "shift_time", "param": -3}
+  ],
+  "repaired_file": "runs/work/agent/case06/radar_repaired.nc",
+  "evidence": [
+    "check(original).result = fail",
+    "check(original).speed_bound.speed_max = 100.4",
+    "check(original).speed_ratio.speed_ratio_median = 150.1",
+    "check(original).lag.best_lag_hours = 3",
+    "qc(radar).speed_median = 23.32",
+    "qc(radar).units_normalized = m s-1",
+    "compare.best_lag_hours = 3",
+    "check(after rescale 0.01).speed_ratio.speed_ratio_median = 1.501",
+    "check(after rescale 0.01).lag.best_lag_hours = 3",
+    "check(after rescale 0.01, shift_time -3).result = pass",
+    "check(after rescale 0.01, shift_time -3).speed_ratio.speed_ratio_median = 1.503",
+    "check(after rescale 0.01, shift_time -3).lag.best_lag_hours = 0",
+    "check(after rescale 0.01, shift_time -3).correlation_sign.corr_u = 0.3507",
+    "check(after rescale 0.01, shift_time -3).correlation_sign.corr_v = 0.3678"
+  ],
+  "reason": "Radar speeds were about 100x too large (values look like cm/s labelled m s-1) and the radar was offset by 3 hours, so speed_bound, speed_ratio and lag failed. After rescale 0.01 and shift_time -3 every check test passes, so the repaired radar file is used."
+}

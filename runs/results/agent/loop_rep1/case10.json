@@ -1,0 +1,21 @@
+{
+  "case_id": "case10",
+  "choice": "repair",
+  "repair": {"action": "rescale", "param": 0.01},
+  "evidence": [
+    "check.result = fail (original radar)",
+    "check.tests.speed_bound.speed_max = 100.4 (max_m_s = 3.0)",
+    "check.tests.speed_ratio.speed_ratio_median = 173.6 (allowed 0.5-2.0)",
+    "qc.speed_median = 21.93",
+    "qc.speed_p95 = 53.15",
+    "qc.units_attr = m s-1",
+    "compare.corr_u = 0.2317",
+    "compare.corr_v = 0.2587",
+    "compare.corr_swapped = -0.02997",
+    "repair.repairs_used = 1",
+    "check.result = pass (repaired radar)",
+    "check.tests.speed_bound.speed_max = 1.004 (repaired)",
+    "check.tests.speed_ratio.speed_ratio_median = 1.736 (repaired)"
+  ],
+  "reason": "Radar speeds were about 100 times too large while the sign, component order, time lag and coverage tests passed, which matches values stored in cm/s but labeled m s-1. Rescaling u and v by 0.01 made every check test pass, so the repaired file (runs/work/agent/case10/radar_repaired.nc) should be used as the radar."
+}
